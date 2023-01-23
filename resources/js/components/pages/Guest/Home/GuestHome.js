@@ -2,7 +2,6 @@ import React from 'react'
 
 import Footer from '../../../footer/Footer'
 import GuestNavbar from '../../../navbar/GuestNavbar'
-import Welcome from '../../General/Welcome'
 import GuestIntro from './GuestIntro'
 
 export default function GuestHome() {
