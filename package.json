@@ -28,6 +28,7 @@
         "tailwindcss": "^3.2.4"
     },
     "dependencies": {
+        "3d-react-carousal": "^5.0.0",
         "react-router-dom": "^6.7.0"
     }
 }

@@ -12,6 +12,8 @@ import Login from './pages/Guest/Login/Login';
 import Register from './pages/Guest/Register/Register';
 import ForgotPassword from './pages/Guest/ForgotPassword/ForgotPassword';
 
+import Home from './pages/Employee/Home/Home';
+
 export default function MyApp() {
   return (
     <>
@@ -41,7 +43,10 @@ export default function MyApp() {
 
             
         {/* Employee Pages */}
-
+            <Routes>
+                <Route path={path.EMPLOYEE_HOME} element={<Home/>}>
+                </Route>
+            </Routes>
 
         {/* Employer Pages */}
 
