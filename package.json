@@ -29,6 +29,8 @@
     },
     "dependencies": {
         "3d-react-carousal": "^5.0.0",
+        "moment": "^2.29.4",
+        "react-icons": "^4.7.1",
         "react-router-dom": "^6.7.0"
     }
 }

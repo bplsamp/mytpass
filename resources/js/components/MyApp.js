@@ -13,6 +13,9 @@ import Register from './pages/Guest/Register/Register';
 import ForgotPassword from './pages/Guest/ForgotPassword/ForgotPassword';
 
 import Home from './pages/Employee/Home/Home';
+import Schedules from './pages/Employee/Schedules/Schedules';
+import Trainings from './pages/Employee/Trainings/Trainings';
+import Profile, { ProfileBox } from './pages/Employee/Profile/Profile';
 
 export default function MyApp() {
   return (
@@ -40,11 +43,19 @@ export default function MyApp() {
                 <Route path={path.FORGOT} element={<ForgotPassword/>}>
                 </Route>
             </Routes>
-
             
         {/* Employee Pages */}
             <Routes>
                 <Route path={path.EMPLOYEE_HOME} element={<Home/>}>
+                </Route>
+
+                <Route path={path.SCHEDULES} element={<Schedules/>}>
+                </Route>
+
+                <Route path={path.TRAININGS} element={<Trainings/>}>
+                </Route>
+
+                <Route path={path.PROFILE} element={<Profile/>}>
                 </Route>
             </Routes>
 

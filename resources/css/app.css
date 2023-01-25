@@ -19,3 +19,24 @@ body {
 .button {
   @apply bg-torange text-white rounded-md shadow-lg drop-shadow-md hover:opacity-80;
 }
+
+table {
+  border: 0px solid transparent;
+
+}
+
+th {
+ font-weight: 300;
+ padding: 1rem;
+ padding-right: 1rem;
+ padding-left: 1rem;
+}
+
+td {
+ padding: 1rem;
+ border: none;
+}
+
+tbody tr:nth-child(odd){
+ background-color: #F6F6F6;
+}

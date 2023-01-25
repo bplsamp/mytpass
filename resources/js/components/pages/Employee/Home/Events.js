@@ -4,38 +4,24 @@ import { Carousel } from "3d-react-carousal";
 const slides = [
     <img
         style={{ minHeight: "700px" }}
-        src="https://picsum.photos/800/300/?random"
+        src="https://www.dozuki.com/hubfs/Imported_Blog_Media/Main%20manufacturing%20training%20image.png"
         height={700}
         width={1000}
         alt="1"
     />,
     <img
         style={{ minHeight: "700px" }}
-        src="https://picsum.photos/800/301/?random"
+        src="https://pttc.gov.ph/wp-content/uploads/2020/06/Food.png"
         height={700}
         width={1000}
         alt="2"
     />,
     <img
         style={{ minHeight: "700px" }}
-        src="https://picsum.photos/800/302/?random"
+        src="https://www.dualtech.org.ph/wp-content/uploads/2022/02/MACHINING-1-800x600.jpg"
         height={700}
         width={1000}
         alt="3"
-    />,
-    <img
-        style={{ minHeight: "700px" }}
-        src="https://picsum.photos/800/303/?random"
-        height={700}
-        width={1000}
-        alt="4"
-    />,
-    <img
-        style={{ minHeight: "700px" }}
-        src="https://picsum.photos/800/304/?random"
-        height={700}
-        width={1000}
-        alt="5"
     />,
 ];
 
