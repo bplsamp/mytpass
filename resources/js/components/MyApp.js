@@ -17,6 +17,8 @@ import Schedules from './pages/Employee/Schedules/Schedules';
 import Trainings from './pages/Employee/Trainings/Trainings';
 import Profile, { ProfileBox } from './pages/Employee/Profile/Profile';
 
+import Dashboard from './pages/Employer/Dashboard/Dashboard';
+
 export default function MyApp() {
   return (
     <>
@@ -60,7 +62,10 @@ export default function MyApp() {
             </Routes>
 
         {/* Employer Pages */}
-
+            <Routes>
+                <Route path={path.DASHBOARD} element={<Dashboard/>}>
+                </Route>
+            </Routes>
 
         {/* Admin Pages */}
 
