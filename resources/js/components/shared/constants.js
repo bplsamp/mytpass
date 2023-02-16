@@ -33,8 +33,13 @@ export const ADMIN_COMPANIES = "/admin/companies";
 export const ADMIN_APPROVAL = "/admin/approvals";
 export const ADMIN_ANNOUNCEMENT = "/admin/announcements";
 
+//Email Verify
+export const EMAIL_SUCCESS = "/email/verify/success";
+export const EMAIL_ALREADY_VERIFIED = "/email/verify/already-success";
+
 //Config
 export const title = "title";
+export const web_url = "http://localhost:8000";
 export const EXPERTISE_OPTIONS = [
     "Technical Aspect",
     "Human Aspect",

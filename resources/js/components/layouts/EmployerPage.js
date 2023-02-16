@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SideNav from "../default/SideNav/SideNav";
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,18 +6,26 @@ import { FaBuilding } from "react-icons/fa";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import NoCompany from "../pages/Employer/Dashboard/NoCompany";
 import WaitingApproval from "../pages/Employer/Company/WaitingApproval";
+import { useAuth, useAuthUpdate } from "../default/Session/SessionProvider";
 
 export default function EmployerPage ({ children }) {
 
     const location = useLocation();
     const navigate = useNavigate();
+    const User = useAuth();
+    const getUser = useAuthUpdate();
 
-    const withCompany = user?.companyId ? true : false;
-    const isActiveCompany =
-        (user?.companyId && user?.company?.companyStatus == "Active") ||
-        user?.company?.companyStatus == "Requested Deactivation";
+    useEffect (() => {
+    getUser()
+    console.log(User)
+    }, [User])
         
     const path = location?.pathname.replace("/employer/", "");
+    
+    const withCompany = User?.companyId ? true : false;
+    const isActiveCompany =
+        (User?.company?.companyStatus == "Active") ||
+        User?.company?.companyStatus == "Requested Deactivation";
 
     return (
         <div className="min-h-screen flex flex-col bg-[#ECF0F4]">
@@ -34,22 +42,22 @@ export default function EmployerPage ({ children }) {
                             </h1>
 
                             <div className="font-medium ml-auto flex flex-row gap-4 items-center relative top-3 mr-6">
-                                {user?.companyId ? (
-                                    <div
-                                        className="flex items-center gap-4 hover:opacity-60 cursor-pointer"
-                                        onClick={() =>
-                                            navigate("/employer/editcompany")
-                                        }
-                                    >
-                                        <LazyLoadImage
-                                            effect="blur"
-                                            src={user?.company?.icon}
-                                            className={`max-w-[49px] max-h-[49px] object-scale-down rounded-full`}
-                                        ></LazyLoadImage>
-                                        <span className="text-[1.3rem]">
-                                            {user?.company?.companyName}
-                                        </span>
-                                    </div>
+                                {User?.companyId ? (
+                                <div
+                                    className="flex items-center gap-4 hover:opacity-60 cursor-pointer"
+                                    onClick={() =>
+                                        navigate("/employer/editcompany")
+                                    }
+                                >
+                                    <LazyLoadImage
+                                        effect="blur"
+                                        src={User?.company?.icon}
+                                        className={`max-w-[49px] max-h-[49px] object-scale-down rounded-full`}
+                                    ></LazyLoadImage>
+                                    <span className="text-[1.3rem]">
+                                        {User?.company?.companyName}
+                                    </span>
+                                </div>
                                 ) : (
                                     <>
                                         <FaBuilding />
@@ -65,13 +73,15 @@ export default function EmployerPage ({ children }) {
                                         </span>
                                     </>
                                 )}
+                                    
+                                
+                                        
+                                    
+                                
                             </div>
                         </div>
 
                         <div className="text-[1.2rem] flex flex-row gap-1 ">
-                            <div>
-                                <TextLogo textShadow={`1px 1px gray`} />
-                            </div>
                             <span>-</span>
                             <span className="capitalize">{path}</span>
                         </div>

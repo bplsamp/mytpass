@@ -4,8 +4,7 @@ import forgot from "../../../assets/images/forgot.png";
 
 export default function ForgotPassword() {
   return (
-    <div className='min-h-screen flex flex-col'>
-      <GuestNavbar/>
+    <GuestPage>
       <div className='flex flex-col items-center text-justify gap-8 pt-[5rem]'>
         <img
         src={forgot}/>
@@ -26,6 +25,6 @@ export default function ForgotPassword() {
           </button>
       </form>
       </div>
-    </div>
+    </GuestPage>
   )
 }

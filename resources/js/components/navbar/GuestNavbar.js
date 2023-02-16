@@ -18,11 +18,8 @@ export default function GuestNavbar() {
   return (
     <nav
         style={{ zIndex: 100 }}
-        className={`
-            ${
-                "bg-white text-black shadow-lg flex text-white sticky top-0 p-2"
-            }`
-    }
+        className="bg-white text-black shadow-lg flex text-white sticky top-0 p-2"
+
     >
         <img src={logo}
             className="mr-auto ml-8 w-[110px] relative top-1"
@@ -32,11 +29,9 @@ export default function GuestNavbar() {
         <li key={idx} className="flex">
             <Link
                 to={route}
-                className={`
+                className={`w-auto p-4 border-b-2 hover:border-torange
                     ${
                         currentPath == route ? "border-torange" : "border-transparent"
-                    }
-                    w-auto p-4 border-b-2 hover:border-torange
                     }
                 `}
             >

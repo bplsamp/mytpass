@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../../navbar/Navbar";
 import Footer from "../../../footer/Footer";
+import VerifyFirst from "../../EmailVerification/VerifyFirst";
 import { MdEmail, MdPhone } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import avatar from "../../../assets/images/user.png";
 import trainings from "./trainings.json";
 import moment from "moment";
+import EmployeePage from "../../../layouts/EmployeePage";
+import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
 
 const Card = ({ text }) => {
     return (
@@ -20,8 +23,8 @@ const HeaderName = ({ name, expertise }) => {
     return (
         <div className="bg-torange w-full font-bold relative right-[12rem] text-white rounded-r-[0.5rem] top-8">
             <div className="pl-[12rem] flex flex-col pr-[12rem]">
-                <span className="text-[2rem]">{name}</span>
-                <span className="text-[1rem]">{expertise}</span>
+                <span className="text-[2rem] capitalize">{name}</span>
+                <span className="text-[1rem] capitalize">{expertise}</span>
             </div>
         </div>
     );
@@ -90,7 +93,7 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                         <span className="font-bold text-[1.4rem]">
                             Specific Expertise
                         </span>
-                        <span>{user?.specify}</span>
+                        <span className="capitalize">{user?.specify}</span>
                     </div>
 
                     {isPublic ? (
@@ -148,13 +151,36 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
 };
 
 export default function Profile() {
-    const navigate = useNavigate()
+
+    const navigate = useNavigate();
+    const User = useAuth();
+    const getUser = useAuthUpdate();
+
+    const location = useLocation();
+    const currentPath = location?.pathname;
+
+    useEffect (() => {
+    localStorage.setItem('pathkey', JSON.stringify(currentPath))
+
+    getUser()
+    console.log(User)
+    if (User?.role == "Employee" || 
+    User?.role ==  "Business Owner" || 
+    User?.role ==  "Human Resource")
+      navigate("/profile")
+      else
+      navigate("/")
+    }, [User])
+
+    //Email verified checker
+    if (User && User?.email_verified_at == null) {
+        return <VerifyFirst />;
+    }
 
     return (
-        <div className='min-h-screen flex flex-col'>
-        <Navbar/>
-        <ProfileBox navigate={navigate}/>
-        <Footer/>
-        </div>
+        <EmployeePage>
+            <ProfileBox user={User} navigate={navigate}/>
+            <Footer/>
+        </EmployeePage>
     );
 }

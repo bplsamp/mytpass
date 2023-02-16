@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../assets/images/logo.png";
 import { IoHome } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { FaUserFriends, FaNewspaper, FaFolderOpen } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import avatar from "../../assets/images/user.png";
 import {GiUpgrade}  from "react-icons/gi"
+import { useAuth, useAuthUpdate } from "../Session/SessionProvider";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const routes = {
     "/employer/myemployees": "My Employees",
@@ -27,6 +30,15 @@ export default function SideNav({ withCompany, isActiveCompany }) {
 
     const location = useLocation();
     const currentPath = location?.pathname;
+    const navigate = useNavigate();
+    const User = useAuth();
+    const getUser = useAuthUpdate();
+    const token = Cookies.get("mytpass_session");
+
+    useEffect(() => {
+        getUser();
+    }, [User])
+
 
     return (
         <nav className="flex flex-col border-r-2 border-gray-200 p-8 text-gray-600 min-h-screen min-w-[270px] bg-white">
@@ -96,7 +108,7 @@ export default function SideNav({ withCompany, isActiveCompany }) {
 
             <footer className="flex flex-row mt-auto gap-2 sticky bottom-6">
                 <img
-                    src={user?.avatar ? user?.avatar : avatar}
+                    
                     className="max-w-[32px] max-h-[32px] object-scale-down"
                     style={{ borderRadius: "50%" }}
                 ></img>
@@ -104,13 +116,25 @@ export default function SideNav({ withCompany, isActiveCompany }) {
                 {/*<RxAvatar className="text-[2rem]" />*/}
 
                 <div className="flex flex-col text-[0.7rem]">
-                    <span className="text-[0.9rem]">
-                        {user?.firstName} {user?.middleInitial} {user?.lastName}
+                    <span className="text-[0.9rem] text-center capitalize">
+                        {User?.firstName + " " + User?.lastName}
                     </span>
                     <Link to={`/employee`} className="underline text-blue-600">
                         Switch To Employee Side
                     </Link>
-                    <button className="underline text-blue-600">Logout</button>
+                    <button 
+                    className="underline text-blue-600"
+                    onClick={async () => {
+                        await axios.post("http://localhost:8000/api/logout",
+                        null, {
+                            headers: { Authorization: `Bearer ${token}`},
+                        })
+                        navigate("/")
+                    }
+                }
+                    >
+                        Logout
+                    </button>
                 </div>
             </footer>
         </nav>

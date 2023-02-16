@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "firstName": "Bria",
+        "lastName": "Marmyon",
+        "middleInitial": "P.",
+        "trainingsTaken": 48,
+        "specify": "Research Associate",
+        "expertise": "Quality Control Specialist"
+    },
+    {
+        "id": 2,
+        "firstName": "Valene",
+        "lastName": "Coal",
+        "middleInitial": "L.",
+        "trainingsTaken": 31,
+        "specify": "Database Administrator II",
+        "expertise": "Senior Quality Engineer"
+    },
+    {
+        "id": 3,
+        "firstName": "Robert",
+        "lastName": "Caze",
+        "middleInitial": "P.",
+        "trainingsTaken": 22,
+        "specify": "Associate Professor",
+        "expertise": "Technical Writer"
+    }
+]

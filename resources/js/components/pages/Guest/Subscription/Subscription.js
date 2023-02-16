@@ -1,6 +1,7 @@
 import React from 'react'
 import GuestNavbar from '../../../navbar/GuestNavbar'
 import Footer from '../../../footer/Footer'
+import GuestPage from '../../../layouts/GuestPage';
 
 export const subscriptions = [
     {
@@ -44,21 +45,20 @@ export const SubscriptionCard = ({ sub }) => {
 
 export default function Subscription() {
   return (
-    <div className='min-h-screen flex flex-col'>
-        <GuestNavbar/>
-            <div className='flex flex-col items-center justify-center'>
-                <div className='text-[2.5rem] text-torange font-bold my-12'>
-                    List of Subscriptions
-                </div>
-                <div className='flex flex-wrap gap-10 text-['>
-                    {subscriptions.map((type, idx) => 
-                    {
-                        return <SubscriptionCard sub={type} key={idx}/> 
-                    })
-                    }
-                </div>
+    <GuestPage>
+        <div className='flex flex-col items-center justify-center'>
+            <div className='text-[2.5rem] text-torange font-bold my-12'>
+                List of Subscriptions
             </div>
+            <div className='flex flex-wrap gap-10 text-['>
+                {subscriptions.map((type, idx) => 
+                {
+                    return <SubscriptionCard sub={type} key={idx}/> 
+                })
+                }
+            </div>
+        </div>
         <Footer/>
-    </div>
+    </GuestPage>
   )
 }

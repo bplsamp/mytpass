@@ -5,7 +5,9 @@ import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import avatar from "../assets/images/user.png"
-import NotificationMenu from '../pages/Notifications/NotificationMenu';
+import { useAuth, useAuthUpdate } from '../default/Session/SessionProvider';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const routes = {
     "/employee": "Home",
@@ -18,31 +20,21 @@ export default function Navbar() {
 
     const location = useLocation();
     const currentPath = location?.pathname;
-    const nav = useRef(null);
 
-    const [ShowNotification, setShowNotification] = useState(false);
-    
-    const handleOpenNotification = (e, id) => {
-        setShowNotification(!ShowNotification);
-        if (isRead.length > 0) {
-            setNotifs(
-                data?.map((x) => {
-                    return { ...x, read: true };
-                })
-            );
+    const navigate = useNavigate();
+    const User = useAuth();
+    const getUser = useAuthUpdate();
+    const token = Cookies.get("mytpass_session");
 
-            apost("/api/readNotif", {}, null, null, null, true);
-        }
-    };
+useEffect (() => {
+  getUser()
+}, [User])
 
     return (
         <nav
         style={{ zIndex: 100 }}
-        className={`
-            ${
-                "bg-white text-black shadow-lg  flex text-white sticky top-0 mt-[0.5rem]"
-            }`
-        }
+        className="bg-white text-black shadow-lg flex text-white sticky top-0 mt-[0.5rem]"
+
         >
         <img src={logo} className="mr-auto ml-8 " width={100} />
         <ul className="ml-auto flex flex-row items-center justify-center uppercase">
@@ -67,22 +59,39 @@ export default function Navbar() {
                 ))}
                 <div className="ml-8 mr-8 flex gap-12 items-center">
                 <AiFillBell
-                        onClick={(e) => handleOpenNotification(e, user?.id)}
-                        className={`text-[2rem] hover:opacity-80 cursor-pointer ${
-                            ShowNotification && "text-torange"
-                        }`}
+                        className={`text-[2rem] hover:opacity-80 cursor-pointer`}
                 />
-                    {/*<div className="flex flex-row gap-4">*/}
+                    <div className="flex flex-row gap-4">
                         
                         {/* NOTIFICATION CODE HERE */}
                            
-                        <button
-                            className="mr-auto ml-auto underline text-blue-400 text-[0.6rem]"
-                        >
-                            Logout
-                        </button>
+                        <div className='flex flex-col'>
+                            <span className='capitalize text-center'>
+                                {User?.firstName + " " + User?.lastName}
+                            </span> 
+                            {User?.role != "Employee" && (
+                                <span>
+                                    <Link to={`/employer/dashboard`} className="capitalize cursor-pointer underline text-blue-400 text-[0.6rem] hover:opacity-70">
+                                        Switch To Employer Side
+                                    </Link>
+                                </span>
+                            )}
+                            <button
+                                onClick={async () => {
+                                        await axios.post("http://localhost:8000/api/logout",
+                                        null, {
+                                            headers: { Authorization: `Bearer ${token}`},
+                                        })
+                                        navigate("/")
+                                    }
+                                }
+                                className="mr-auto ml-auto underline text-blue-400 text-[0.6rem] hover:opacity-70"
+                            >
+                                Logout
+                            </button>
+                        </div>
 
-                 {/*</div>*/}
+                 </div>
             </div>
         </ul>
     </nav>

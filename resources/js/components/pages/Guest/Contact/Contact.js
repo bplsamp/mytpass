@@ -2,11 +2,11 @@ import React from 'react'
 import GuestNavbar from '../../../navbar/GuestNavbar'
 import Footer from '../../../footer/Footer'
 import contact from '../../../assets/images/contact.png'
+import GuestPage from '../../../layouts/GuestPage'
 
 export default function Contact() {
   return (
-    <div className='min-h-screen flex flex-col'>
-        <GuestNavbar/>
+    <GuestPage>
         <div className="flex flex-col">
             <h1 className="ml-auto mr-auto text-torange font-bold text-[2rem] py-6">
                 Contact Us
@@ -34,6 +34,6 @@ export default function Contact() {
             </div>
         </div>
         <Footer/>
-    </div>
+    </GuestPage>
   )
 }
