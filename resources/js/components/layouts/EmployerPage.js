@@ -13,19 +13,13 @@ export default function EmployerPage ({ children }) {
     const location = useLocation();
     const navigate = useNavigate();
     const User = useAuth();
-    const getUser = useAuthUpdate();
-
-    useEffect (() => {
-    getUser()
-    console.log(User)
-    }, [User])
         
     const path = location?.pathname.replace("/employer/", "");
     
     const withCompany = User?.companyId ? true : false;
     const isActiveCompany =
-        (User?.company?.companyStatus == "Active") ||
-        User?.company?.companyStatus == "Requested Deactivation";
+        (User?.company?.companyStatus == "active") ||
+        User?.company?.companyStatus == "requested deactivation";
 
     return (
         <div className="min-h-screen flex flex-col bg-[#ECF0F4]">
@@ -49,11 +43,10 @@ export default function EmployerPage ({ children }) {
                                         navigate("/employer/editcompany")
                                     }
                                 >
-                                    <LazyLoadImage
-                                        effect="blur"
+                                    <img
                                         src={User?.company?.icon}
                                         className={`max-w-[49px] max-h-[49px] object-scale-down rounded-full`}
-                                    ></LazyLoadImage>
+                                    ></img>
                                     <span className="text-[1.3rem]">
                                         {User?.company?.companyName}
                                     </span>

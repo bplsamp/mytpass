@@ -28,7 +28,7 @@ class CompanyController extends Controller
     {
         try {
             //set status
-            $companyStatus = "Active";
+            $companyStatus = "pending";
             $companyOwner = $request->ownerId;
 
             //Create our company

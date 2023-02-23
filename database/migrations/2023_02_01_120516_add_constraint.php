@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('companyId')->references('id')->on('companies')->onUpdate('cascade');
+            $table->foreign('companyId')->references('id')->on('companies')->onUpdate('cascade')->onDelete('cascade');
            
          });
 
          Schema::table('companies', function (Blueprint $table) {
-            $table->foreign('ownerId')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('ownerId')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

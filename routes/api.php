@@ -7,6 +7,9 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\VerifyEmailController;
+use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\TrainingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +39,35 @@ Route::controller(CompanyController::class)->group(function () {
     Route::post('/company/create', 'createCompany');
 });
 
+Route::controller(EmployerController::class)->group(function () {
+    Route::post('/employer/search', 'search');
+    Route::post('/employer/inviteUser', 'inviteUser');
+    Route::post('/employer/myemployees', 'myEmployees');
+    Route::post('/employer/myemployers', 'myEmployers');
+    Route::post('/employer/removeUser', 'removeUser');
+    Route::post('/employer/trainings', 'mytrainings');
+    Route::post('/employer/myCompanyUsers', 'myCompanyUsers');
+});
+
+Route::controller(EmployeeController::class)->group(function () {
+    Route::get('/notifications', 'getNotif');
+    Route::post('/acceptCompany', 'acceptCompany');
+    Route::post('/rejectCompany', 'rejectCompany');
+});
+
+Route::controller(TrainingsController::class)->group(function () {
+    Route::post('/trainings/create', 'create');
+    Route::get('/trainings/get', 'get');
+    Route::post('/trainings/delete', 'delete');
+    Route::get('/trainings/getSchedule', 'getSchedule');
+});
+
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/users', 'users');
     Route::get('/admin/companies', 'companies');
+    Route::get('/admin/approvals', 'approvals');
+    Route::get('/admin/announcements', 'announcements');
+    Route::post('/admin/approveCompany', 'approveCompany');
 });
 
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])

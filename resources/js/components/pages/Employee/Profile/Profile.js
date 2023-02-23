@@ -161,21 +161,7 @@ export default function Profile() {
 
     useEffect (() => {
     localStorage.setItem('pathkey', JSON.stringify(currentPath))
-
-    getUser()
-    console.log(User)
-    if (User?.role == "Employee" || 
-    User?.role ==  "Business Owner" || 
-    User?.role ==  "Human Resource")
-      navigate("/profile")
-      else
-      navigate("/")
     }, [User])
-
-    //Email verified checker
-    if (User && User?.email_verified_at == null) {
-        return <VerifyFirst />;
-    }
 
     return (
         <EmployeePage>

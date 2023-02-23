@@ -72,7 +72,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function company() {
         return $this->belongsTo(Company::class, 'companyId', 'id');
     }
-
+    
     //User can only have ???
     public function mycompany() {
         return $this->hasOne(Company::class);

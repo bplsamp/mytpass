@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../../../navbar/Navbar'
 import Footer from '../../../footer/Footer'
 import VerifyFirst from '../../EmailVerification/VerifyFirst'
@@ -9,6 +9,9 @@ import { AiFillPrinter } from "react-icons/ai";
 import EmployeePage from '../../../layouts/EmployeePage';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth, useAuthUpdate } from '../../../default/Session/SessionProvider';
+import QueryApi, { QueryApiPost } from '../../../Query/QueryApi'
+import AddTrainingModal from './AddTrainingModal'
+import{ useQuery } from "@tanstack/react-query"
 
 export default function Trainings() {
     const navigate = useNavigate();
@@ -17,19 +20,17 @@ export default function Trainings() {
 
     const location = useLocation();
     const currentPath = location?.pathname;
+
+    const [ShowAdd, setShowAdd] = useState(false);
+
+    const { isLoading, error, data, isFetching, isError, refetch } = QueryApi(
+        `trainings`,
+        `/api/trainings/get`,
+    );
     
     useEffect (() => {
     localStorage.setItem('pathkey', JSON.stringify(currentPath))
-
-    getUser()
-    console.log(User)
-    if (User?.role == "Employee" || 
-    User?.role ==  "Business Owner" || 
-    User?.role ==  "Human Resource")
-      navigate("/trainings")
-      else
-      navigate("/")
-    }, [User])
+    }, []);
 
     //Email verified checker
     if (User && User?.email_verified_at == null) {
@@ -62,10 +63,10 @@ export default function Trainings() {
                         </button>
                     </div>
                 </div>
-                <TrainingsTable trainings={trainings} />
+                <TrainingsTable trainings={data} refetch={refetch}/>
             </div>
-        
         <Footer/>
-        </EmployeePage>
+        {ShowAdd && <AddTrainingModal close={() => setShowAdd(false)} refetch={refetch} />}
+    </EmployeePage>
   )
 }

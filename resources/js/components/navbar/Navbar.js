@@ -8,6 +8,9 @@ import avatar from "../assets/images/user.png"
 import { useAuth, useAuthUpdate } from '../default/Session/SessionProvider';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import QueryApi from '../Query/QueryApi';
+import { apost } from '../shared/query';
+import NotificationMenu from "../pages/Notifications/NotificationMenu"
 
 const routes = {
     "/employee": "Home",
@@ -26,9 +29,30 @@ export default function Navbar() {
     const getUser = useAuthUpdate();
     const token = Cookies.get("mytpass_session");
 
-useEffect (() => {
-  getUser()
-}, [User])
+    const [ShowNotification, setShowNotification] = useState(false);
+    const [Notifs, setNotifs] = useState([]);
+
+    const { isLoading, error, data, isFetching, isError, refetch } = QueryApi(
+        `${currentPath.replace("/employee/", "")}`,
+        `/api/notifications`,
+        5000
+    );
+
+    useEffect(() => {
+        if (data) {
+            setNotifs(data);
+            console.log("DATAAAAAAA", data)
+        }
+    }, [data]);
+
+    const handleOpenNotification = (e, id) => {
+        setShowNotification(!ShowNotification);
+        setNotifs(
+            data?.map((x) => {
+                return { ...x };
+            })
+        );
+    };
 
     return (
         <nav
@@ -59,7 +83,10 @@ useEffect (() => {
                 ))}
                 <div className="ml-8 mr-8 flex gap-12 items-center">
                 <AiFillBell
-                        className={`text-[2rem] hover:opacity-80 cursor-pointer`}
+                        onClick={(e) => handleOpenNotification(e, User?.id)}
+                        className={`text-[2rem] hover:opacity-80 cursor-pointer ${
+                            ShowNotification && "text-torange"
+                        }`}
                 />
                     <div className="flex flex-row gap-4">
                         
@@ -90,10 +117,15 @@ useEffect (() => {
                                 Logout
                             </button>
                         </div>
-
                  </div>
             </div>
         </ul>
+        {ShowNotification && (
+                <NotificationMenu
+                    notifications={Notifs}
+                    getUser={getUser}
+                />
+        )}
     </nav>
     )
 }

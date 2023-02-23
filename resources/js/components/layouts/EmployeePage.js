@@ -9,11 +9,6 @@ export default function EmployeePage({ children }) {
     const navigate = useNavigate();
     const User = useAuth();
     const getUser = useAuthUpdate();
-
-useEffect (() => {
-  getUser()
-}, [User])
-
     
         return (
             <div

@@ -8,6 +8,7 @@ import EmployeePage from '../../../layouts/EmployeePage';
 import VerifyFirst from '../../EmailVerification/VerifyFirst';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth, useAuthUpdate } from '../../../default/Session/SessionProvider';
+import QueryApi from '../../../Query/QueryApi';
 
 export default function Schedules() {
     const navigate = useNavigate();
@@ -16,19 +17,17 @@ export default function Schedules() {
 
     const location = useLocation();
     const currentPath = location?.pathname;
+
+    const { isLoading, error, data, isFetching, isError, refetch } = QueryApi(
+        `schedules`,
+        `/api/trainings/getSchedule`,
+    );
+
+    console.log(data);
     
     useEffect (() => {
     localStorage.setItem('pathkey', JSON.stringify(currentPath))
-
-    getUser()
-    console.log(User)
-    if (User?.role == "Employee" || 
-    User?.role ==  "Business Owner" || 
-    User?.role ==  "Human Resource")
-      navigate("/schedules")
-      else
-      navigate("/")
-    }, [User])
+    }, []);
 
     //Email verified checker
     if (User && User?.email_verified_at == null) {
@@ -50,7 +49,7 @@ export default function Schedules() {
                         <Search />
                     </div>
                 </div>
-                <SchedulesTable trainings={trainings} />
+                <SchedulesTable trainings={data} refetch={refetch} />
             </div>
         
         <Footer/>

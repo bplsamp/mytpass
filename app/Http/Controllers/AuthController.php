@@ -135,7 +135,7 @@ class AuthController extends Controller
           // returns user if existing user, else fail api
 
           $company = User::findOrFail($user->id)->company;
-          //error_log(strval($company));
+          error_log(strval($company));
         
           return response()->json([
                 'user' => $user,

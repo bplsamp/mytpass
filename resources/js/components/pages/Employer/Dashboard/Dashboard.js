@@ -20,22 +20,8 @@ export default function Dashboard() {
 
     useEffect (() => {
     localStorage.setItem('pathkey', JSON.stringify(currentPath))
-    getUser()  
-
-    if (User?.role == "Employee")
-        navigate("/employee")
-    else if 
-        (User?.role ==  "Business Owner" || 
-        User?.role ==  "Human Resource")
-        navigate("/employer/dashboard")
-    else
-        navigate("/")
     }, [User])
 
-    //Email verified checker
-    if (User && User?.email_verified_at == null) {
-        return <VerifyFirst />;
-    }
 
     const data = {empCount : 1}
 

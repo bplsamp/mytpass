@@ -18,25 +18,6 @@ const getUser = useAuthUpdate();
 const location = useLocation();
 const currentPath = location?.pathname;
 
-useEffect (() => {
-localStorage.setItem('pathkey', JSON.stringify(currentPath))
-console.log(currentPath)
-getUser()
-console.log(User)
-
-if (User?.role == "Employee" || 
-User?.role ==  "Business Owner" || 
-User?.role ==  "Human Resource")
-  navigate("/employee")
-  else
-  navigate("/")
-}, [User])
-
-//Email verified checker
-if (User && User?.email_verified_at == null) {
-  return <VerifyFirst />;
-}
-
   return (
   
     <EmployeePage>

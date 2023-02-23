@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('dtiNumber');
             $table->string('companyEmail');
             $table->string('companyContact');
-            $table->string('companyStatus');
+            $table->string('companyStatus')->default('pending'); //Pending / Active / Deactivated / Requested Deactivation
+            $table->string('reason')->nullable();
             $table->uuid('ownerId');
-            //$table->foreign('ownerId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('userId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('trainingId');
             $table->foreign('trainingId')->references('id')->on('trainings')->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('isPresent');
+            $table->boolean('isPresent')->default(false);
             $table->timestamps();
         });
     }

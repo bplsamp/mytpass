@@ -38,3 +38,54 @@ export default function UserProvider({ children }) {
     );
 }
 
+export function WithSession({ children }) {
+    const user = useAuth();
+    const getUser = useAuthUpdate();
+
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    return user == null ? (
+        <></>
+    ) : Object.keys(user).length > 0 ? (
+        children
+    ) : (
+        <Navigate to={"/login"} />
+    );
+}
+
+export function WithSessionLogged({ children }) {
+    const user = useAuth();
+    const getUser = useAuthUpdate();
+
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    return user == null ? (
+        <></>
+    ) : Object.keys(user).length > 0 ? (
+        <>
+            {user?.role.toLowerCase() == "employee" ? (
+                <Navigate to={`/employee`} />
+            ) : user?.role == "admin" || user.role == "administrator" ? (
+                <Navigate to={`/admin/users`} />
+            ) : (
+                <Navigate to={`/employer/dashboard`} />
+            )}
+        </>
+    ) : (
+        children
+    );
+}
+
+export function Navigate({ children, to }) {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate(to);
+    }, []);
+
+    return <div>{children}</div>;
+}

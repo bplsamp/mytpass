@@ -40,3 +40,36 @@ td {
 tbody tr:nth-child(odd){
  background-color: #F6F6F6;
 }
+
+.input {
+  @apply outline-0 border border-gray-400 rounded-md px-2 py-2 w-full focus:ring-2 focus:ring-torange;
+}
+
+
+   input[type=radio] {
+            accent-color: black;
+        }
+  
+
+        input[type=file]::file-selector-button {
+  border: 2px solid #E0701D;
+  padding: .2em .4em;
+  border-radius: 0.5rem;
+  color: white;
+  background-color: #E0701D;
+  transition: 1s;
+}
+
+.checkbox {
+  accent-color: #E0701D;
+}
+
+.MuiSlider-thumb{
+  color: black;
+}
+.MuiSlider-rail{
+  color:#E0701D;
+}
+.MuiSlider-track{
+  color: #E0701D;
+}

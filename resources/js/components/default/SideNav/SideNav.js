@@ -37,7 +37,7 @@ export default function SideNav({ withCompany, isActiveCompany }) {
 
     useEffect(() => {
         getUser();
-    }, [User])
+    }, [])
 
 
     return (

@@ -19,14 +19,15 @@ const RenderStatus = ({ status }) => {
 };
 
 const RenderButton = ({ status }) => {
-    if (status === "Active") {
+    if (status === "active") {
         return (
-            <button className="flex flex-row gap-2  text-red-400">
+            <button 
+            className="flex flex-row gap-2  text-red-400">
                 <MdDomainDisabled className="icon" />
                 <span>Deactivate</span>
             </button>
         );
-    } else if (status === "Deactivated") {
+    } else if (status === "deactivated") {
         return (
             <button className="flex flex-row gap-2  text-green-600">
                 <MdDomain className="icon" />
@@ -55,8 +56,8 @@ export default function Companies() {
     const { isLoading, error, data, isFetching, refetch } = QueryApi(
         `${currentPath.replace("/admin/", "")}`,
         `/api${currentPath}`,
-        console.log(data)
     );
+    console.log(data)
 
     return(
         <AdminPage>

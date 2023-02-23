@@ -29,7 +29,11 @@
     },
     "dependencies": {
         "3d-react-carousal": "^5.0.0",
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
         "@faker-js/faker": "^7.6.0",
+        "@material/slider": "^14.0.0",
+        "@mui/material": "^5.11.9",
         "@tanstack/react-query": "^4.24.6",
         "@types/chart.js": "^2.9.37",
         "chart.js": "^4.2.0",

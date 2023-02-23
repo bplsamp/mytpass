@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('speaker');
             $table->string('provider');
             $table->dateTime('completionDate');
-            $table->dateTime('expiryDate');
+            $table->dateTime('expiryDate')->nullable();
             $table->string('result');
             $table->string('feedback');
-            $table->string('inputtedBy');
+            $table->uuid('inputtedBy');
+            $table->string('inputtedName');
             $table->string('certificate');
             $table->string('status');
             $table->string('venueUrl')->nullable();

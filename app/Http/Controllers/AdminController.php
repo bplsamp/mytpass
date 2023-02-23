@@ -52,7 +52,7 @@ class AdminController extends Controller
 
     public function companies() {
         try {
-        $company = Company::where('companyStatus', '!=', 'Requested Approval')->with('owner')->get();
+        $company = Company::where('companyStatus', '!=', 'pending')->with('owner')->get();
         
         
         if($company != null) {
@@ -72,4 +72,44 @@ class AdminController extends Controller
         }
     }
     
+    public function approvals() {
+        try {
+            $data = Company::where('companyStatus', '=', 'pending')->with('owner:id,lastName,firstName')->get();
+            //->with(WALANG SPACE DAPAT PARA DI MAGERROR);
+            return response()->json($data , 200);
+        }
+        catch (Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
+        }
+    }
+
+    public function approveCompany(Request $request) {
+        try {
+            $obj = (object)json_decode($request->getContent());
+
+            $company = Company::findOrFail($obj->companyId);
+            $company->companyStatus = "active";
+            $company->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Company created successfully',
+            ]);
+        }
+        catch (Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
+        }
+
+    }
+
+    public function rejectCompany() {
+
+    }
+
+    public function deactivateCompany() {
+        
+    }
+
 }
