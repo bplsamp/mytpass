@@ -46,7 +46,7 @@ Route::controller(EmployerController::class)->group(function () {
     Route::post('/employer/myemployers', 'myEmployers');
     Route::post('/employer/removeUser', 'removeUser');
     Route::post('/employer/trainings', 'mytrainings');
-    Route::post('/employer/myCompanyUsers', 'myCompanyUsers');
+    Route::get('/employer/myCompanyUsers', 'myCompanyUsers');
 });
 
 Route::controller(EmployeeController::class)->group(function () {
@@ -60,6 +60,7 @@ Route::controller(TrainingsController::class)->group(function () {
     Route::get('/trainings/get', 'get');
     Route::post('/trainings/delete', 'delete');
     Route::get('/trainings/getSchedule', 'getSchedule');
+    Route::post('/trainings/bulkInsert', 'bulkInsert');
 });
 
 Route::controller(AdminController::class)->group(function () {

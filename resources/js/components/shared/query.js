@@ -18,6 +18,5 @@ export const apost = async (
         return axios
         .post(`${web_url}${url}`, variables)
     }
-    
 };
 

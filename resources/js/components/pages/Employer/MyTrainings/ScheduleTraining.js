@@ -15,7 +15,7 @@ import {
 const opts = ["Test1", "Test2"];
 
 export default function ScheduleTraining({ close }) {
-    const  data  = QueryApi(["users"], "/api/employer/myCompanyUsers")
+    const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
     const user = useAuth();
     
     const [Users, setUsers] = useState(data);
@@ -33,15 +33,16 @@ export default function ScheduleTraining({ close }) {
         inputtedBy: user?.id,
         inputtedName: user?.firstName + " " + user?.lastName,
         venueUrl: "TESTVENUEURL",
+        certificate: '',
     });
 
-    const handleChangeInvited = (index) => {
+    const handleChangeInvited = (e) => {
         console.log("CLICKED");
         let newArr = [...Users];
-        if (newArr[index].invited != true) {
-            newArr[index].invited = true;
+        if (newArr[e].invited != true) {
+            newArr[e].invited = true;
         } else {
-            newArr[index].invited = false;
+            newArr[e].invited = false;
         }
         setUsers(newArr);
     };
@@ -71,13 +72,14 @@ export default function ScheduleTraining({ close }) {
 
 
         if (users.length <= 0) {
-            toast.error("No invited users");
+            alert("No invited users");
             return;
         }
         await apost("/api/trainings/bulkInsert", {
             training: Training,
             users: users,
         });
+        close();
     };
 
     const handleSearchUsers = (e) => {
@@ -115,7 +117,7 @@ export default function ScheduleTraining({ close }) {
                 >
                     <div
                         key={`LIST${i}`}
-                        className={`flex flex-row w-full ${
+                        className={`flex flex-row w-full capitalize ${
                             user?.invited == true ? "opacity-0" : "opacity-100"
                         }`}
                     >
@@ -143,7 +145,7 @@ export default function ScheduleTraining({ close }) {
                 {users?.map((user, i) => (
                     <div
                         key={`INVITED${i}`}
-                        className="border border-gray-300  flex flex-row items-center p-2"
+                        className="border border-gray-300  flex flex-row items-center p-2 capitalize"
                     >
                         <div
                             key={`INVITED${i}`}

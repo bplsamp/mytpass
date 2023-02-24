@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Company;
 use App\Models\Training;
 use App\Models\TrainingUser;
+use App\Models\Attendance;
 
 class TrainingsController extends Controller
 {
@@ -43,7 +44,7 @@ class TrainingsController extends Controller
                 'type' => $req->type,
                 'category' => $req->category,
                 'feedback' => $req->feedback,
-                'certificate' => ""
+                'certificate' => $req->certificate,
             ]);
             
             if(!$training) {
@@ -112,7 +113,7 @@ class TrainingsController extends Controller
         }
     }
 
-    public function getSchedule(Request $req)
+    public function getSchedule()
     {
 
             $user = Auth::user();
@@ -124,5 +125,33 @@ class TrainingsController extends Controller
 
             return response()->json($trainings);
 
+    }
+
+    public function bulkInsert(Request $req) {
+        try {
+            $loggedUser = Auth::user();
+            $training = (object)Training::create($req->training);
+
+            foreach($req->users as $user) {
+                $u = (object)$user;
+                TrainingUser::create([
+                    'trainingId' => $training->id,
+                    'userId' => $u->id,
+                ]);
+            }
+
+                Attendance::create([
+                    'userId' => $u->id,
+                    'trainingId' => $training->id,
+                    'userFullname' => $u->firstName . " " . $u->lastName,
+                ]);
+
+                return response()->json(['message' => 'Successfully notified users'], 200);
+        }
+        catch (Throwable $e)
+        {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
     }
 }

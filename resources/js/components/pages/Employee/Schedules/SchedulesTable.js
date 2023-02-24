@@ -1,5 +1,8 @@
 import React from 'react'
 import EmptyState from '../../../default/EmptyState/EmptyState';
+import { AiFillEye } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
+import { CgTrash } from "react-icons/cg";
 
 export default function SchedulesTable({ trainings, withTool, setSelectedTraining, setshowAttendanceModal }) {
 

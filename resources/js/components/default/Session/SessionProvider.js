@@ -4,12 +4,15 @@ import React, {
     useEffect,
 } from "react";
 
+import Loading from "../Loading/Loading";
+import VerifyFirst from "../../pages/EmailVerification/VerifyFirst";
 import { useNavigate } from "react-router-dom";
 import ValidateToken from "./ValidateToken";
 
 
 export const UserContext = React.createContext();
 export const UserUpdateContext = React.createContext();
+
 export function useAuth() {
     return useContext(UserContext);
 }
@@ -38,23 +41,6 @@ export default function UserProvider({ children }) {
     );
 }
 
-export function WithSession({ children }) {
-    const user = useAuth();
-    const getUser = useAuthUpdate();
-
-    useEffect(() => {
-        getUser();
-    }, []);
-
-    return user == null ? (
-        <></>
-    ) : Object.keys(user).length > 0 ? (
-        children
-    ) : (
-        <Navigate to={"/login"} />
-    );
-}
-
 export function WithSessionLogged({ children }) {
     const user = useAuth();
     const getUser = useAuthUpdate();
@@ -63,8 +49,33 @@ export function WithSessionLogged({ children }) {
         getUser();
     }, []);
 
+    if (user && user?.email_verified_at == null) {
+        return <VerifyFirst />;
+    }
+
     return user == null ? (
-        <></>
+        <Loading />
+    ) : Object.keys(user).length > 0 ? (
+        children
+    ) : (
+        <Navigate to={"/login"} />
+    );
+}
+
+export function WithSession({ children }) {
+    const user = useAuth();
+    const getUser = useAuthUpdate();
+
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    if (user && user?.email_verified_at == null) {
+        return <VerifyFirst />;
+    }
+
+    return user == null ? (
+        <Loading />
     ) : Object.keys(user).length > 0 ? (
         <>
             {user?.role.toLowerCase() == "employee" ? (

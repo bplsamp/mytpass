@@ -149,15 +149,18 @@ class EmployerController extends Controller
         } 
     }
 
-    public function myCompanyUsers(Request $request)
+    public function myCompanyUsers()
     {
         try {
             $user = Auth::user();
-            $obj = (object)json_decode($request->getContent());
-            $data = User::where('companyId', '=', $user->companyId)
-                ->where('role', '!=', 'business owner')
-                ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
-                return response()->json($data);
+            $users = User::where('companyId', '=', $user->companyId)
+            ->where('role', '!=', 'business owner')->get();
+
+            if(!$users) {
+                throw new Error('Failed to find company users');
+            }
+
+            return response()->json($users);
             }
         catch(Throwable $e) {
             error_log($e->getMessage());

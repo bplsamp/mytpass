@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import UserProvider, { WithSession, WithSessionLogged } from './default/Session/SessionProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Loading from './default/Loading/Loading';
 
 import GuestHome from './pages/Guest/Home/GuestHome';
 import Subscription from './pages/Guest/Subscription/Subscription';
@@ -46,14 +47,14 @@ export default function MyApp() {
 
             {/* Guest Pages */}
                 <Routes>
-                    <Route 
-                        path={path.HOME} 
+                    <Route
+                        path={path.HOME}
                         element={
-                            <WithSessionLogged>
-                                <GuestHome/>
-                            </WithSessionLogged>
-                    }>
-                    </Route>
+                            <WithSession>
+                                <GuestHome />
+                            </WithSession>
+                        }
+                    />
 
                     <Route 
                         path={path.SUBSCRIPTION} 
@@ -70,100 +71,206 @@ export default function MyApp() {
                         element={<About/>}>
                     </Route>
 
-                    <Route 
-                        path={path.LOGIN} 
+                    <Route
+                        path={path.LOGIN}
                         element={
-                            <WithSessionLogged>
-                                <Login/>
-                            </WithSessionLogged>}>
-                    </Route>
+                            <WithSession>
+                                <Login />
+                            </WithSession>
+                        }
+                    />
 
                     <Route 
                         path={path.REGISTER} 
                         element={
-                        <WithSessionLogged>
+                        <WithSession>
                             <Register/>
-                        </WithSessionLogged>
+                        </WithSession>
                         }>
-                    </Route>
-
-                    <Route 
-                        path={path.FORGOT} 
-                        element={
-                        <WithSessionLogged>
-                            <ForgotPassword/>
-                        </WithSessionLogged>}>
                     </Route>
                 </Routes>
 
             {/* Email Verify Pages */}
                 <Routes>
-                        <Route path={path.EMAIL_SUCCESS} element={<WithSession><EmailSuccess/></WithSession>}>
-                        </Route>
-
-                        <Route path={path.EMAIL_ALREADY_VERIFIED} element={<WithSession><AlreadyVerifiedEmail/></WithSession>}>
-                        </Route>
+                    <Route
+                        path={path.EMAIL_SUCCESS}
+                        element={
+                            <WithSessionLogged>
+                                <EmailSuccess />
+                            </WithSessionLogged>
+                        }
+                    />
+                    <Route
+                        path={path?.EMAIL_ALREADY_VERIFIED}
+                        element={
+                            <WithSessionLogged>
+                                <AlreadyVerifiedEmail />
+                            </WithSessionLogged>
+                        }
+                    />
                 </Routes>
 
             {/* Employee Pages */}
                 <Routes>
-                    <Route path={path.EMPLOYEE_HOME} element={<WithSession><Home/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.EMPLOYEE_HOME}
+                        element={
+                            <WithSessionLogged>
+                                <Home />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.SCHEDULES} element={<WithSession><Schedules/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.SCHEDULES}
+                        element={
+                            <WithSessionLogged>
+                                <Schedules />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.TRAININGS} element={<WithSession><Trainings/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.TRAININGS}
+                        element={
+                            <WithSessionLogged>
+                                <Trainings />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.PROFILE} element={<WithSession><Profile/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.PROFILE}
+                        element={
+                            <WithSessionLogged>
+                                <Profile />
+                            </WithSessionLogged>
+                        }
+                    />
                 </Routes>
 
             {/* Employer Pages */}
                 <Routes>
-                    <Route path={path.DASHBOARD} element={<WithSession><Dashboard/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.DASHBOARD}
+                        element={
+                            <WithSessionLogged>
+                                <Dashboard />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.MY_EMPLOYERS} element={<WithSession><MyEmployers/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.MY_EMPLOYERS}
+                        element={
+                            <WithSessionLogged>
+                                <MyEmployers />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.MY_EMPLOYEES} element={<WithSession><MyEmployees/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.MY_EMPLOYEES}
+                        element={
+                            <WithSessionLogged>
+                                <MyEmployees />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.EMPLOYER_TRAININGS} element={<WithSession><MyTrainings/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.EMPLOYER_TRAININGS}
+                        element={
+                            <WithSessionLogged>
+                                <MyTrainings />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.SEARCH} element={<WithSession><PublicSearch/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.SEARCH}
+                        element={
+                            <WithSessionLogged>
+                                <PublicSearch />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.SUBSCRIBE} element={<WithSession><Subscribe/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.SUBSCRIBE}
+                        element={
+                            <WithSessionLogged>
+                                <Subscribe />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.TRAINING_RECORDS} element={<WithSession><TrainingRecords/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.TRAINING_RECORDS}
+                        element={
+                            <WithSessionLogged>
+                                <TrainingRecords />
+                            </WithSessionLogged>
+                        }
+                    />
 
-                    <Route path={path.CREATE_COMPANY} element={<WithSession><CreateCompany/></WithSession>}>
-                    </Route>
+                    <Route
+                        path={path.CREATE_COMPANY}
+                        element={
+                            <WithSessionLogged>
+                                <CreateCompany />
+                            </WithSessionLogged>
+                        }
+                    />
                 </Routes>
 
             {/* Admin Pages */}
                 <Routes>
-                    <Route path={path.ADMIN_USERS} element={<WithSession><Users/></WithSession>}>
-                    </Route>
+                    <Route 
+                        path={path.ADMIN_USERS} 
+                        element={
+                            <WithSessionLogged>
+                                <Users/>
+                            </WithSessionLogged>
+                        }
+                        />
 
-                    <Route path={path.ADMIN_COMPANIES} element={<WithSession><Companies/></WithSession>}>
-                    </Route>
 
-                    <Route path={path.ADMIN_APPROVAL} element={<WithSession><Approval/></WithSession>}>
-                    </Route>
+                    < Route
+                        path={path.ADMIN_COMPANIES} 
+                        element={
+                        <WithSessionLogged>
+                            <Companies/>
+                        </WithSessionLogged>
+                        }
+                        />
 
-                    <Route path={path.ADMIN_ANNOUNCEMENT} element={<WithSession><Announcement/></WithSession>}>
-                    </Route>
+                    <Route 
+                        path={path.ADMIN_APPROVAL} 
+                        element={
+                        <WithSessionLogged>
+                            <Approval/>
+                        </WithSessionLogged>}
+                    />
+
+                    <Route 
+                        path={path.ADMIN_ANNOUNCEMENT} 
+                        element={
+                        <WithSessionLogged>
+                            <Announcement/>
+                        </WithSessionLogged>}
+                    />
+                    
+                    <Route 
+                        path="/loadingtest"
+                        element={<Loading/>}
+                    />
                 </Routes>
-
+                
             </UserProvider>
         </QueryClientProvider>
+
+        
   )
 }
 

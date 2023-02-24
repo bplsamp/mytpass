@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('title');
             $table->string('speaker');
             $table->string('provider');
-            $table->dateTime('completionDate');
+            $table->dateTime('completionDate')->nullable();;
             $table->dateTime('expiryDate')->nullable();
-            $table->string('result');
-            $table->string('feedback');
+            $table->string('result')->nullable();;
+            $table->string('feedback')->nullable();;
             $table->uuid('inputtedBy');
             $table->string('inputtedName');
-            $table->string('certificate');
+            $table->string('certificate')->nullable();;
             $table->string('status');
             $table->string('venueUrl')->nullable();
             $table->string('type');

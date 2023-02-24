@@ -12,21 +12,7 @@ const navigate = useNavigate();
 const User = useAuth();
 const getUser = useAuthUpdate();
 
-const pathkey = JSON.parse(localStorage.getItem('pathkey'));
-
-useEffect (() => {
-  getUser()
-  console.log(User)
-  if (User?.role == "Employee")
-    navigate(pathkey)
-    else if (User?.role == "Business Owner" || User?.role == "Human Resource")
-    navigate(pathkey)
-    else
-    navigate("/")
-}, [User])
-
   return (
-    
     <GuestPage>
         <GuestIntro/>
         <Footer/>
