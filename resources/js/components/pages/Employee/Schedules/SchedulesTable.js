@@ -7,7 +7,7 @@ import { apost } from '../../../shared/query';
 import QueryApi from '../../../Query/QueryApi';
 import { useAuth } from '../../../default/Session/SessionProvider';
 
-export default function SchedulesTable({ trainings, withTool, setSelectedTraining, setshowAttendanceModal, isAuthor, data2, refetch }) {
+export default function SchedulesTable({ trainings, setSelectedTraining, setshowAttendanceModal, refetch }) {
 
     if (trainings?.length <= 0) {
         return <EmptyState />;
@@ -15,7 +15,7 @@ export default function SchedulesTable({ trainings, withTool, setSelectedTrainin
 
     const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
     const User = useAuth();
-
+    const [isPending, setIsPending] = useState(true);
 
     const handleDeleteTraining = (e, trainingId) => {
         e.preventDefault();
@@ -47,7 +47,7 @@ export default function SchedulesTable({ trainings, withTool, setSelectedTrainin
                     <th>Status</th>
                     <th>Feedback</th>
                     <th>Inputted By</th>
-                    {withTool && <th>Actions</th>}
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,24 +65,24 @@ export default function SchedulesTable({ trainings, withTool, setSelectedTrainin
                         <td>{training?.status}</td>
                         <td>{training?.feedback}</td>
                         <td>{training?.inputtedName}</td>
-                        {withTool && 
-                        <td>
+                        
+                        {training?.status == "pending" ? (<td>
                             <div className="flex flex-row gap-4">
                                 <AiFillEye onClick={() => {
                                     console.log("CLICKED");
                                     setSelectedTraining(training)
                                     setshowAttendanceModal(true)
-                                }} className="icon cursor-pointer" />
+                                }} className="icon cursor-pointer text-yellow-500" />
 
                                 <AiFillEdit className="icon cursor-pointer text-orange-500"/>
-                                {isAuthor && 
-                                    <CgTrash onClick={(e) => {
+                                
+                                <CgTrash onClick={(e) => {
                                         console.log("CLICKED DELETE TRAINING");
                                         handleDeleteTraining(e, training?.id);
                                     }} className="icon cursor-pointer text-red-500" />
-                                }
                             </div>
-                        </td>}
+                        </td>) 
+                        : <td>No Actions</td>}
                     </tr>
                 ))}
             </tbody>

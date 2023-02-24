@@ -53,12 +53,10 @@ export default function MyTrainings() {
                 {data && 
                     <SchedulesTable 
                         trainings={data} 
-                        withTool={true} 
                         setshowAttendanceModal={setshowAttendanceModal} 
                         setSelectedTraining={setSelectedTraining}
                         data2={data}
                         refetch={refetch}
-                        isAuthor={true}
                         />
                     }
             </Card>
