@@ -26,16 +26,17 @@ class TrainingsController extends Controller
     {
         try {
             $user = Auth::user();
-
             $req = json_decode($request->input("training"));
-         
+            if ($req->expiryDate == null) $expiryDate = null;
+            else $expiryDate = $req->expiryDate;
+            
             $training = Training::create([
                 'title' => $req->title, 
                 'speaker' => $req->speaker,
                 'provider' => $req->provider,
                 'date' => null,
                 'completionDate' => $req->completionDate,
-                'expiryDate' => null,
+                'expiryDate' => $expiryDate,
                 'inputtedBy' => $user->id,
                 'inputtedName' => $user->firstName." ".$user->lastName,
                 'status' => 'completed',
@@ -154,4 +155,28 @@ class TrainingsController extends Controller
             return response()->json(['message' => $e->getMessage()], 401);
         }
     }
+
+    public function deleteTraining(Request $req) {
+        try {
+            $user = Auth::user();
+            $training = Training::where('id', "=", $req->trainingId)->delete();
+            $trainingUser = TrainingUser::where('trainingId', '=', $req->trainingId)->delete();
+            $attendances = Attendance::where('trainingId', '=', $req->trainingId)->delete();
+
+
+            return response()->json([
+                'message' => 'Successfully deleted scheduled training',
+                'training' => $training,
+                'trainingUser' => $trainingUser,
+                'attendances' => $attendances]
+                , 200
+            );
+
+
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }    
+    } 
 }

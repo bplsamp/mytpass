@@ -26,20 +26,21 @@ export default function AddTrainingModal({ close, refetch }) {
         const [Image, setImage] = useState(null);
         const [previewUrl, setPreviewUrl] = useState("");
 
-        const [isTrainingExpire, setisTrainingExpire] = useState(false);
+        const [isTrainingExpiring, setisTrainingExpiring] = useState(false);
         const [Training, setTraining] = useState({
             title: "a",
             speaker: "b",
             provider: "c",
             completionDate: "2000-10-12",
             category: "test1",
-            expiryDate: "",
+            expiryDate: null?null:"",
             feedback: "FEEDBACK",
             result: "FINISHED",
             type: "test1",
             date: "",
             userId: id ? id : User?.id,
             venueUrl: "",
+            certificate: "",
         });
 
         const handleInputChange = (e) => {
@@ -97,6 +98,8 @@ export default function AddTrainingModal({ close, refetch }) {
                             label={`Training Provider`}
                             setValue={handleInputChange}
                         />
+                        <div className="flex flex-col mt-[3rem]">
+                        </div>
                         <ModalSelect
                             value={Training.category}
                             id={`category`}
@@ -137,9 +140,9 @@ export default function AddTrainingModal({ close, refetch }) {
                                         className=""
                                         id="yes"
                                         name="yes"
-                                        checked={isTrainingExpire}
+                                        checked={isTrainingExpiring}
                                         onChange={(e) =>
-                                            setisTrainingExpire(true)
+                                            setisTrainingExpiring(true)
                                         }
                                     />
                                 </div>
@@ -151,16 +154,16 @@ export default function AddTrainingModal({ close, refetch }) {
                                         className=""
                                         id="no"
                                         name="no"
-                                        checked={!isTrainingExpire}
+                                        checked={!isTrainingExpiring}
                                         onChange={(e) =>
-                                            setisTrainingExpire(false)
+                                            setisTrainingExpiring(false)
                                         }
                                     />
                                 </div>
                             </div>
                         </div>
                         <ModalInput
-                            disabled={!isTrainingExpire}
+                            disabled={!isTrainingExpiring}
                             value={Training.expiryDate}
                             id={`expiryDate`}
                             label={`Expiry Date`}

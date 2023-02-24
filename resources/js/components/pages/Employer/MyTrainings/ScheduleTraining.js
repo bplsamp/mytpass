@@ -14,10 +14,11 @@ import {
 } from "react-icons/bs";
 const opts = ["Test1", "Test2"];
 
-export default function ScheduleTraining({ close }) {
+export default function ScheduleTraining({ close, refetch }) {
     const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
     const user = useAuth();
     
+    const [isTrainingExpiring, setisTrainingExpiring] = useState(true);
     const [Users, setUsers] = useState(data);
     const [Training, setTraining] = useState({
         title: "a",
@@ -80,6 +81,7 @@ export default function ScheduleTraining({ close }) {
             users: users,
         });
         close();
+        refetch();
     };
 
     const handleSearchUsers = (e) => {
@@ -204,6 +206,7 @@ export default function ScheduleTraining({ close }) {
                             <input type={`radio`} />
                         </div>
                     </div>*/}
+                        <div className="flex flex-col mt-[3rem]"></div>
                         <ModalSelect
                             id={`category`}
                             label={`Category of Training`}
@@ -242,7 +245,40 @@ export default function ScheduleTraining({ close }) {
                             value={Training.date}
                             setValue={handleInputChange}
                         />
+                        <div className="flex flex-col">
+                            <span>Does the Training Expires?</span>
+                            <div className="flex flex-row gap-4">
+                                <div className="flex flex-row gap-4">
+                                    <label htmlFor="yes">Yes</label>
+                                    <input
+                                        type="radio"
+                                        className=""
+                                        id="yes"
+                                        name="yes"
+                                        checked={isTrainingExpiring}
+                                        onChange={(e) =>
+                                            setisTrainingExpiring(true)
+                                        }
+                                    />
+                                </div>
+
+                                <div className="flex flex-row gap-4">
+                                    <label htmlFor="no">No</label>
+                                    <input
+                                        type="radio"
+                                        className=""
+                                        id="no"
+                                        name="no"
+                                        checked={!isTrainingExpiring}
+                                        onChange={(e) =>
+                                            setisTrainingExpiring(false)
+                                        }
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <ModalInput
+                            disabled={!isTrainingExpiring}
                             id={`expiryDate`}
                             label={`Expiry Date`}
                             type={`date`}

@@ -28,8 +28,6 @@ const handleRejectCompany = (e, notifId) => {
     apost(
         "/api/rejectCompany",
         { id: notifId },
-        setisLoading,
-        null,
         refetch
     );
 };

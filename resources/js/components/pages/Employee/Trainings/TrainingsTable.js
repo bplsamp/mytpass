@@ -48,7 +48,7 @@ export default function TrainingsTable({trainings, refetch}) {
                         <td>
                             {training?.expiryDate
                                 ? training?.expiryDate
-                                : "None"}
+                                : "No Expiration"}
                         </td>
                         <td>{training?.result}</td>
                         <td>{training?.feedback}</td>

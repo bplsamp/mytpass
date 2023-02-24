@@ -1,14 +1,35 @@
-import React from 'react'
+import React, { useState, useEffect  } from 'react'
 import EmptyState from '../../../default/EmptyState/EmptyState';
 import { AiFillEye } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
 import { CgTrash } from "react-icons/cg";
+import { apost } from '../../../shared/query';
+import QueryApi from '../../../Query/QueryApi';
+import { useAuth } from '../../../default/Session/SessionProvider';
 
-export default function SchedulesTable({ trainings, withTool, setSelectedTraining, setshowAttendanceModal }) {
+export default function SchedulesTable({ trainings, withTool, setSelectedTraining, setshowAttendanceModal, isAuthor, data2, refetch }) {
 
     if (trainings?.length <= 0) {
         return <EmptyState />;
     }
+
+    const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
+    const User = useAuth();
+
+
+    const handleDeleteTraining = (e, trainingId) => {
+        e.preventDefault();
+
+        let users;
+
+        apost(
+            "/api/trainings/deleteTraining",
+            { 
+                trainingId: trainingId,
+            },
+        );
+        refetch();
+    };
 
     return (
         <table className="bg-transparent rounded-lg shadow-lg">
@@ -26,7 +47,7 @@ export default function SchedulesTable({ trainings, withTool, setSelectedTrainin
                     <th>Status</th>
                     <th>Feedback</th>
                     <th>Inputted By</th>
-                    {withTool && <th></th>}
+                    {withTool && <th>Actions</th>}
                 </tr>
             </thead>
             <tbody>
@@ -49,11 +70,17 @@ export default function SchedulesTable({ trainings, withTool, setSelectedTrainin
                             <div className="flex flex-row gap-4">
                                 <AiFillEye onClick={() => {
                                     console.log("CLICKED");
-                                    setshowAttendanceModal(true)
                                     setSelectedTraining(training)
-                                }} className="icon" />
+                                    setshowAttendanceModal(true)
+                                }} className="icon cursor-pointer" />
 
-                                <AiFillEdit className="icon text-orange-500"/>
+                                <AiFillEdit className="icon cursor-pointer text-orange-500"/>
+                                {isAuthor && 
+                                    <CgTrash onClick={(e) => {
+                                        console.log("CLICKED DELETE TRAINING");
+                                        handleDeleteTraining(e, training?.id);
+                                    }} className="icon cursor-pointer text-red-500" />
+                                }
                             </div>
                         </td>}
                     </tr>

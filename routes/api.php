@@ -61,6 +61,7 @@ Route::controller(TrainingsController::class)->group(function () {
     Route::post('/trainings/delete', 'delete');
     Route::get('/trainings/getSchedule', 'getSchedule');
     Route::post('/trainings/bulkInsert', 'bulkInsert');
+    Route::post('/trainings/deleteTraining', 'deleteTraining');
 });
 
 Route::controller(AdminController::class)->group(function () {

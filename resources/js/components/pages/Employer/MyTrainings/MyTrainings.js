@@ -50,11 +50,21 @@ export default function MyTrainings() {
             </Card>
 
             <Card className={`mx-4 p-4 mt-4`}>
-                {data && <SchedulesTable trainings={data} withTool={true} setshowAttendanceModal={setshowAttendanceModal} setSelectedTraining={setSelectedTraining}/>}
+                {data && 
+                    <SchedulesTable 
+                        trainings={data} 
+                        withTool={true} 
+                        setshowAttendanceModal={setshowAttendanceModal} 
+                        setSelectedTraining={setSelectedTraining}
+                        data2={data}
+                        refetch={refetch}
+                        isAuthor={true}
+                        />
+                    }
             </Card>
 
             {ShowSchedule && 
-                <ScheduleTraining close={() => setShowSchedule(false)}  />
+                <ScheduleTraining close={() => setShowSchedule(false)} refetch={refetch}  />
             }
 
         </EmployerPage>
