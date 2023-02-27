@@ -1,7 +1,6 @@
 import React from 'react'
 import Footer from '../../../footer/Footer'
 import GuestPage from '../../../layouts/GuestPage'
-import FooterLogged from '../../../footer/FooterLogged'
 
 export default function About() {
   return (
@@ -53,6 +52,7 @@ export default function About() {
             MyTPass Admin: +63 928-934-1928
           </p>
         </div>
+        <Footer/>
     </GuestPage>
   )
 }
