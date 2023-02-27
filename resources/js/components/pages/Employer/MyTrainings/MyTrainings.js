@@ -10,6 +10,7 @@ import { QueryApiPost } from "../../../Query/QueryApi";
 import SchedulesTable from "../../Employee/Schedules/SchedulesTable";
 import Select from "../../../default/Inputs/Select";
 import EmptyState from "../../../default/EmptyState/EmptyState";
+import AttendanceModal from "./AttendanceModal";
 
 export default function MyTrainings() {
     const [ShowSchedule, setShowSchedule] = useState(false);
@@ -64,6 +65,8 @@ export default function MyTrainings() {
             {ShowSchedule && 
                 <ScheduleTraining close={() => setShowSchedule(false)} refetch={refetch}  />
             }
+
+            {showAttendanceModal && <AttendanceModal training={SelectedTraining} close={() => setshowAttendanceModal(false)} refetch={refetch} />}
 
         </EmployerPage>
     );

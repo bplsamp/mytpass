@@ -11,7 +11,7 @@ function ModalInput({ label, type, setValue, id, value, disabled }) {
                 onChange={(e) => setValue(e)}
                 type={type}
                 disabled={disabled}
-                className="input text-[1.1rem] max-h-[44.29px]"
+                className={`input text-[1.1rem] max-h-[44.29px]`}
             />
         </div>
     );

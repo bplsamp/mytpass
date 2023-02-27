@@ -26,7 +26,7 @@ export default function ScheduleTraining({ close, refetch }) {
         provider: "c",
         completionDate: "2025-02-20",
         category: "test1",
-        expiryDate: "2030-02-20",
+        expiryDate: null?null:"",
         feedback: "",
         result: "PENDING",
         status: "pending",
@@ -65,7 +65,8 @@ export default function ScheduleTraining({ close, refetch }) {
                 return {
                     id: user?.id,
                     firstName: user?.firstName,
-                    lastName: user?.lastName
+                    lastName: user?.lastName,
+                    contact: user?.contact
                 };
             }
         

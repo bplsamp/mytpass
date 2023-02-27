@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Events\Registered;
+use App\Custom\AuditHelper;
 
 use Exception;
 
@@ -51,6 +52,9 @@ class AuthController extends Controller
            }
     
             event(new Registered($user));
+
+            AuditHelper::audit('create', 'user', 'created user account', $user);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'User created successfully',

@@ -17,6 +17,7 @@ class Attendance extends Model
             'userFullname',
             'trainingId',
             'isPresent',
+            'contact',
     ];
 
     public function user() {

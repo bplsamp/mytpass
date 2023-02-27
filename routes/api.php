@@ -54,6 +54,7 @@ Route::controller(EmployeeController::class)->group(function () {
     Route::get('/notifications', 'getNotif');
     Route::post('/acceptCompany', 'acceptCompany');
     Route::post('/rejectCompany', 'rejectCompany');
+    Route::post('/updateProfile', 'updateProfile');
 });
 
 Route::controller(TrainingsController::class)->group(function () {
@@ -63,6 +64,8 @@ Route::controller(TrainingsController::class)->group(function () {
     Route::get('/trainings/getSchedule', 'getSchedule');
     Route::post('/trainings/bulkInsert', 'bulkInsert');
     Route::post('/trainings/deleteTraining', 'deleteTraining');
+    Route::post('/trainings/getUsersByTraining', 'getUsersByTraining');
+    Route::post('/trainings/completeTraining', 'completeTraining');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -71,6 +74,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/approvals', 'approvals');
     Route::get('/admin/announcements', 'announcements');
     Route::post('/admin/approveCompany', 'approveCompany');
+    Route::get('/admin/audits', 'audits');
 });
 
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])

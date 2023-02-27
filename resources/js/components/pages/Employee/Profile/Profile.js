@@ -6,11 +6,12 @@ import { AiFillPrinter } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
 import { useNavigate, useLocation } from "react-router-dom";
 import avatar from "../../../assets/images/user.png";
-import trainings from "./trainings.json";
 import moment from "moment";
 import EmployeePage from "../../../layouts/EmployeePage";
 import FooterLogged from "../../../footer/FooterLogged";
 import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
+import QueryApi from "../../../Query/QueryApi";
+import EmptyState from "../../../default/EmptyState/EmptyState";
 
 const Card = ({ text }) => {
     return (
@@ -30,6 +31,11 @@ const HeaderName = ({ name, expertise }) => {
 };
 
 export const ProfileBox = ({ user, navigate, isPublic }) => {
+    const { isLoading, error, data, isFetching, isError, refetch } = QueryApi(
+        `trainings`,
+        `/api/trainings/get`,
+    );
+    
     return (
         <main className="text-gray-800 shadow-gray-300 shadow bg-white flex flex-row rounded-lg mr-auto ml-auto m-8">
             <div className="flex flex-col bg-[#3A3A3A] max-w-[350px] items-center text-white border-l-8 border-torange">
@@ -128,7 +134,7 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                             </tr>
                         </thead>
                         <tbody className="text-left">
-                            {trainings.map((training) => (
+                            {data?.map((training) => (
                                 <tr
                                     key={training?.id}
                                     className="border-b-2 border-gray-200"
@@ -136,7 +142,7 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                                     <td className="p-2">{training?.title}</td>
                                     <td className="p-2">
                                         {moment(
-                                            new Date(training?.completion)
+                                            new Date(training?.completionDate)
                                         ).format("MM/DD/YYYY")}
                                     </td>
                                 </tr>

@@ -29,11 +29,6 @@ export default function Trainings() {
     localStorage.setItem('pathkey', JSON.stringify(currentPath))
     }, []);
 
-    //Email verified checker
-    if (User && User?.email_verified_at == null) {
-        return <VerifyFirst />;
-    }
-
   return (
     <EmployeePage>
         <div className="p-12 flex flex-col">

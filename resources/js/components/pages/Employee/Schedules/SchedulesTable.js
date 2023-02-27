@@ -66,12 +66,12 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
                         <td>{training?.feedback}</td>
                         <td>{training?.inputtedName}</td>
                         
-                        {training?.status == "pending" ? (<td>
+                        {training?.status == "pending" && training?.inputtedBy == User?.id ? (<td>
                             <div className="flex flex-row gap-4">
                                 <AiFillEye onClick={() => {
                                     console.log("CLICKED");
-                                    setSelectedTraining(training)
                                     setshowAttendanceModal(true)
+                                    setSelectedTraining(training)
                                 }} className="icon cursor-pointer text-yellow-500" />
 
                                 <AiFillEdit className="icon cursor-pointer text-orange-500"/>

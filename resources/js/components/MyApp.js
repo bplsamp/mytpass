@@ -22,6 +22,7 @@ import Home from './pages/Employee/Home/Home';
 import Schedules from './pages/Employee/Schedules/Schedules';
 import Trainings from './pages/Employee/Trainings/Trainings';
 import Profile, { ProfileBox } from './pages/Employee/Profile/Profile';
+import EditProfile from './pages/Employee/Profile/EditProfile';
 
 import Dashboard from './pages/Employer/Dashboard/Dashboard';
 import MyEmployers from './pages/Employer/MyEmployers/MyEmployers';
@@ -37,6 +38,7 @@ import Users from './pages/Admin/Users/Users';
 import Companies from './pages/Admin/Companies/Companies';
 import Approval from './pages/Admin/Approval/Approval';
 import Announcement from './pages/Admin/Announcement/Announcement';
+import Audits from './pages/Admin/Audits/Audits';
 
 import EmailSuccess from './pages/EmailVerification/EmailSuccess';
 import AlreadyVerifiedEmail from './pages/EmailVerification/AlreadyVerifiedEmail';
@@ -169,6 +171,15 @@ export default function MyApp() {
                             </WithSessionLogged>
                         }
                     />
+
+                    <Route
+                        path={path.EDIT_PROFILE}
+                        element={
+                            <WithSessionLogged>
+                                <EditProfile />
+                            </WithSessionLogged>
+                        }
+                    />
                 </Routes>
 
             {/* Employer Pages */}
@@ -289,6 +300,14 @@ export default function MyApp() {
                         element={
                         <WithSessionLogged>
                             <Announcement/>
+                        </WithSessionLogged>}
+                    />
+
+                    <Route 
+                        path={path.ADMIN_AUDITS} 
+                        element={
+                        <WithSessionLogged>
+                            <Audits/>
                         </WithSessionLogged>}
                     />
                     

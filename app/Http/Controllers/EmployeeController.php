@@ -10,7 +10,9 @@ use App\Models\User;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
+use Illuminate\Filesystem\AwsS3V3Adapter;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -21,7 +23,24 @@ class EmployeeController extends Controller
 
     public function updateProfile(Request $request)
     {
+        try {        
+            $obj = json_decode($request->input('user'));
 
+            $user = User::findOrFail($obj->id);
+
+            foreach ($obj as $property => $new) {
+                $user->$property = $new;
+            }
+
+            if ($user) {
+                $user->save();
+            }
+           
+            return response()->json(['message' => "Successfully updated profile"], 200);
+        } catch(Throwable $e) {
+            report($e);
+            error_log("hit".$e);
+        }
     }
 
     public function getNotif(Request $request)

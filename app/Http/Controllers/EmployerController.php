@@ -76,7 +76,7 @@ class EmployerController extends Controller
               error_log($e->getMessage());
         }
     }
-    
+
     public function searchUser(Request $request)
     {
 

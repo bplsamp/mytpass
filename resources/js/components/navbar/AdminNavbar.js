@@ -7,7 +7,7 @@ const routes = {
     "/admin/companies": "Companies",
     "/admin/approvals": "Approval List",
     "/admin/announcements": "Announcement",
-    "/admin/audit": "Audit",
+    "/admin/audits": "Audits",
 };
 export default function AdminNavbar() {
     const location = useLocation();

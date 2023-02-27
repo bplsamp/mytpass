@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Webcontent;
 use App\Models\Approval;
+use App\Models\Audit;
 use stdClass;
 use Throwable;
 use Exception;
@@ -102,6 +103,11 @@ class AdminController extends Controller
             return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
         }
 
+    }
+
+    public function audits() {
+        $audits = Audit::all();
+        return response()->json($audits);
     }
 
     public function rejectCompany() {

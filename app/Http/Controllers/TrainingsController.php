@@ -14,6 +14,7 @@ use App\Models\Company;
 use App\Models\Training;
 use App\Models\TrainingUser;
 use App\Models\Attendance;
+use Illuminate\Support\Carbon;
 
 class TrainingsController extends Controller
 {
@@ -45,7 +46,7 @@ class TrainingsController extends Controller
                 'type' => $req->type,
                 'category' => $req->category,
                 'feedback' => $req->feedback,
-                'certificate' => $req->certificate,
+                'certificate' => null,
             ]);
             
             if(!$training) {
@@ -63,6 +64,18 @@ class TrainingsController extends Controller
 
             $trainingUser->save();
             $training->save();
+
+            /*$path = $this->database->uploadFileWatermarked(
+                '/trainings'. '/',
+                $request->file("certificate"),
+                $training->id,
+                true
+            );
+
+            if(!$path) {
+                Training::find($training->id)->delete();
+                throw new Error("Failed to upload certificate");
+            }*/
 
             return response()->json(['message' => 'Successfully created training'], 200);
 
@@ -128,6 +141,22 @@ class TrainingsController extends Controller
 
     }
 
+    public function getUsersByTraining(Request $req) {
+        try{
+            $users = Attendance::where('trainingId', '=', $req->trainingId)->get();
+            if(!$users) {
+                throw New Error("Failed to get users");
+            }
+
+            return response()->json($users);
+        }  
+        catch (Throwable $e)
+        {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
+
     public function bulkInsert(Request $req) {
         try {
             $loggedUser = Auth::user();
@@ -139,13 +168,14 @@ class TrainingsController extends Controller
                     'trainingId' => $training->id,
                     'userId' => $u->id,
                 ]);
-            }
-
                 Attendance::create([
                     'userId' => $u->id,
                     'trainingId' => $training->id,
                     'userFullname' => $u->firstName . " " . $u->lastName,
+                    'contact' => $u->contact,
                 ]);
+                
+            }
 
                 return response()->json(['message' => 'Successfully notified users'], 200);
         }
@@ -154,6 +184,36 @@ class TrainingsController extends Controller
             error_log($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 401);
         }
+    }
+
+    public function completeTraining(Request $req) {
+        try {
+             //Update training to completed
+             $t = (object)$req->training;
+             $training = Training::find($t->id);
+             $training->status = 'completed';
+             $training->feedback = $t->feedback;
+             $training->result = $t->result;
+             $training->completionDate = Carbon::now();
+             $training->save();
+            
+             //Update all attendance
+             foreach ($req->users as $user) {
+                 $u = (object)$user;
+                 Attendance::where('userId', '=', $u->userId)->update(['isPresent' => $u->isPresent]);
+ 
+                 //if absent
+                 if($u->isPresent == false) {
+                     TrainingUser::where('trainingId', '=', $training->id)->where('userId', '=', $u->userId)->delete();
+                 }
+             }
+ 
+             return response()->json(['message' => 'Successfully completed training'], 200);
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }    
     }
 
     public function deleteTraining(Request $req) {

@@ -34,6 +34,7 @@ export const ADMIN_USERS = "/admin/users";
 export const ADMIN_COMPANIES = "/admin/companies";
 export const ADMIN_APPROVAL = "/admin/approvals";
 export const ADMIN_ANNOUNCEMENT = "/admin/announcements";
+export const ADMIN_AUDITS = "/admin/audits";
 
 //Email Verify
 export const EMAIL_SUCCESS = "/email/verify/success";

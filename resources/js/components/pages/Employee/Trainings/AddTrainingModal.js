@@ -26,21 +26,24 @@ export default function AddTrainingModal({ close, refetch }) {
         const [Image, setImage] = useState(null);
         const [previewUrl, setPreviewUrl] = useState("");
 
+        const handleFile = (file) => {
+            setImage(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        };
+
         const [isTrainingExpiring, setisTrainingExpiring] = useState(false);
         const [Training, setTraining] = useState({
-            title: "",
-            speaker: "",
-            provider: "",
-            completionDate: "",
+            title: "a",
+            speaker: "b",
+            provider: "c",
+            completionDate: "2000-10-12",
             category: "General",
             expiryDate: null?null:"",
-            feedback: "",
-            result: "",
+            feedback: "a",
+            result: "completed",
             type: "Short Term",
-            date: "",
             userId: id ? id : User?.id,
-            venueUrl: "",
-            certificate: "",
+            venueUrl: "url",
         });
 
         const handleInputChange = (e) => {
@@ -56,6 +59,7 @@ export default function AddTrainingModal({ close, refetch }) {
             e.preventDefault();
 
             const data = new FormData();
+            data.append("certificate", Image);
             data.append(
                 "training",
                 JSON.stringify(

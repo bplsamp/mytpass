@@ -7,21 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+ * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('audits', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('operation');
+            $table->string('targetModel');
+            $table->string('description')->nullable();
+            $table->string('by')->nullable();
             $table->uuid('userId');
-            $table->string('userFullname');
-            $table->string('contact');
             $table->foreign('userId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->uuid('trainingId');
-            $table->foreign('trainingId')->references('id')->on('trainings')->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('isPresent')->default(false);
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('audits');
     }
 };
