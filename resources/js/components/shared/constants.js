@@ -6,6 +6,8 @@ export const CONTACT = "/contact";
 export const SUBSCRIPTION = "/subscription";
 export const ABOUT = "/about";
 export const FORGOT = "/forgotpassword";
+export const TERMS = "/terms";
+export const PRIVACY = "/privacy";
 
 //Employee Paths
 export const EMPLOYEE_HOME = "/employee";

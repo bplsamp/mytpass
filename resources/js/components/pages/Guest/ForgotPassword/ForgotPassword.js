@@ -1,10 +1,8 @@
 import React from 'react'
-import GuestNavbar from '../../../navbar/GuestNavbar';
 import forgot from "../../../assets/images/forgot.png"; 
 
 export default function ForgotPassword() {
   return (
-    <GuestPage>
       <div className='flex flex-col items-center text-justify gap-8 pt-[5rem]'>
         <img
         src={forgot}/>
@@ -25,6 +23,5 @@ export default function ForgotPassword() {
           </button>
       </form>
       </div>
-    </GuestPage>
   )
 }

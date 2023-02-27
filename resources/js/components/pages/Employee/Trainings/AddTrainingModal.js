@@ -28,15 +28,15 @@ export default function AddTrainingModal({ close, refetch }) {
 
         const [isTrainingExpiring, setisTrainingExpiring] = useState(false);
         const [Training, setTraining] = useState({
-            title: "a",
-            speaker: "b",
-            provider: "c",
-            completionDate: "2000-10-12",
-            category: "test1",
+            title: "",
+            speaker: "",
+            provider: "",
+            completionDate: "",
+            category: "General",
             expiryDate: null?null:"",
-            feedback: "FEEDBACK",
-            result: "FINISHED",
-            type: "test1",
+            feedback: "",
+            result: "",
+            type: "Short Term",
             date: "",
             userId: id ? id : User?.id,
             venueUrl: "",
@@ -104,7 +104,7 @@ export default function AddTrainingModal({ close, refetch }) {
                             value={Training.category}
                             id={`category`}
                             label={`Category of Training`}
-                            options={["test1", "test2", "test3"]}
+                            options={["General", "Technical Aspect", "Human Aspect", "Commercial Aspect"]}
                             setValue={handleInputChange}
                         />
                         <ModalTextArea
@@ -181,7 +181,7 @@ export default function AddTrainingModal({ close, refetch }) {
                             setValue={handleInputChange}
                             id={`type`}
                             label={`Type of Training`}
-                            options={["test1", "test2", "test3"]}
+                            options={["Short Term", "Long Term", "Refresher", "Internationally Acknowledge"]}
                         />
 
                         <label htmlFor="cert">Certificate / Document</label>
