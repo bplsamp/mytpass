@@ -66,9 +66,15 @@ class EmployerController extends Controller
         }
     }
 
-    public function user(Request $request) 
-    {
-
+    public function user(Request $request) {
+        try {
+            $obj = (object)json_decode($request->getContent());
+            $data = User::findOrFail($obj->id);
+            return response()->json($data);
+        }
+        catch(Throwable $e) {
+              error_log($e->getMessage());
+        }
     }
 
     public function searchUser(Request $request)

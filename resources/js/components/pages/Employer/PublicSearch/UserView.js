@@ -2,10 +2,11 @@ import React from "react";
 import EmployerPage from "../../../layouts/EmployerPage";
 import { FaUserTie } from "react-icons/fa";
 import Card from "../../../default/Card/Card";
-import { QueryApiPost } from "../../../default/Query/QueryApi";
+import { QueryApiPost } from "../../../Query/QueryApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProfileBox } from "../../Employee/Profile/Profile";
 import { IoChevronBack } from "react-icons/io5";
+
 export default function UserView({}) {
     const location = useLocation();
     const currentPath = location?.pathname;

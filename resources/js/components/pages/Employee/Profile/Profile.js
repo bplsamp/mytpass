@@ -11,7 +11,7 @@ import avatar from "../../../assets/images/user.png";
 import trainings from "./trainings.json";
 import moment from "moment";
 import EmployeePage from "../../../layouts/EmployeePage";
-import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
+import { useAuth } from "../../../default/Session/SessionProvider";
 
 const Card = ({ text }) => {
     return (
@@ -60,11 +60,9 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                         <FaBuilding className="text-[1.5rem]" />
 
                         <span>
-                            {user?.companyId == null
-                                ? "none"
-                                : user?.company?.companyStatus == "Active"
-                                ? user?.company?.companyName
-                                : "none"}
+                            {user?.company?.id == null ? "none" 
+                            : user?.company?.companyStatus == "active" || "request deactivation" ? user?.company?.companyName 
+                            : "none"}
                         </span>
                         {user?.company?.icon && (
                             <img
@@ -151,10 +149,9 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
 };
 
 export default function Profile() {
-
-    const navigate = useNavigate();
     const User = useAuth();
-    const getUser = useAuthUpdate();
+    const navigate = useNavigate();
+    console.log(User);
 
     const location = useLocation();
     const currentPath = location?.pathname;

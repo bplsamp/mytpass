@@ -114,6 +114,18 @@ class TrainingsController extends Controller
         }
     }
 
+    public function getById()
+    {
+        try {
+            
+        }
+        catch (Throwable $e)
+        {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
+
     public function getSchedule()
     {
 
@@ -171,8 +183,6 @@ class TrainingsController extends Controller
                 'attendances' => $attendances]
                 , 200
             );
-
-
         }
         catch(Throwable $e) {
             error_log($e->getMessage());

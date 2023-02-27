@@ -26,6 +26,7 @@ import MyEmployers from './pages/Employer/MyEmployers/MyEmployers';
 import MyEmployees from './pages/Employer/MyEmployees/MyEmployees';
 import MyTrainings from './pages/Employer/MyTrainings/MyTrainings';
 import PublicSearch from './pages/Employer/PublicSearch/PublicSearch';
+import UserView from './pages/Employer/PublicSearch/UserView';
 import Subscribe from './pages/Employer/Company/Subscribe';
 import TrainingRecords from './pages/Employer/TrainingRecords/TrainingRecords';
 import CreateCompany from './pages/Employer/Company/CreateCompany';
@@ -192,6 +193,15 @@ export default function MyApp() {
                         element={
                             <WithSessionLogged>
                                 <PublicSearch />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.PUBLIC_USER_PROFILE}
+                        element={
+                            <WithSessionLogged>
+                                <UserView />
                             </WithSessionLogged>
                         }
                     />

@@ -19,9 +19,7 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
 
     const handleDeleteTraining = (e, trainingId) => {
         e.preventDefault();
-
-        let users;
-
+        
         apost(
             "/api/trainings/deleteTraining",
             { 
