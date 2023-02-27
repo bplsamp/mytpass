@@ -9,7 +9,7 @@ const socials = {
 export default function FooterLogged() {
   return (
     <footer className="mt-auto bg-torange flex flex-col text-white px-16 py-2 pt-5">
-            <div className="flex flex-row gap-[7.5rem] justify-center mb-5">
+            <div className="flex flex-row gap-[7.5rem] justify-center mb-5 mr-[10rem]">
                 {/* 1 */}
                 <div className="flex flex-col gap-8">
                     <span className="font-black text-[2rem]">MyT-Pass</span>

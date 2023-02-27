@@ -3,6 +3,7 @@ import GuestNavbar from '../../../navbar/GuestNavbar'
 import Footer from '../../../footer/Footer'
 import contact from '../../../assets/images/contact.png'
 import GuestPage from '../../../layouts/GuestPage'
+import FooterLogged from '../../../footer/FooterLogged'
 
 export default function Contact() {
   return (

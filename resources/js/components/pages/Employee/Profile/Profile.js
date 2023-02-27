@@ -60,7 +60,7 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                         <span>
                             {user?.companyId == null
                                 ? "none"
-                                : user?.company?.companyStatus == "Active"
+                                : user?.company?.companyStatus == "active" || "request deactivation"
                                 ? user?.company?.companyName
                                 : "none"}
                         </span>
