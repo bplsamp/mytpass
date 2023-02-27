@@ -9,8 +9,7 @@ import avatar from "../../../assets/images/user.png";
 import trainings from "./trainings.json";
 import moment from "moment";
 import EmployeePage from "../../../layouts/EmployeePage";
-import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
-import FooterLogged from '../../../footer/FooterLogged';
+import { useAuth } from "../../../default/Session/SessionProvider";
 
 const Card = ({ text }) => {
     return (
