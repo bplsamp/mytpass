@@ -1,7 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import forgot from "../../../assets/images/forgot.png"; 
 
 export default function ForgotPassword() {
+  const navigate = useNavigate()
   return (
       <div className='flex flex-col items-center text-justify gap-8 pt-[5rem]'>
         <img
@@ -13,7 +15,8 @@ export default function ForgotPassword() {
           Fear not. We'll help you to reset your password.
           Enter the email address associated with your account.
         </div>
-        <form className="flex flex-col gap-4 w-[500px]">
+        <div className="flex flex-col gap-4 w-[500px]">
+        <form className='flex flex-col gap-4'>
           <input
               className="outline-0 border rounded-md border-gray-400 px-4 py-2"
               placeholder="Enter Email Address"
@@ -21,7 +24,13 @@ export default function ForgotPassword() {
           <button className="button px-4 py-2 mr-auto ml-auto">
               Send Email Verification
           </button>
-      </form>
+        </form>
+        <button 
+          className="button px-4 py-2 mr-auto ml-auto"
+          onClick={() => navigate(-1)}>
+            Back
+        </button>
+        </div>
       </div>
   )
 }

@@ -1,10 +1,11 @@
 import React from 'react'
 import Footer from '../../../footer/Footer'
 import GuestPage from '../../../layouts/GuestPage'
+import EmployeePage from '../../../layouts/EmployeePage'
 
 export default function About() {
   return (
-    <GuestPage>
+    <EmployeePage>
       <div className="flex flex-row">
           <h1 className="ml-auto mr-auto text-torange font-bold text-[2rem] py-6 justify-center">
               Terms and Conditions
@@ -31,6 +32,6 @@ export default function About() {
           </p>
         </div>
       <Footer/>
-    </GuestPage>
+    </EmployeePage>
   )
 }
