@@ -15,6 +15,8 @@ import About from './pages/Guest/About/About';
 import Login from './pages/Guest/Login/Login';
 import Register from './pages/Guest/Register/Register';
 import ForgotPassword from './pages/Guest/ForgotPassword/ForgotPassword';
+import Terms from './pages/Guest/Terms/Terms';
+import Privacy from './pages/Guest/Privacy/Privacy'
 
 import Home from './pages/Employee/Home/Home';
 import Schedules from './pages/Employee/Schedules/Schedules';
@@ -71,6 +73,25 @@ export default function MyApp() {
                         path={path.ABOUT} 
                         element={<About/>}>
                     </Route>
+
+                    <Route 
+                        path={path.TERMS} 
+                        element={<Terms/>}>
+                    </Route>
+
+                    <Route 
+                        path={path.PRIVACY} 
+                        element={<Privacy/>}>
+                    </Route>
+
+                    <Route
+                        path={path.FORGOT}
+                        element={
+                            <WithSession>
+                                <ForgotPassword />
+                            </WithSession>
+                        }
+                    />
 
                     <Route
                         path={path.LOGIN}
