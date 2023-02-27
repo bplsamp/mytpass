@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import Navbar from "../../../navbar/Navbar";
-import Footer from "../../../footer/Footer";
 import VerifyFirst from "../../EmailVerification/VerifyFirst";
 import { MdEmail, MdPhone } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa";
@@ -12,6 +10,7 @@ import trainings from "./trainings.json";
 import moment from "moment";
 import EmployeePage from "../../../layouts/EmployeePage";
 import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
+import FooterLogged from '../../../footer/FooterLogged';
 
 const Card = ({ text }) => {
     return (
@@ -166,7 +165,7 @@ export default function Profile() {
     return (
         <EmployeePage>
             <ProfileBox user={User} navigate={navigate}/>
-            <Footer/>
+            <FooterLogged/>
         </EmployeePage>
     );
 }

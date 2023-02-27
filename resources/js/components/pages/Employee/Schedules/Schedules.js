@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../../navbar/Navbar'
-import Footer from '../../../footer/Footer'
 import Search from '../../../shared/Search'
-import trainings from "../../Employee/Trainings/dummy.json";
 import SchedulesTable from './SchedulesTable';
 import EmployeePage from '../../../layouts/EmployeePage';
 import VerifyFirst from '../../EmailVerification/VerifyFirst';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth, useAuthUpdate } from '../../../default/Session/SessionProvider';
 import QueryApi from '../../../Query/QueryApi';
+import FooterLogged from '../../../footer/FooterLogged';
 
 export default function Schedules() {
     const navigate = useNavigate();
@@ -52,7 +50,7 @@ export default function Schedules() {
                 <SchedulesTable trainings={data} refetch={refetch} />
             </div>
         
-        <Footer/>
+        <FooterLogged/>
     </EmployeePage>
   )
 }

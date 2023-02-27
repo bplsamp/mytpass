@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '../../../navbar/Navbar'
-import Footer from '../../../footer/Footer'
 import VerifyFirst from '../../EmailVerification/VerifyFirst'
 import Search from '../../../shared/Search'
-import trainings from "../../Employee/Trainings/dummy.json";
 import TrainingsTable from './TrainingsTable';
 import { AiFillPrinter } from "react-icons/ai";
 import EmployeePage from '../../../layouts/EmployeePage';
@@ -11,7 +8,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth, useAuthUpdate } from '../../../default/Session/SessionProvider';
 import QueryApi, { QueryApiPost } from '../../../Query/QueryApi'
 import AddTrainingModal from './AddTrainingModal'
-import{ useQuery } from "@tanstack/react-query"
+import FooterLogged from '../../../footer/FooterLogged';
 
 export default function Trainings() {
     const navigate = useNavigate();
@@ -65,7 +62,7 @@ export default function Trainings() {
                 </div>
                 <TrainingsTable trainings={data} refetch={refetch}/>
             </div>
-        <Footer/>
+        <FooterLogged/>
         {ShowAdd && <AddTrainingModal close={() => setShowAdd(false)} refetch={refetch} />}
     </EmployeePage>
   )
