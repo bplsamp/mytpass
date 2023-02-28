@@ -68,13 +68,13 @@ class EmployeeController extends Controller
                     $user->companyId = $notif->companyId;
                     $user->isSearchable = false;
                     $user->save();
-                    Notification::where('companyId', '=', $notif->companyId)->delete();
+                    Notification::where('companyId', '=', $notif->companyId)->where('userId', '=', $user->id)->delete();
                     return response()->json([
                         'message' => "Successfully accepted company invitation.",
                         'status' => "success",
                     ], 200);
                 } else {
-                    Notification::where('companyId', '=', $notif->companyId)->delete();
+                    Notification::where('companyId', '=', $notif->companyId)->where('userId', '=', $user->id)->delete();
                     return response()->json([
                         'message' => "User already part of a company.",
                         'status' => "failed",
