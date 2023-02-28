@@ -30,7 +30,6 @@ export default function PublicSearch() {
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
-    console.log(data)
 
     return (
         <EmployerPage>
