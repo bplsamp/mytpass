@@ -66,7 +66,13 @@ export default function MyTrainings() {
                 <ScheduleTraining close={() => setShowSchedule(false)} refetch={refetch}  />
             }
 
-            {showAttendanceModal && <AttendanceModal training={SelectedTraining} close={() => setshowAttendanceModal(false)} refetch={refetch} />}
+            {showAttendanceModal && 
+                <AttendanceModal 
+                    training={SelectedTraining} 
+                    close={() => setshowAttendanceModal(false)} 
+                    refetch={refetch} 
+                />
+            }
 
         </EmployerPage>
     );

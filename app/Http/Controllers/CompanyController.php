@@ -46,6 +46,7 @@ class CompanyController extends Controller
             //update user - input companyId
             $user = User::findOrFail($companyOwner);
             $user->companyId = $company->id;
+            $user->isSearchable = false;
             $user->save();
 
             return response()->json([

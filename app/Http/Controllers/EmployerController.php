@@ -49,8 +49,7 @@ class EmployerController extends Controller
              return response()->json($data);
             }
             else {
-          
-            $data = User::whereNull('companyId')
+            $data = User::where('companyId', '=', "")
             ->where("isSearchable", '=', true)
             ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
             return response()->json($data);
@@ -173,6 +172,7 @@ class EmployerController extends Controller
         try {
             $user = Auth::user();
             $users = User::where('companyId', '=', $user->companyId)
+            ->where('id', '!=', $user->id)
             ->where('role', '!=', 'business owner')->get();
 
             if(!$users) {
@@ -194,6 +194,7 @@ class EmployerController extends Controller
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
             $user->companyId = '';
+            $user->isSearchable = true;
             $user->save();
 
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
