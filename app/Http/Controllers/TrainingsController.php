@@ -97,7 +97,6 @@ class TrainingsController extends Controller
         {
             $user = Auth::user();
             TrainingUser::where('trainingId', '=', $req->id)->where('userId', '=', $user->id)->delete();
-            Training::where('id', '=', $req->id)->where('inputtedBy', '=', $user->id)->delete();
             
             return response()->json(['message' => 'Successfully deleted training'], 200);
         }
