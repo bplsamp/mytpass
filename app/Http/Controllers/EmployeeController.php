@@ -63,11 +63,24 @@ class EmployeeController extends Controller
             error_log(strval($notif));
 
             if(isset($notif->companyId)) {
-                error_log('pasok');
                 $user = User::findOrFail($notif->userId);
-                $user->companyId = $notif->companyId;
-                $user->save();
-                Notification::where('companyId', '=', $notif->companyId)->delete();
+                if ($user->companyId == null) {
+                    $user->companyId = $notif->companyId;
+                    $user->isSearchable = false;
+                    $user->save();
+                    Notification::where('companyId', '=', $notif->companyId)->delete();
+                    return response()->json([
+                        'message' => "Successfully accepted company invitation.",
+                        'status' => "success",
+                    ], 200);
+                } else {
+                    Notification::where('companyId', '=', $notif->companyId)->delete();
+                    return response()->json([
+                        'message' => "User already part of a company.",
+                        'status' => "failed",
+                    ], 200);
+                }
+                
             }
         }
             catch(Throwable $e) {

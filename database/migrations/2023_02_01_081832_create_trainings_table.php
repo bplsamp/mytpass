@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('venueUrl')->nullable();
             $table->string('type');
             $table->string('category');
+            $table->boolean('isScheduled')->default(false);
             $table->timestamps();
         });
     }

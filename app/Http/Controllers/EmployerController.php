@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Custom\NotificationHelper;
 use App\Models\Notification;
 use App\Models\Training;
+use Illuminate\Support\Facades\DB;
 
 class EmployerController extends Controller
 {
@@ -40,9 +41,6 @@ class EmployerController extends Controller
 
             $data = User::where(function($query) use ($user) {
                 $query->whereNull('companyId')
-                ->orWhere('companyId', '!=', $user->companyId)
-                ->where('role', '!=', 'Business Owner')
-                ->where('companyId', '!=', $user->companyId)
                 ->where("isSearchable", '=', true);
             })
                 ->where('firstName', 'like', "%$obj->query%")
@@ -53,9 +51,6 @@ class EmployerController extends Controller
             else {
           
             $data = User::whereNull('companyId')
-            ->orWhere('companyId', '!=', $user->companyId)
-            ->where('role', '!=', 'Business Owner')
-            ->where('companyId', '!=', $user->companyId)
             ->where("isSearchable", '=', true)
             ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
             return response()->json($data);
@@ -122,6 +117,23 @@ class EmployerController extends Controller
         } 
     }
 
+    public function transferOwnership(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $company = Company::findOrFail($user->companyId)->update(['ownerId' => $request->targetId]);
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return response()->json(['message' => 'Successfully transferred ownership']);
+        } 
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        } 
+    }
+
     public function myEmployees(Request $request)
     {
         try {
@@ -146,6 +158,7 @@ class EmployerController extends Controller
             $obj = (object)json_decode($request->getContent());
             $data = User::where('companyId', '=', $user->companyId)
                 ->where('role', '!=', 'employee')
+                ->where('id', '!=', $user->id)
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
                 return response()->json($data);
             }
@@ -178,9 +191,12 @@ class EmployerController extends Controller
     {
         try {
             $user = User::findOrFail($request->id);
-            $user->company()->detach();
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
             $user->companyId = '';
             $user->save();
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     
             return response()->json(['message' => 'Successfully removed user from company', 200]);
         }
@@ -199,7 +215,7 @@ class EmployerController extends Controller
         try {
             $user = Auth::user();
 
-            $trainings = Training::where('inputtedBy', '=', $user->id)->get();
+            $trainings = Training::where('inputtedBy', '=', $user->id)->where('isScheduled', '=', 1)->get();
  
             if(!$trainings) {
              throw new Error("Failed to fetch my trainings");

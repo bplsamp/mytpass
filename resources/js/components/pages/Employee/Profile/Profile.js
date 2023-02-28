@@ -30,15 +30,11 @@ const HeaderName = ({ name, expertise }) => {
     );
 };
 
-export const ProfileBox = ({ user, navigate, isPublic }) => {
-    const { isLoading, error, data, isFetching, isError, refetch } = QueryApi(
-        `trainings`,
-        `/api/trainings/get`,
-    );
+export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
     
     return (
         <main className="text-gray-800 shadow-gray-300 shadow bg-white flex flex-row rounded-lg mr-auto ml-auto m-8">
-            <div className="flex flex-col bg-[#3A3A3A] max-w-[350px] items-center text-white border-l-8 border-torange">
+            <div className="flex flex-col bg-[#3A3A3A] max-w-[500px] items-center text-white border-l-8 border-torange">
                 <img
                     width="150"
                     className="rounded-full border-4 border-lorange z-10 m-8 bg-white max-w-[150px] min-h-[150px] min-w-[150px] max-h-[150px] object-scale-down"
@@ -61,23 +57,24 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                         <MdPhone className="text-[1.5rem]" />
                         <span>+{user?.contact ? user?.contact : "No contact..."}</span>
                     </div>
-                    <div className="flex flex-row items-center gap-4">
-                        <FaBuilding className="text-[1.5rem]" />
+                        {user?.companyId ? (
+                        <div className="flex flex-row items-center gap-4">
+                            <FaBuilding className="text-[1.5rem]" />
 
-                        <span>
-                            {user?.companyId == null
-                                ? "none"
-                                : user?.company?.companyStatus == "active" || "request deactivation"
-                                ? user?.company?.companyName
-                                : "none"}
-                        </span>
-                        {user?.company?.icon && (
-                            <img
-                                src={user?.company?.icon}
-                                className="max-w-[40] max-h-[40px] min-h-[40px] min-w-[40px] rounded-full object-scale-down border border-blue-400"
-                            ></img>
-                        )}
-                    </div>
+                            <span>
+                                {user?.companyId == null
+                                    ? "none"
+                                    : user?.company?.companyStatus == "active" || "request deactivation"
+                                    ? user?.company?.companyName
+                                    : "none"}
+                            </span>
+                            {user?.company?.icon && (
+                                <img
+                                    src={user?.company?.icon}
+                                    className="max-w-[40] max-h-[40px] min-h-[40px] min-w-[40px] rounded-full object-scale-down border border-blue-400"
+                                ></img>
+                            )}
+                    </div>) : (<></>)}
                 </div>
             </div>
 
@@ -134,7 +131,8 @@ export const ProfileBox = ({ user, navigate, isPublic }) => {
                             </tr>
                         </thead>
                         <tbody className="text-left">
-                            {data?.map((training) => (
+                            {trainings &&
+                            trainings?.map((training) => (
                                 <tr
                                     key={training?.id}
                                     className="border-b-2 border-gray-200"
@@ -164,13 +162,17 @@ export default function Profile() {
     const location = useLocation();
     const currentPath = location?.pathname;
 
+    const { data } = QueryApi(["trainings"], "/api/trainings/get");
+
     useEffect (() => {
     localStorage.setItem('pathkey', JSON.stringify(currentPath))
     }, [User])
 
     return (
         <EmployeePage>
-            <ProfileBox user={User} navigate={navigate}/>
+            {data && (
+                <ProfileBox user={User} navigate={navigate} trainings={data} />
+            )}
             <FooterLogged/>
         </EmployeePage>
     );

@@ -77,7 +77,7 @@ export default function MyEmployees () {
         </div>
         </Card>
         
-        <UserList data={data?.data} user={User} type={`employee`} />
+        <UserList data={data?.data} user={User} type={`employee`} refetch={refetch} />
 
 
     </EmployerPage>

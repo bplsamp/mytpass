@@ -23,7 +23,7 @@ export default function PublicSearch() {
 
     const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
-        `/api${currentPath}`,
+        `/api/employer/search`,
     { page: Page , query: Search}
     );
 

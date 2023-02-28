@@ -35,6 +35,7 @@ export default function ScheduleTraining({ close, refetch }) {
         inputtedName: user?.firstName + " " + user?.lastName,
         venueUrl: "TESTVENUEURL",
         certificate: '',
+        isScheduled: true,
     });
 
     const handleChangeInvited = (e) => {

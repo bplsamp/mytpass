@@ -47,6 +47,7 @@ Route::controller(EmployerController::class)->group(function () {
     Route::post('/employer/removeUser', 'removeUser');
     Route::post('/employer/trainings', 'mytrainings');
     Route::post('/employer/user', 'user');
+    Route::post('employer/transferOwnership', 'transferOwnership');
     Route::get('/employer/myCompanyUsers', 'myCompanyUsers');
 });
 

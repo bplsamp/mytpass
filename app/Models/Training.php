@@ -25,6 +25,7 @@ class Training extends Model
             'type',
             'category',
             'inputtedName',
+            'isScheduled',
     ];
 
   public function user() {

@@ -15,7 +15,6 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
 
     const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
     const User = useAuth();
-    const [isPending, setIsPending] = useState(true);
 
     const handleDeleteTraining = (e, trainingId) => {
         e.preventDefault();

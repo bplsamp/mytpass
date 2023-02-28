@@ -7,6 +7,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import UserProvider, { WithSession, WithSessionLogged } from './default/Session/SessionProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Loading from './default/Loading/Loading';
+import toast, { Toaster } from "react-hot-toast";
 
 import GuestHome from './pages/Guest/Home/GuestHome';
 import Subscription from './pages/Guest/Subscription/Subscription';
@@ -316,6 +317,13 @@ export default function MyApp() {
                         element={<Loading/>}
                     />
                 </Routes>
+                <Toaster
+                    toastOptions={{
+                        style: {
+                            zIndex: 9999999,
+                        },
+                    }}
+                />
                 
             </UserProvider>
         </QueryClientProvider>

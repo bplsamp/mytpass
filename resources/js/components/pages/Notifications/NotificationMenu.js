@@ -4,19 +4,24 @@ import { CardShadow } from "../../default/Card/Card";
 import Card from "../../default/Card/Card";
 import avatar from "../../assets/images/user.png";
 import { apost } from "../../shared/query";
+import { toast, Toaster} from "react-hot-toast";
 
 const NotificationCard = ({ notif, refetch, getUser }) => {
     let split = notif?.content.split("has invited you to their company");
     let [sender, company] = split;
     let content = "has invited you to their company";
 
-const handleAcceptCompany = (e, notifId) => {
+const handleAcceptCompany = async (e, notifId) => {
     e.preventDefault();
-    apost(
+    const res = await apost(
         "/api/acceptCompany",
         { id: notifId },
         refetch
     );
+
+    //if(res?.data?.status == "failed") alert("User already in a company.");
+    console.log(1111111, res?.data);
+    alert(res?.data?.status + ": " + res?.data?.message)
 
     setTimeout(() => {
         getUser();

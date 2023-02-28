@@ -20,7 +20,6 @@ export default function MyEmployers () {
 
     const navigate = useNavigate();
     const User = useAuth();
-
     const location = useLocation();
     const currentPath = location?.pathname;
 
@@ -40,7 +39,7 @@ export default function MyEmployers () {
     
     return (
         <>
-            {user?.role != "business owner" ? (
+            {User?.company?.ownerId != User?.id ? (
                 <NoPermission />
             ) : (
                 <EmployerPage>
@@ -87,7 +86,7 @@ export default function MyEmployers () {
                 </div>
                 </Card>
 
-                <UserList data={data?.data} user={User} type={`employer`} />
+                <UserList data={data?.data} user={User} type={`employer`}  refetch={refetch} />
 
                 </EmployerPage>
             )}

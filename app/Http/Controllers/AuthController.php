@@ -75,12 +75,11 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-        error_log($request);
+
         $credentials = $request->only('email', 'password');
 
-        error_log("ERROR1");
         $token = Auth::attempt($credentials);
-        error_log("ERROR2");
+
         if (!$token) {
             return response()->json([
                 'status' => 'error',

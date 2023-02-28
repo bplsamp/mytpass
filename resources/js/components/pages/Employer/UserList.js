@@ -9,7 +9,7 @@ import avatar from "../../assets/images/user.png";
 import { useNavigate } from "react-router-dom";
 import { apost } from "../../shared/query"
 
-export default function UserList({ data, type, user }) {
+export default function UserList({ data, type, user, refetch }) {
     const navigate = useNavigate();
 
     const handleRemoveUser = async (e, id) => {
@@ -18,7 +18,17 @@ export default function UserList({ data, type, user }) {
         await apost("/api/employer/removeUser", {
             id: id,
         });
+        refetch();
     };
+
+    const handleTransferOwnership = async (e, id) => {
+        await apost("/api/employer/transferOwnership", {
+            targetId: id
+        });
+        refetch();
+        
+    };
+
     return (
         <Card className={`mx-4 p-12 flex flex-col gap-7 mt-4`}>
             {data?.length <= 0 ? (
@@ -99,10 +109,18 @@ export default function UserList({ data, type, user }) {
                                         T-Pass
                                     </button>
                                 ) : type == "employer" ? (
-                                    <>
-                                        <FaCrown />
-                                        Transfer Ownership
-                                    </>
+                                    <button
+                                            className="flex items-center gap-2"
+                                            onClick={async (e) =>
+                                                await handleTransferOwnership(
+                                                    e,
+                                                    emp?.id
+                                                )
+                                            }
+                                        >
+                                            <FaCrown />
+                                            Transfer Ownership
+                                        </button>
                                 ) : (
                                     <>
                                         <FaUserPlus />
