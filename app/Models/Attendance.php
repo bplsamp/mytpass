@@ -16,6 +16,7 @@ class Attendance extends Model
             'userId',
             'userFullname',
             'trainingId',
+            'companyId',
             'isPresent',
             'contact',
     ];
@@ -24,7 +25,11 @@ class Attendance extends Model
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
-     public function training() {
+    public function training() {
         return $this->belongsTo(Training::class, 'trainingId', 'id');
+    }
+
+    public function company() {
+        return $this->belongsTo(Company::class, 'companyId', 'id');
     }
 }

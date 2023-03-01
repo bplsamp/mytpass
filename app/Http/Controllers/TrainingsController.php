@@ -130,7 +130,7 @@ class TrainingsController extends Controller
     {
 
             $user = Auth::user();
-            $trainings = TrainingUser::where('userId', '=', $user->id)->get()->pluck('training')->where('status', '=', 'pending');
+            $trainings = TrainingUser::where('userId', '=', $user->id)->get()->pluck('training');
 
             if(!$trainings) {
                 throw new Error("Failed to get training");
@@ -170,6 +170,7 @@ class TrainingsController extends Controller
                 Attendance::create([
                     'userId' => $u->id,
                     'trainingId' => $training->id,
+                    'companyId' => $loggedUser->companyId,
                     'userFullname' => $u->firstName . " " . $u->lastName,
                     'contact' => $u->contact,
                 ]);

@@ -31,6 +31,7 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
     };
 
     return (
+        
         <table className="bg-transparent rounded-lg shadow-lg">
             <thead className="bg-[#3A3A3A] text-white text-left rounded-lg">
                 <tr>

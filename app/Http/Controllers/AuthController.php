@@ -39,7 +39,7 @@ class AuthController extends Controller
                 'specify' => $request->specify,
                 'isSearchable' => true,
                 'bio' => '',
-                'companyId' => '',
+                'companyId' => null,
                 'liked' => '',
             ]);
 

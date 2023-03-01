@@ -11,6 +11,8 @@ use Error;
 use Illuminate\Support\Facades\Auth;
 use App\Custom\NotificationHelper;
 use App\Models\Notification;
+use App\Models\TrainingUser;
+use App\Models\Attendance;
 use App\Models\Training;
 use Illuminate\Support\Facades\DB;
 
@@ -191,11 +193,17 @@ class EmployerController extends Controller
     {
         try {
             $user = User::findOrFail($request->id);
+            $companyId = $user->companyId;
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
             $user->companyId = null;
             $user->isSearchable = true;
             $user->save();
+
+            //Attendance::where('companyId', '=', $companyId)
+            //->where('userId', '=', $user->id)->delete();
+
+            //TrainingUser::where('userId', '=', $user->id)->get()->pluck('training')->where('status', '=', 'pending')->delete();
 
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     

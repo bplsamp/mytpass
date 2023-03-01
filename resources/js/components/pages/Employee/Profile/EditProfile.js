@@ -39,7 +39,7 @@ export default function EditProfile() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         //send it by for because of image
@@ -59,12 +59,16 @@ export default function EditProfile() {
             )
         );
 
-        apost("/api/updateProfile", data);
+        const res = await apost("/api/updateProfile", data);
         setTimeout(() => {
             getUser();
         }, 1000);
 
+        /*alert(res?.data?.message); */
+        
+        
         navigate("/profile");
+        location.reload();
     };
 
     console.log(Profile);

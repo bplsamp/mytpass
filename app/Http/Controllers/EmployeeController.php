@@ -26,10 +26,33 @@ class EmployeeController extends Controller
         try {        
             $obj = json_decode($request->input('user'));
 
-            $user = User::findOrFail($obj->id);
+            $avatar = $request->file('avatar');
+            $path = '';
+            if($avatar) {
+                $filename = $obj->id."/avatar"."/".$avatar->getClientOriginalName();
+                $path = Storage::disk('s3')->put($filename, file_get_contents($avatar),'public');
+                $path = Storage::url($filename);
+                error_log('path'.$path);
+            }
 
-            foreach ($obj as $property => $new) {
-                $user->$property = $new;
+            $user = User::findOrFail($obj->id);
+            if($user) {
+                $user->email = $request->email;
+                //$user->email = $request->password;
+                $user->bio = $request->bio;
+                $user->expertise = $request->expertise;
+                $user->specify = $request->specify;
+                $user->firstName = $request->firstName;
+                $user->middleInitial = $request->middleInitial;
+                $user->contact = $request->contact;
+                if ($request->isSearchable == 0 || $request->isSearchable == "false") {
+                    $user->isSearchable = 0;
+                } else {
+                    $user->isSearchable = 1;
+                }
+                if($path) {
+                    $user->avatar = $path;
+                }
             }
 
             if ($user) {

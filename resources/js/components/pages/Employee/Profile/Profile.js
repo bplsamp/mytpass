@@ -104,7 +104,7 @@ export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
                         <div className="flex flex-col ml-auto gap-2">
                             <button
                                 onClick={() => {
-                                    navigate("/editprofile");
+                                    location.reload(navigate("/editprofile"));
                                 }}
                                 className="flex flex-row items-center justify-center gap-2 text-[0.9rem] bg-lorange text-white rounded-md px-8 py-1 hover:opacity-80"
                             >
