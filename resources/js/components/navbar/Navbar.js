@@ -82,7 +82,7 @@ export default function Navbar() {
                     </li>
                 ))}
                 <div className="ml-8 mr-8 flex gap-12 items-center">
-                <AiFillBell
+                    <AiFillBell
                         onClick={(e) => handleOpenNotification(e, User?.id)}
                         className={`text-[2rem] hover:opacity-80 cursor-pointer ${
                             ShowNotification && "text-torange"
@@ -91,7 +91,7 @@ export default function Navbar() {
                     <div className="flex flex-row gap-4">
                         
                         {/* NOTIFICATION CODE HERE */}
-                           
+                            
                         <div className='flex flex-col'>
                             <span className='capitalize text-center'>
                                 {User?.firstName + " " + User?.lastName}

@@ -25,12 +25,6 @@ export default function AddTrainingModal({ close, refetch }) {
     const [isLoading, setisLoading] = useState(false);
         const [Image, setImage] = useState(null);
         const [previewUrl, setPreviewUrl] = useState("");
-
-        const handleFile = (file) => {
-            setImage(file);
-            setPreviewUrl(URL.createObjectURL(file));
-        };
-
         const [isTrainingExpiring, setisTrainingExpiring] = useState(false);
         const [Training, setTraining] = useState({
             title: "a",
@@ -45,6 +39,11 @@ export default function AddTrainingModal({ close, refetch }) {
             userId: id ? id : User?.id,
             venueUrl: "url",
         });
+
+        const handleFile = (file) => {
+            setImage(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        };
 
         const handleInputChange = (e) => {
             const { name, value } = e.target;
@@ -69,10 +68,11 @@ export default function AddTrainingModal({ close, refetch }) {
                 )
             );
 
-            await apost(
+            const res = await apost(
                 "/api/trainings/create",
                 data,
             );
+            alert(res?.data?.message)
             close();
             refetch();
         };
@@ -190,8 +190,8 @@ export default function AddTrainingModal({ close, refetch }) {
 
                         <label htmlFor="cert">Certificate / Document</label>
                         <input
-                            id="cert"
-                            name="cert"
+                            id="certificate"
+                            name="certificate"
                             type="file"
                             onChange={(e) => {
                                 handleFile(e.target.files[0]);

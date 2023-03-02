@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('feedback')->nullable();;
             $table->uuid('inputtedBy');
             $table->string('inputtedName');
-            $table->string('certificate')->nullable();;
+            $table->string('certificate')->nullable();
             $table->string('status');
             $table->string('venueUrl')->nullable();
             $table->string('type');

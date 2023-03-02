@@ -15,6 +15,7 @@ use App\Models\Training;
 use App\Models\TrainingUser;
 use App\Models\Attendance;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class TrainingsController extends Controller
 {
@@ -28,6 +29,8 @@ class TrainingsController extends Controller
         try {
             $user = Auth::user();
             $req = json_decode($request->input("training"));
+            $certificate = $request->file('certificate');
+            
             if ($req->expiryDate == null) $expiryDate = null;
             else $expiryDate = $req->expiryDate;
             
@@ -46,8 +49,15 @@ class TrainingsController extends Controller
                 'type' => $req->type,
                 'category' => $req->category,
                 'feedback' => $req->feedback,
-                'certificate' => null,
             ]);
+
+            if($certificate) {
+                $filename = '/trainings'. '/'. $user->id. '/'. $certificate->getClientOriginalName();
+                $path = Storage::disk('s3')->put($filename, file_get_contents($certificate),'public');
+                //error_log(strval('path'.$path));
+                $path = Storage::url($filename);
+                $training->certificate = $path;
+            }
             
             if(!$training) {
                 throw new Error("Failed to create training");
@@ -77,7 +87,7 @@ class TrainingsController extends Controller
                 throw new Error("Failed to upload certificate");
             }*/
 
-            return response()->json(['message' => 'Successfully created training'], 200);
+            return response()->json(['message' => 'Successfully added training'], 200);
 
         }
         catch(Throwable $e) {
@@ -97,6 +107,7 @@ class TrainingsController extends Controller
         {
             $user = Auth::user();
             TrainingUser::where('trainingId', '=', $req->id)->where('userId', '=', $user->id)->delete();
+            //Delete Training URL
             
             return response()->json(['message' => 'Successfully deleted training'], 200);
         }

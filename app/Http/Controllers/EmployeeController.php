@@ -13,6 +13,7 @@ use App\Models\Notification;
 use Illuminate\Filesystem\AwsS3V3Adapter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class EmployeeController extends Controller
 {
@@ -23,7 +24,7 @@ class EmployeeController extends Controller
 
     public function updateProfile(Request $request)
     {
-        try {        
+        try {
             $obj = json_decode($request->input('user'));
 
             $avatar = $request->file('avatar');
@@ -31,15 +32,19 @@ class EmployeeController extends Controller
             if($avatar) {
                 $filename = $obj->id."/avatar"."/".$avatar->getClientOriginalName();
                 $path = Storage::disk('s3')->put($filename, file_get_contents($avatar),'public');
+                error_log(strval('path'.$path));
                 $path = Storage::url($filename);
-                error_log('path'.$path);
             }
 
             $user = User::findOrFail($obj->id);
             if($user) {
                 $user->email = $request->email;
                 //$user->email = $request->password;
-                $user->bio = $request->bio;
+                if ($request->bio == null) {
+                    $user->bio = '';
+                } else {
+                    $user->bio = $request->bio;
+                }
                 $user->expertise = $request->expertise;
                 $user->specify = $request->specify;
                 $user->firstName = $request->firstName;
@@ -60,9 +65,9 @@ class EmployeeController extends Controller
             }
            
             return response()->json(['message' => "Successfully updated profile"], 200);
-        } catch(Throwable $e) {
-            report($e);
-            error_log("hit".$e);
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
         }
     }
 

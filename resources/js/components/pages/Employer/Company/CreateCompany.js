@@ -27,7 +27,7 @@ export default function CreateCompany() {
     
     const [Files, setFiles] = useState([]);
     const [image, setImage] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState("");/*
+    const [previewUrl, setPreviewUrl] = useState("");
 
     const handleFile = (file) => {
         setImage(file);
@@ -41,7 +41,6 @@ export default function CreateCompany() {
         }
         setFiles(filesArray);
     };
-    */
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -56,10 +55,13 @@ export default function CreateCompany() {
 
         const data = new FormData();
 
+        for (let i = 0; i < Files.length; i++) {
+            data.append("files[]", Files[i]);
+        }
+        data.append("icon", image);
+
         data.append("company", JSON.stringify(Company));
-        console.log(User)
-        console.log(Company)
-        await axios.post("http://localhost:8000/api/company/create", Company,
+        const res = await axios.post("http://localhost:8000/api/company/create", data,
         {
             headers: { Authorization: `Bearer ${token}`},
         })
@@ -100,6 +102,15 @@ export default function CreateCompany() {
                     </div>
                 )}
 
+                <input
+                        required
+                        type="file"
+                        name="icon"
+                        id="icon"
+                        className="max-w-[300px]"
+                        accept="image/*"
+                        onChange={(e) => handleFile(e.target.files[0])}
+                />
             </div>
             <div className="flex flex-col gap-4 w-[770px]">
                 <label>Company Name</label>
@@ -155,6 +166,7 @@ export default function CreateCompany() {
                                 //required
                                 type="file"
                                 multiple={true}
+                                onChange={(e) => handleSupportingFilesChange(e)}
                             />
                     </div>
                     <div className="ml-auto flex flex-col gap-2">
