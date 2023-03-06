@@ -15,6 +15,7 @@ use App\Models\TrainingUser;
 use App\Models\Attendance;
 use App\Models\Training;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EmployerController extends Controller
 {
@@ -28,9 +29,40 @@ class EmployerController extends Controller
 
     }
 
-    public function updateCompany(Request $request)
+    public function editcompany(Request $request)
     {
+        try {
+            $icon = $request->file('icon');
+            $obj = (object)json_decode($request->input('company'));
+            $company = (object)Company::findOrFail($obj->id); 
+    
+            if($icon) {
+                $deletefile = parse_url($company->icon);
+                $isDeleted = Storage::disk('s3')->delete($deletefile);
+                error_log('DELETED'. $isDeleted);
 
+                $filename = '/companies/images/'. str_replace(" ", "_",$company->companyName). '/'. $icon->getClientOriginalName();
+                $pathicon = Storage::disk('s3')->put($filename, file_get_contents($icon),'public');
+                //error_log(strval('path'.$path));
+                $pathicon = Storage::url($filename);
+
+                $company->icon = $pathicon;
+                $company->save(); 
+            } 
+
+            if($company) {
+                $company->companyEmail = $request->companyEmail;
+                $company->companyContact = $request->companyContact;
+                $company->save();
+            }
+           
+            return response()->json(['message' => "Successfully updated company"], 200);
+    
+            } 
+            catch(Throwable $e) {
+                error_log((string)$e->getMessage());
+                return response()->json(['message' => "Failed to update company cause: ". $e->getMessage()] , 401);
+            }
     }
 
     public function search(Request $request) 
@@ -66,7 +98,10 @@ class EmployerController extends Controller
         try {
             $obj = (object)json_decode($request->getContent());
             $data = User::findOrFail($obj->id);
-            return response()->json($data);
+            $company = User::findOrFail($obj->id)->company;
+
+
+            return response()->json(['user' => $data, 'company' => $company]);
         }
         catch(Throwable $e) {
               error_log($e->getMessage());

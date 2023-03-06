@@ -28,7 +28,7 @@ class AuthController extends Controller
     {
         error_log("call_API");
         try {
-            try {
+            /*try {
                 $validator = (object)$request->validate([
                     'email' => 'required|string|max:100',
                     'password' => 'required|string|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
@@ -42,6 +42,7 @@ class AuthController extends Controller
                 error_log($e->getMessage());
                 return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
             }
+            */
             
 
             $user = User::create([

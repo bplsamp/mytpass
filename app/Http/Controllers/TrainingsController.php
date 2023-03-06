@@ -122,7 +122,7 @@ class TrainingsController extends Controller
         try 
         {
             $user = Auth::user();
-            $trainings = TrainingUser::where('userId', '=', $user->id)->get()->pluck('training')->where('status', '!=', 'pending');
+            $trainings = TrainingUser::where('userId', '=', $user->id)->with('training')->get()->pluck('training')->where('status', '!=', 'pending');
 
             if(!$trainings) {
                 throw new Error("Failed to get training");

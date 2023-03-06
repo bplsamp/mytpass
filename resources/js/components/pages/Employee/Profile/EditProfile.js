@@ -12,7 +12,6 @@ export default function EditProfile() {
     const user = useAuth();
     const getUser = useAuthUpdate();
     const navigate = useNavigate();
-    const [isLoading, setisLoading] = useState(false);
     const [Profile, setProfile] = useState(user);
     const [Image, setImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState("");

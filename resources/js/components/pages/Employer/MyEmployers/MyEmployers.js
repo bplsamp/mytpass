@@ -31,7 +31,7 @@ export default function MyEmployers () {
         { page: Page }
     );
 
-    console.log(data);
+    console.log(1111,data);
 
     useEffect (() => {
         localStorage.setItem('pathkey', JSON.stringify(currentPath))

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import VerifyFirst from "../../EmailVerification/VerifyFirst";
 import { MdEmail, MdPhone } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa";
@@ -31,9 +31,12 @@ const HeaderName = ({ name, expertise }) => {
 };
 
 export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
+    const componentRef = useRef(null);
     
     return (
-        <main className="text-gray-800 shadow-gray-300 shadow bg-white flex flex-row rounded-lg mr-auto ml-auto m-8">
+        <main 
+        ref={componentRef}
+        className="text-gray-800 shadow-gray-300 shadow bg-white flex flex-row rounded-lg mr-auto ml-auto m-8">
             <div className="flex flex-col bg-[#3A3A3A] max-w-[500px] items-center text-white border-l-8 border-torange">
                 <img
                     width="150"
@@ -156,17 +159,10 @@ export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
 export default function Profile() {
 
     const navigate = useNavigate();
-    const User = useAuth();
-    const getUser = useAuthUpdate();
-
-    const location = useLocation();
-    const currentPath = location?.pathname;
+    const User = useAuth();     
 
     const { data } = QueryApi(["trainings"], "/api/trainings/get");
 
-    useEffect (() => {
-    localStorage.setItem('pathkey', JSON.stringify(currentPath))
-    }, [User])
 
     return (
         <EmployeePage>

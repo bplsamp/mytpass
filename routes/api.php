@@ -37,9 +37,13 @@ Route::controller(AuthController::class)->group(function() {
 
 Route::controller(CompanyController::class)->group(function () {
     Route::post('/company/create', 'createCompany');
+    Route::post('/company/deactivate', 'deactivate');
+    Route::post('/company/activate', 'activate');
+    Route::post('/company/requestDeactivate', 'requestDeactivate');
 });
 
 Route::controller(EmployerController::class)->group(function () {
+    Route::post('/employer/editcompany', 'editcompany');
     Route::post('/employer/search', 'search');
     Route::post('/employer/inviteUser', 'inviteUser');
     Route::post('/employer/myemployees', 'myEmployees');
@@ -47,7 +51,7 @@ Route::controller(EmployerController::class)->group(function () {
     Route::post('/employer/removeUser', 'removeUser');
     Route::post('/employer/trainings', 'mytrainings');
     Route::post('/employer/user', 'user');
-    Route::post('employer/transferOwnership', 'transferOwnership');
+    Route::post('/employer/transferOwnership', 'transferOwnership');
     Route::get('/employer/myCompanyUsers', 'myCompanyUsers');
 });
 
@@ -75,6 +79,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/approvals', 'approvals');
     Route::get('/admin/announcements', 'announcements');
     Route::post('/admin/approveCompany', 'approveCompany');
+    Route::post('/admin/rejectCompany', 'rejectCompany');
     Route::get('/admin/audits', 'audits');
 });
 

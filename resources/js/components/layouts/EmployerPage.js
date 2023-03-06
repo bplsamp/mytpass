@@ -7,6 +7,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import NoCompany from "../pages/Employer/Dashboard/NoCompany";
 import WaitingApproval from "../pages/Employer/Company/WaitingApproval";
 import { useAuth, useAuthUpdate } from "../default/Session/SessionProvider";
+import { toast } from "react-hot-toast";
 
 export default function EmployerPage ({ children }) {
 
@@ -36,7 +37,7 @@ export default function EmployerPage ({ children }) {
                             </h1>
 
                             <div className="font-medium ml-auto flex flex-row gap-4 items-center relative top-3 mr-6">
-                                {User?.companyId ? (
+                                {User?.company?.ownerId == User?.id && User?.companyId ? (
                                 <div
                                     className="flex items-center gap-4 hover:opacity-60 cursor-pointer"
                                     onClick={() =>
@@ -45,12 +46,25 @@ export default function EmployerPage ({ children }) {
                                 >
                                     <img
                                         src={User?.company?.icon}
-                                        className={`max-w-[49px] max-h-[49px] object-scale-down rounded-full`}
+                                        className={`max-w-[50px] max-h-[50px] object-scale-down rounded-full`}
                                     ></img>
                                     <span className="text-[1.3rem]">
                                         {User?.company?.companyName}
                                     </span>
                                 </div>
+                                ) : User?.company?.ownerId != User?.id ? (
+                                    <div
+                                    onClick={() => toast.error("User is not owner, can not edit company details.")}
+                                    className="flex items-center gap-4 hover:opacity-60 cursor-pointer"
+                                    >
+                                        <img
+                                            src={User?.company?.icon}
+                                            className={`max-w-[49px] max-h-[49px] object-scale-down rounded-full`}
+                                        ></img>
+                                        <span className="text-[1.3rem]">
+                                            {User?.company?.companyName}
+                                        </span>
+                                    </div>
                                 ) : (
                                     <>
                                         <FaBuilding />

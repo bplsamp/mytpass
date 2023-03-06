@@ -44,7 +44,7 @@ export default function PublicSearch() {
             refetch={refetch}
             Search={Search}
             />
-            <UserList data={data?.data} user={user}/>
+            <UserList data={data?.data} user={user} type={""}/>
 
         </EmployerPage>
     );

@@ -10,6 +10,8 @@ use App\Models\Subscription;
 use App\Models\File;
 use Throwable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 use Exception;
 
@@ -106,7 +108,7 @@ class CompanyController extends Controller
         } catch (Throwable $e){
             //if anything fails we delete the files and icon from S3 first then delete the company
             //1st we need to delete icon
-            Storage::disk('s3')->delete($pathicon);
+            Storage::disk('s3')->delete(parse_url($pathicon));
 
             //2nd delete company if exist
             if(property_exists($company, 'id')) {
@@ -140,13 +142,69 @@ class CompanyController extends Controller
                         //Delete Files::class from database
                         File::destroy($filesArray[$i]);
                         //Delete uploaded files from s3
-                        Storage::disk('s3')->delete($fileUrls[$i]);
+                        Storage::disk('s3')->delete(parse_url($fileUrls[$i]));
                     } catch(Throwable $e) {
                         error_log($e->getMessage());
                     }
                 }
             }
+            error_log((string)$e->getMessage());
             return response()->json(['message' => "Failed to create company cause: ". $e->getMessage()] , 401);
+        }
+    }
+
+    public function deactivate(Request $request) {
+        try {
+            Company::findOrFail($request->id)->update(["companyStatus" => 'inactive',]);
+            
+            Mail::raw('The admins decided to deactivate your company, if you feel that we had made a mistake. Please contact us', function ($message) use($request) {
+                $message->to($request->ownerEmail)
+                    ->subject("Your Company Has Been Deactivated");
+                });
+
+            return response()->json(['message', 'Succesfully deactivated company']);
+        } 
+        catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
+
+    public function activate(Request $request) {
+        try {
+            $company = Company::findOrFail($request->id);
+            $company->companyStatus = "active";
+            $company->reason = null;
+            $company->save();  
+            
+            Mail::raw("The admins had reactivated your company, we appreciate your participation!", function ($message) use($request) {
+            $message->to($request->ownerEmail)
+                ->subject("Your Company Has Been Reactivated"." from:".$request->email);
+            });
+
+            return response()->json(['message', 'Succesfully activated company']);
+        } 
+        catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
+
+    public function requestDeactivate(Request $request) {
+        try {
+            $user = Auth::user();
+            $company = (object)User::findOrFail($user->id)->company;
+
+            $company = Company::findOrFail($company->id);
+            $company->companyStatus = "requested deactivation";
+            $company->reason = $request->reason;
+            $company->save();  
+          
+            return response()->json(['message' => 'Successfully requested deactivation.']);
+        } 
+        catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
         }
     }
 }

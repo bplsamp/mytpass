@@ -7,6 +7,7 @@ import QueryApi from "../../../Query/QueryApi";
 import Error from "../../../default/Error/Error";
 import Card from "../../../default/Card/Card";
 import EmptyState from "../../../default/EmptyState/EmptyState";
+import { apost } from "../../../shared/query";
 
 const RenderStatus = ({ status }) => {
     if (status === "Active") {
@@ -18,20 +19,53 @@ const RenderStatus = ({ status }) => {
     }
 };
 
-const RenderButton = ({ status }) => {
-    if (status === "active") {
+const RenderButton = ({ 
+    status,
+    refetch,
+    id,
+    ownerEmail 
+    }) => {
+    if (status === "inactive") {
         return (
             <button 
-            className="flex flex-row gap-2  text-red-400">
-                <MdDomainDisabled className="icon" />
-                <span>Deactivate</span>
+            className="flex flex-row gap-2  text-green-400">
+                <MdDomain className="icon" />
+                <span
+                    onClick={async () => {
+                        await apost(
+                            "/api/company/activate",
+                            { id: id, ownerEmail: ownerEmail }
+                        );
+                        refetch();
+                    }}
+                >
+                    Activate
+                </span>
             </button>
         );
-    } else if (status === "deactivated") {
+    } else if (status === "requested deactivation") {
         return (
-            <button className="flex flex-row gap-2  text-green-600">
+            <button className="flex flex-row gap-2  text-red-600">
+                <MdDomainDisabled className="icon" />
+                <span
+                    onClick={async () => {
+                        await apost(
+                            "/api/company/deactivate",
+                            { id: id, ownerEmail: ownerEmail }
+                        );
+                        refetch();
+                    }}
+                >
+                    Deactivate
+                </span>
+            </button>
+        );
+        
+    } else if (status === "active") {
+        return (
+            <button className="flex flex-row gap-2  text-gray-400">
                 <MdDomain className="icon" />
-                <span>Activate</span>
+                <span>None</span>
             </button>
         );
     } else {
@@ -115,6 +149,7 @@ export default function Companies() {
                                 <th>Contact Number</th>
                                 <th>Subscription Status</th>
                                 <th>Company Status</th>
+                                <th>Reason</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -138,7 +173,7 @@ export default function Companies() {
                                     <td>{company?.companyContact}</td>
                                     <td>
                                         {company?.subscription?.type
-                                            ? company?.subscripion?.type
+                                            ? company?.subscription?.type
                                             : "Free"}
                                     </td>
                                     <td>
@@ -147,8 +182,16 @@ export default function Companies() {
                                         />
                                     </td>
                                     <td>
+                                        {company?.reason != null
+                                            ? company?.reason
+                                            : "None"}
+                                    </td>
+                                    <td>
                                         <RenderButton
                                             status={company?.companyStatus}
+                                            id={company?.id}
+                                            refetch={refetch}
+                                            ownerEmail={company?.owner?.email}
                                         />
                                     </td>
                                 </tr>

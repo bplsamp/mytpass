@@ -34,6 +34,7 @@ import UserView from './pages/Employer/PublicSearch/UserView';
 import Subscribe from './pages/Employer/Company/Subscribe';
 import TrainingRecords from './pages/Employer/TrainingRecords/TrainingRecords';
 import CreateCompany from './pages/Employer/Company/CreateCompany';
+import EditCompany from './pages/Employer/Company/EditCompany';
 
 import Users from './pages/Admin/Users/Users';
 import Companies from './pages/Admin/Companies/Companies';
@@ -43,6 +44,7 @@ import Audits from './pages/Admin/Audits/Audits';
 
 import EmailSuccess from './pages/EmailVerification/EmailSuccess';
 import AlreadyVerifiedEmail from './pages/EmailVerification/AlreadyVerifiedEmail';
+
 
 const queryClient = new QueryClient();
 
@@ -262,6 +264,15 @@ export default function MyApp() {
                         element={
                             <WithSessionLogged>
                                 <CreateCompany />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.EDIT_COMPANY}
+                        element={
+                            <WithSessionLogged>
+                                <EditCompany />
                             </WithSessionLogged>
                         }
                     />

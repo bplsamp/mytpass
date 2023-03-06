@@ -116,8 +116,9 @@ export default function Approval() {
                                                     setShowReject({
                                                         state: true,
                                                         id: app?.id,
-                                                        companyName:
-                                                            app?.companyName,
+                                                        companyName: app?.companyName,
+                                                        ownerEmail: app?.owner?.email,
+                                                        ownerId: app?.owner?.id
                                                     })
                                                 }
                                                 className="icon text-red-400
@@ -137,8 +138,12 @@ export default function Approval() {
             {ShowReject.state && (
                 <RejectModal
                     close={() => setShowReject(false)}
+                    companyId={ShowReject?.id}
                     company={ShowReject?.companyName}
-                />
+                    refetch={refetch}
+                    ownerEmail={ShowReject?.ownerEmail}
+                    ownerId={ShowReject?.ownerId}
+            />
             )}
 
         </AdminPage>

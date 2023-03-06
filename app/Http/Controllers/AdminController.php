@@ -7,14 +7,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Providers\Database;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use App\Models\User;
 use App\Models\Webcontent;
 use App\Models\Approval;
 use App\Models\Audit;
+use App\Custom\AuditHelper;
 use stdClass;
 use Throwable;
 use Exception;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -75,7 +78,7 @@ class AdminController extends Controller
     
     public function approvals() {
         try {
-            $data = Company::where('companyStatus', '=', 'pending')->with('owner:id,lastName,firstName')->with('files')->get();
+            $data = Company::where('companyStatus', '=', 'pending')->with('owner:id,lastName,firstName,email')->with('files')->get();
             //->with(WALANG SPACE DAPAT PARA DI MAGERROR);
             return response()->json($data , 200);
         }
@@ -110,8 +113,32 @@ class AdminController extends Controller
         return response()->json($audits);
     }
 
-    public function rejectCompany() {
+    public function rejectCompany(Request $request) {
+        try {
+            $user = Auth::user();
 
+            $obj = (object)json_decode($request->getContent());    
+            
+            $logged = User::findOrFail($obj->ownerId);
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $logged->companyId = null;
+            $logged->save();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+            $company = Company::findOrFail($obj->companyId);
+            Company::destroy($obj->companyId);
+            AuditHelper::audit('update', 'company', 'Rejected ' . $company->companyName . ' company' , $user);            
+
+            Mail::raw("Reason: ".$obj->reason.
+            "\nAfter a careful review of your company, we decided to reject your commany, please provideus more information and documents. Your account has been deleted along with the company information and documents, so please register an account and a company again.", function ($message) use($obj) {
+                $message->to($obj->ownerEmail)
+                    ->subject("Your Company Has Been Rejected");
+                });
+        }
+        catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
     }
 
     public function deactivateCompany() {
