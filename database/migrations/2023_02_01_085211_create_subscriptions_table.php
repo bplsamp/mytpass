@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type')->default('basic');
-            $table->dateTime('expiryDate');
-            $table->dateTime('startDate');
+            $table->dateTime('expiryDate')->nullable();
+            $table->dateTime('startDate')->nullable();
             $table->uuid('companyId');
             $table->foreign('companyId')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('maxEmployee')->default(30);
             $table->timestamps();
         });
     }

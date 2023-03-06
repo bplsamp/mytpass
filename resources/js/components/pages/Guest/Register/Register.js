@@ -36,9 +36,9 @@ const handleRegister = async (e) => {
 
   e.preventDefault();
   console.log(NewUser);
-  await axios.post("http://localhost:8000/api/register", NewUser)
-  
-    
+  const res = await axios.post("http://localhost:8000/api/register", NewUser)
+
+  alert(res?.data?.message)
   navigate("/login");
 
   //navigate("/login");

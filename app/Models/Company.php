@@ -32,4 +32,13 @@ class Company extends Model
         return $this->belongsTo(User::class, 'ownerId', 'id');
     }
     
+    public function files()
+    {
+        return $this->hasMany(File::class,'companyId', 'id');
+    }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class, 'companyId', 'id');
+    }
 }

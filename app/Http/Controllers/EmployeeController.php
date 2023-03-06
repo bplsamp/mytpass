@@ -14,6 +14,7 @@ use Illuminate\Filesystem\AwsS3V3Adapter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Exception;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -27,10 +28,29 @@ class EmployeeController extends Controller
         try {
             $obj = json_decode($request->input('user'));
 
+            //validate inputs
+            try {
+                $validator = (object)$request->validate([
+                    'email' => 'required|string|max:100|email|unique:users,email,'.$obj->id,
+                    'firstName' => 'required|string|max:50',
+                    'lastName' => 'required|string|max:50',
+                    'middleInitial' => 'string|max:5',
+                    'contact' => [
+                        'required',
+                        'numeric',
+                        'digits_between:10,15',
+                        Rule::unique('users')->ignore($obj->id)
+                    ]
+                ]);
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+                return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
+            }
+
             $avatar = $request->file('avatar');
             $path = '';
             if($avatar) {
-                $filename = $obj->id."/avatar"."/".$avatar->getClientOriginalName();
+                $filename = "users/".$obj->id."/avatar"."/".$avatar->getClientOriginalName();
                 $path = Storage::disk('s3')->put($filename, file_get_contents($avatar),'public');
                 error_log(strval('path'.$path));
                 $path = Storage::url($filename);
@@ -45,8 +65,7 @@ class EmployeeController extends Controller
                 } else {
                     $user->bio = $request->bio;
                 }
-                $user->expertise = $request->expertise;
-                $user->specify = $request->specify;
+                $user->lastName = $request->lastName;
                 $user->firstName = $request->firstName;
                 $user->middleInitial = $request->middleInitial;
                 $user->contact = $request->contact;

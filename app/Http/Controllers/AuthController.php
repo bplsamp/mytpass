@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Events\Registered;
 use App\Custom\AuditHelper;
+use Throwable;
 
 use Exception;
 
@@ -27,6 +28,22 @@ class AuthController extends Controller
     {
         error_log("call_API");
         try {
+            try {
+                $validator = (object)$request->validate([
+                    'email' => 'required|string|max:100',
+                    'password' => 'required|string|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
+                    'firstName' => 'required|string|max:50',
+                    'lastName' => 'required|string|max:50',
+                    'middleInitial' => 'string|max:5',
+                    'contact' => 'required|numeric|digits_between:10,15',
+                    'specify' => 'required|string|max:50',
+                ]);
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+                return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
+            }
+            
+
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),

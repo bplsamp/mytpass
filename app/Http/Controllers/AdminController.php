@@ -75,7 +75,7 @@ class AdminController extends Controller
     
     public function approvals() {
         try {
-            $data = Company::where('companyStatus', '=', 'pending')->with('owner:id,lastName,firstName')->get();
+            $data = Company::where('companyStatus', '=', 'pending')->with('owner:id,lastName,firstName')->with('files')->get();
             //->with(WALANG SPACE DAPAT PARA DI MAGERROR);
             return response()->json($data , 200);
         }

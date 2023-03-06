@@ -64,7 +64,7 @@ export default function EditProfile() {
             getUser();
         }, 1000);
 
-        /*alert(res?.data?.message); */
+        alert(res?.data?.message);
         
         
         navigate("/profile");
@@ -137,27 +137,11 @@ export default function EditProfile() {
 
                     <div className="flex flex-col">
                         <div className="flex flex-row gap-8">
-                            <Select
-                                label={`Expertise`}
-                                options={["Test1", "Test2", "Test3"]}
-                                id={`expertise`}
-                                value={Profile?.expertise}
-                                setValue={handleInputChange}
-                            />{" "}
                             <Input
                                 label={`Email Address`}
                                 type={`email`}
                                 id={`email`}
                                 value={Profile?.email}
-                                setValue={handleInputChange}
-                            />
-                        </div>
-
-                        <div className="flex flex-row gap-8">
-                            <Input
-                                label={`Specify`}
-                                id={`specify`}
-                                value={Profile?.specify}
                                 setValue={handleInputChange}
                             />
                             <Input
@@ -170,16 +154,16 @@ export default function EditProfile() {
 
                         <div className="flex flex-row gap-4">
                             <Input
-                                label={`Last Name`}
-                                id={`lastName`}
-                                value={Profile?.lastName}
+                                label={`First Name`}
+                                id={`firstName`}
+                                value={Profile?.firstName}
                                 setValue={handleInputChange}
                                 style={`max-w-[170px]`}
                             />
                             <Input
-                                label={`First Name`}
-                                id={`firstName`}
-                                value={Profile?.firstName}
+                                label={`Last Name`}
+                                id={`lastName`}
+                                value={Profile?.lastName}
                                 setValue={handleInputChange}
                                 style={`max-w-[170px]`}
                             />
