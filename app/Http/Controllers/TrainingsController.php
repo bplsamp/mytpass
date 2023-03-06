@@ -250,4 +250,20 @@ class TrainingsController extends Controller
             return response()->json(['message' => $e->getMessage()], 401);
         }    
     } 
+
+    public function getById(Request $req) {
+        try {
+            $trainings = TrainingUser::where('userId', '=', $req->id)->get()->pluck('training')->where('status', '!=', 'pending');
+            
+            if(!$trainings) {
+                throw new Error("Failed to get training");
+            }
+            error_log("id1111".$req->id);
+            return response()->json($trainings);
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }    
+    } 
 }

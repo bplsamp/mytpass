@@ -65,6 +65,7 @@ Route::controller(EmployeeController::class)->group(function () {
 Route::controller(TrainingsController::class)->group(function () {
     Route::post('/trainings/create', 'create');
     Route::get('/trainings/get', 'get');
+    Route::get('/trainings/getById', 'getById');
     Route::post('/trainings/delete', 'delete');
     Route::get('/trainings/getSchedule', 'getSchedule');
     Route::post('/trainings/bulkInsert', 'bulkInsert');

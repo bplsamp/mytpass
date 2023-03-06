@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { web_url } from "../shared/constants";
 
-export default function QueryApi(key, url, interval = null) {
+export default function QueryApi(key, url, interval = null, params) {
     const token = Cookies.get("mytpass_session");
     return useQuery({
         queryKey: [key],
@@ -12,6 +12,7 @@ export default function QueryApi(key, url, interval = null) {
             try {
                 const { data } = await axios.get(`${web_url}${url}`, {
                     headers: { Authorization: `Bearer ${token}` },
+                    params: params,
                 });
                 return data;
             } catch (e) {
