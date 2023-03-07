@@ -91,7 +91,7 @@ console.log(NewUser)
               <div className='flex flex-col gap-[1rem]'>
                 <div  className="flex flex-col text-[1.5rem] gap-[.5rem]">
 
-                  <label>What are you?</label>
+                  <label>Role</label>
                   <select 
                   onChange={(e) => handleInputChange(e)}
                   name="role"

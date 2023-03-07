@@ -3,6 +3,7 @@ import AdminPage from '../../../layouts/AdminPage'
 import QueryApi from '../../../Query/QueryApi'
 import moment from 'moment';
 import EmptyState from '../../../default/EmptyState/EmptyState';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 export default function Audits() {
 
@@ -11,8 +12,19 @@ console.log(data);
   return (
     <AdminPage>
         <div className="p-12 w-full text-gray-600">
+
+        <div className="flex flex-row mb-5">
+            <ReactHTMLTableToExcel
+                className="button p-2"
+                table="table-to-xls"
+                filename="Audits Export"
+                sheet="Audits Sheet"
+                buttonText="Export to Excel"/>
+        </div>
         
-        <table className="w-full">
+        <table 
+        className="w-full"
+        id="table-to-xls">
             <thead className="bg-torange text-white text-left">
                 <tr>
                     <th>User ID</th>

@@ -16,6 +16,7 @@ use App\Models\Attendance;
 use App\Models\Training;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Subscription;
 
 class EmployerController extends Controller
 {
@@ -75,7 +76,8 @@ class EmployerController extends Controller
 
             $data = User::where(function($query) use ($user) {
                 $query->whereNull('companyId')
-                ->where("isSearchable", '=', true);
+                ->where("isSearchable", '=', true)
+                ->where("email_verified_at", '!=', null);
             })
                 ->where('firstName', 'like', "%$obj->query%")
                 ->orWhere('lastName', 'like', "%$obj->query%")
@@ -85,6 +87,7 @@ class EmployerController extends Controller
             else {
             $data = User::whereNull('companyId')
             ->where("isSearchable", '=', true)
+            ->where("email_verified_at", '!=', null)
             ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
             return response()->json($data);
             }
@@ -116,14 +119,26 @@ class EmployerController extends Controller
     public function inviteUser(Request $request)
     {
         try {
+            $user = Auth::user();
             $obj = (object)json_decode($request->getContent());
             
             $n = new NotificationHelper();
 
-            error_log(json_encode($obj));
+            //our subscription model
+            $subscription = Subscription::where('companyId', '=', $user->companyId)->first();
+            $max = $subscription->maxEmployee;
+            error_log($max);
 
+
+
+            
             //get our company
             $company = Company::findOrFail($obj->companyId, ['companyName']);
+
+            //check number of employees in company
+            if($company->users->count() + 1 > $max) {
+                return response()->json(['message' => 'Please upgrade, your company is full', 400]);
+            }
 
             //get our sender
             $sender = User::findOrFail($obj->senderId, ['firstName', 'lastName']);
@@ -131,19 +146,23 @@ class EmployerController extends Controller
             //build our notif
             $user = $sender->firstName . ' '. $sender->lastName;
             $obj->content = $user . ' has invited you to their company ' . $company->companyName;
+            error_log(json_encode($obj));
 
-
+            
             //is user already invited? checker
-            /*$user = User::find($obj->userId, ['id']);
-            $notifs = Notification::where('content', 'like', '%invited%')
-            ->orWhere('userId', '!=', $user);
+            $senderId = User::find($obj->senderId);
+            $companyName = Company::find($senderId->companyId)->companyName;
+            $notifs = Notification::where('userId', '=', $obj->userId)
+            ->where('companyId', '=', $senderId->companyId)
+            ->get();
 
-            if($notifs){
-                error_log($user);
-                error_log("failed");
-                return response()->json(['message' => 'fail']);
-            }*/
-           
+            if($notifs->count() >= 1){
+                error_log("USER".$user);
+                error_log("COMPANY".$senderId->companyId);
+                error_log(json_encode($notifs->count()));
+                return response()->json(['message' => "User has already been invited to ".$companyName, 401]);
+            }
+            
             return $n->createNotif($obj);
             error_log("success invite user");
         }

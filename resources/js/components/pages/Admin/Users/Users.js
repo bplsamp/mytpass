@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AdminPage from "../../../layouts/AdminPage";
 import Card from "../../../default/Card/Card";
@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import avatar from "../../../assets/images/user.png";
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 export default function Users() {
     const location = useLocation();
@@ -18,6 +19,8 @@ export default function Users() {
         me: "ako",
         ako: "me",
     }
+
+    const[ result, setResult] = useState([]);
 
     const { isLoading, error, data, isFetching, isError } = QueryApi(
         `${currentPath.replace("/admin/", "")}`,
@@ -43,7 +46,7 @@ export default function Users() {
                     </div>
                 </Card>
 
-                <div className="flex flex-row items-center gap-4 p-8">
+                <div className="flex flex-row items-center gap-4 p-4">
                     <label htmlFor="expertise" className="px-2">{"Expertise"}</label>
                     <select
                         id={"Expertise"}
@@ -71,13 +74,24 @@ export default function Users() {
                     </select>
                 </div>
 
+                <div className="flex flex-row mb-5">
+                    <ReactHTMLTableToExcel
+                        className="button p-2"
+                        table="table-to-xls"
+                        filename="Users Export"
+                        sheet="Users Sheet"
+                        buttonText="Export to Excel"/>
+                </div>
+
                 {/* Show List of Users */}
                     {data?.users?.length > 0 ? (
-                    <table className="w-full">
+                    <table 
+                    className="w-full"
+                    id="table-to-xls">
                         <thead className="bg-torange text-white text-left">
                             <tr>
                                 <th></th>
-                                <th>Status</th>
+                                <th>Role</th>
                                 <th>Expertise</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>

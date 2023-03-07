@@ -71,6 +71,7 @@ export default function DeactivateModal({ close }) {
                         setValue={handleInputChange}
                         className="button mr-auto px-6 py-1"
                     >
+                        Send
                     </button>
                     <button
                         type="button"

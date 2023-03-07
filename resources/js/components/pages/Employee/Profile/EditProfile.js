@@ -137,22 +137,6 @@ export default function EditProfile() {
                     <div className="flex flex-col">
                         <div className="flex flex-row gap-8">
                             <Input
-                                label={`Email Address`}
-                                type={`email`}
-                                id={`email`}
-                                value={Profile?.email}
-                                setValue={handleInputChange}
-                            />
-                            <Input
-                                label={`Contact No.`}
-                                id={`contact`}
-                                value={Profile?.contact}
-                                setValue={handleInputChange}
-                            />
-                        </div>
-
-                        <div className="flex flex-row gap-4">
-                            <Input
                                 label={`First Name`}
                                 id={`firstName`}
                                 value={Profile?.firstName}
@@ -172,6 +156,15 @@ export default function EditProfile() {
                                 value={Profile?.middleInitial}
                                 setValue={handleInputChange}
                                 style={`max-w-[100px]`}
+                            />
+                        </div>
+
+                        <div className="flex flex-row gap-4">
+                            <Input
+                                label={`Contact No.`}
+                                id={`contact`}
+                                value={Profile?.contact}
+                                setValue={handleInputChange}
                             />
                         </div>
 

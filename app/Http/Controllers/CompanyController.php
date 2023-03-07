@@ -153,43 +153,6 @@ class CompanyController extends Controller
         }
     }
 
-    public function deactivate(Request $request) {
-        try {
-            Company::findOrFail($request->id)->update(["companyStatus" => 'inactive',]);
-            
-            Mail::raw('The admins decided to deactivate your company, if you feel that we had made a mistake. Please contact us', function ($message) use($request) {
-                $message->to($request->ownerEmail)
-                    ->subject("Your Company Has Been Deactivated");
-                });
-
-            return response()->json(['message', 'Succesfully deactivated company']);
-        } 
-        catch(Throwable $e) {
-            error_log((string)$e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 401);
-        }
-    }
-
-    public function activate(Request $request) {
-        try {
-            $company = Company::findOrFail($request->id);
-            $company->companyStatus = "active";
-            $company->reason = null;
-            $company->save();  
-            
-            Mail::raw("The admins had reactivated your company, we appreciate your participation!", function ($message) use($request) {
-            $message->to($request->ownerEmail)
-                ->subject("Your Company Has Been Reactivated"." from:".$request->email);
-            });
-
-            return response()->json(['message', 'Succesfully activated company']);
-        } 
-        catch(Throwable $e) {
-            error_log((string)$e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 401);
-        }
-    }
-
     public function requestDeactivate(Request $request) {
         try {
             $user = Auth::user();

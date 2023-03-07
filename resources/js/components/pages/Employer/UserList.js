@@ -26,7 +26,7 @@ export default function UserList({ data, type, user, refetch }) {
             targetId: id
         });
         refetch();
-        
+        window.location.reload();
     };
 
     return (
@@ -78,19 +78,19 @@ export default function UserList({ data, type, user, refetch }) {
                                     : "View"}
                             </button>
                             <button
-                                onClick={() => {
+                                onClick={async () => {
                                     switch (type) {
                                         case "employee":
                                             break;
                                         case "employer":
                                             break;
                                         default:
-                                            apost("/api/employer/inviteUser", {
+                                            const res = await apost("/api/employer/inviteUser", {
                                                 senderId: user?.id,
                                                 userId: emp?.id,
                                                 companyId: user?.companyId,
                                             });
-                                            alert("User invited successfully")
+                                            alert(res?.data?.message)
                                             break;
                                     }
                                 }}

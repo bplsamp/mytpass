@@ -188,7 +188,7 @@ export default function AddTrainingModal({ close, refetch }) {
                             options={["Short Term", "Long Term", "Refresher", "Internationally Acknowledge"]}
                         />
 
-                        <label htmlFor="cert">Certificate / Document</label>
+                        <label htmlFor="cert">Certificate (Image)</label>
                         <input
                             id="certificate"
                             name="certificate"

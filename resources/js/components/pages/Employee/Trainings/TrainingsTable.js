@@ -3,8 +3,9 @@ import { CgTrash } from "react-icons/cg";
 import { AiFillEye } from "react-icons/ai"
 import { apost } from '../../../shared/query';
 import EmptyState from '../../../default/EmptyState/EmptyState';
+import moment from 'moment';
 
-export default function TrainingsTable({trainings, refetch}) {
+export default function TrainingsTable({trainings, forwardedRef, refetch}) {
     const handleDelete = async (e, id) => {
         e.preventDefault();
         await apost(
@@ -20,7 +21,9 @@ export default function TrainingsTable({trainings, refetch}) {
     }
 
     return (
-        <table className="bg-transparent rounded-lg shadow-lg w-full">
+        <table 
+        ref={forwardedRef ? forwardedRef : null}
+        className="bg-transparent rounded-lg shadow-lg w-full">
             <thead className="bg-[#3A3A3A] text-white text-left rounded-lg">
                 <tr>
                     <th>Training Title</th>
@@ -33,11 +36,12 @@ export default function TrainingsTable({trainings, refetch}) {
                     <th>Result</th>
                     <th>Feedback</th>
                     <th>Inputted Name</th>
+                    <th>Date Added</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {trainings?.map((training) => (
+                {trainings?.slice(0).reverse().map((training) => (
                     <tr key={training?.id}>
                         <td>{training?.title}</td>
                         <td>{training?.speaker}</td>
@@ -53,6 +57,9 @@ export default function TrainingsTable({trainings, refetch}) {
                         <td>{training?.result}</td>
                         <td>{training?.feedback}</td>
                         <td>{training?.inputtedName}</td>
+                        <td>{moment(training?.created_at).format(
+                            "MMM DD, YYYY hh:mm A"
+                        )}</td>
                         <td>
                             <div className="flex flex-row p-2 gap-4">
                                 <a

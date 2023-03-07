@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import VerifyFirst from "../../EmailVerification/VerifyFirst";
 import { MdEmail, MdPhone } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa";
@@ -12,6 +12,7 @@ import FooterLogged from "../../../footer/FooterLogged";
 import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
 import QueryApi from "../../../Query/QueryApi";
 import EmptyState from "../../../default/EmptyState/EmptyState";
+import ReactToPrint from "react-to-print";
 
 const Card = ({ text }) => {
     return (
@@ -31,9 +32,11 @@ const HeaderName = ({ name, expertise }) => {
 };
 
 export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
+    const componentRef = useRef(null);
     
     return (
         <main 
+        ref={componentRef}
         className="text-gray-800 shadow-gray-300 shadow bg-white flex flex-row rounded-lg mr-auto ml-auto m-8">
             <div className="flex flex-col bg-[#3A3A3A] max-w-[500px] items-center text-white border-l-8 border-torange">
                 <img
@@ -112,10 +115,16 @@ export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
                                 <AiFillEdit />
                                 Edit Profile
                             </button>
-                            <button className="flex flex-row items-center justify-center gap-2 text-[0.9rem] bg-lorange text-white rounded-md px-8 py-1 hover:opacity-80">
-                                <AiFillPrinter />
-                                Print
-                            </button>
+                            <ReactToPrint
+                                bodyClass={`zoomout`}
+                                trigger={() => (
+                                    <button className="flex flex-row items-center justify-center gap-2 text-[0.9rem] bg-lorange text-white rounded-md px-8 py-1 hover:opacity-80">
+                                        <AiFillPrinter />
+                                        Print
+                                    </button>
+                                )}
+                                content={() => componentRef.current}
+                            />
                         </div>
                     )}
                 </div>
@@ -133,7 +142,7 @@ export const ProfileBox = ({ user, navigate, isPublic, trainings }) => {
                         </thead>
                         <tbody className="text-left">
                             {trainings &&
-                            trainings?.map((training) => (
+                            trainings?.slice(0).reverse().map((training) => (
                                 <tr
                                     key={training?.id}
                                     className="border-b-2 border-gray-200"

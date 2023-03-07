@@ -123,12 +123,17 @@ class TrainingsController extends Controller
         {
             $user = Auth::user();
             $trainings = TrainingUser::where('userId', '=', $user->id)->with('training')->get()->pluck('training')->where('status', '!=', 'pending');
+            $array_trainings = [];
+
+            foreach($trainings as $key => $value) {
+                array_push($array_trainings, $value);
+            }
 
             if(!$trainings) {
                 throw new Error("Failed to get training");
             }
 
-            return response()->json($trainings);
+            return response()->json($array_trainings);
         }
         catch (Throwable $e)
         {
@@ -141,13 +146,18 @@ class TrainingsController extends Controller
     {
 
             $user = Auth::user();
-            $trainings = TrainingUser::where('userId', '=', $user->id)->get()->pluck('training');
+            $trainings = TrainingUser::where('userId', '=', $user->id)->get()->pluck('training')->where('status', '=', 'pending');
+            $array_trainings = [];
+
+            foreach($trainings as $key => $value) {
+                array_push($array_trainings, $value);
+            }
 
             if(!$trainings) {
                 throw new Error("Failed to get training");
             }
 
-            return response()->json($trainings);
+            return response()->json($array_trainings);
 
     }
 
@@ -254,12 +264,18 @@ class TrainingsController extends Controller
     public function getById(Request $req) {
         try {
             $trainings = TrainingUser::where('userId', '=', $req->id)->get()->pluck('training')->where('status', '!=', 'pending');
+            $array_trainings = [];
             
             if(!$trainings) {
                 throw new Error("Failed to get training");
             }
+
+            foreach($trainings as $key => $value) {
+                array_push($array_trainings, $value);
+            }
+            
             error_log("id1111".$req->id);
-            return response()->json($trainings);
+            return response()->json($array_trainings);
         }
         catch(Throwable $e) {
             error_log($e->getMessage());

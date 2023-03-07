@@ -28,14 +28,15 @@ class AuthController extends Controller
     {
         error_log("call_API");
         try {
-            /*try {
+            /*
+            try {
                 $validator = (object)$request->validate([
-                    'email' => 'required|string|max:100',
+                    'email' => 'required|string|max:100|email|unique:users',
                     'password' => 'required|string|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
                     'firstName' => 'required|string|max:50',
                     'lastName' => 'required|string|max:50',
                     'middleInitial' => 'string|max:5',
-                    'contact' => 'required|numeric|digits_between:10,15',
+                    'contact' => 'required|numeric|digits_between:10,15|unique:users',
                     'specify' => 'required|string|max:50',
                 ]);
             } catch (Throwable $e) {

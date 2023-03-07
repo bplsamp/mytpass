@@ -6,6 +6,7 @@ import { CgTrash } from "react-icons/cg";
 import { apost } from '../../../shared/query';
 import QueryApi from '../../../Query/QueryApi';
 import { useAuth } from '../../../default/Session/SessionProvider';
+import moment from 'moment';
 
 export default function SchedulesTable({ trainings, setSelectedTraining, setshowAttendanceModal, refetch }) {
 
@@ -47,11 +48,12 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
                     <th>Status</th>
                     <th>Feedback</th>
                     <th>Inputted By</th>
+                    <th>Date Added</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {trainings?.map((training) => (
+                {trainings?.slice(0).reverse().map((training) => (
                     <tr key={training?.id}>
                         <td>{training?.title}</td>
                         <td>{training?.speaker}</td>
@@ -65,6 +67,9 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
                         <td>{training?.status}</td>
                         <td>{training?.feedback}</td>
                         <td>{training?.inputtedName}</td>
+                        <td>{moment(training?.created_at).format(
+                            "MMM DD, YYYY hh:mm A"
+                        )}</td>
                         
                         {training?.status == "pending" && training?.inputtedBy == User?.id ? (<td>
                             <div className="flex flex-row gap-4">
@@ -83,6 +88,7 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
                             </div>
                         </td>) 
                         : <td>No Actions</td>}
+                        
                     </tr>
                 ))}
             </tbody>

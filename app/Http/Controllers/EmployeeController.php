@@ -31,7 +31,6 @@ class EmployeeController extends Controller
             //validate inputs
             try {
                 $validator = (object)$request->validate([
-                    'email' => 'required|string|max:100|email|unique:users,email,'.$obj->id,
                     'firstName' => 'required|string|max:50',
                     'lastName' => 'required|string|max:50',
                     'middleInitial' => 'string|max:5',
@@ -52,13 +51,12 @@ class EmployeeController extends Controller
             if($avatar) {
                 $filename = "users/".$obj->id."/avatar"."/".$avatar->getClientOriginalName();
                 $path = Storage::disk('s3')->put($filename, file_get_contents($avatar),'public');
-                error_log(strval('path'.$path));
+                //error_log(strval('path'.$path));
                 $path = Storage::url($filename);
             }
 
             $user = User::findOrFail($obj->id);
             if($user) {
-                $user->email = $request->email;
                 //$user->email = $request->password;
                 if ($request->bio == null) {
                     $user->bio = '';
@@ -115,7 +113,10 @@ class EmployeeController extends Controller
                     $user->companyId = $notif->companyId;
                     $user->isSearchable = false;
                     $user->save();
-                    Notification::where('companyId', '=', $notif->companyId)->where('userId', '=', $user->id)->delete();
+                    Notification::where('companyId', '!=', null)
+                    ->where('userId', '=', $user->id)
+                    ->where('trainingId', '=', null)
+                    ->delete();
                     return response()->json([
                         'message' => "Successfully accepted company invitation.",
                         'status' => "success",

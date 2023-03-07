@@ -8,6 +8,7 @@ import Error from "../../../default/Error/Error";
 import Card from "../../../default/Card/Card";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import { apost } from "../../../shared/query";
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const RenderStatus = ({ status }) => {
     if (status === "Active") {
@@ -33,7 +34,7 @@ const RenderButton = ({
                 <span
                     onClick={async () => {
                         await apost(
-                            "/api/company/activate",
+                            "/api/admin/activate",
                             { id: id, ownerEmail: ownerEmail }
                         );
                         refetch();
@@ -50,7 +51,7 @@ const RenderButton = ({
                 <span
                     onClick={async () => {
                         await apost(
-                            "/api/company/deactivate",
+                            "/api/admin/deactivate",
                             { id: id, ownerEmail: ownerEmail }
                         );
                         refetch();
@@ -86,6 +87,7 @@ const options = {
 export default function Companies() {
     const location = useLocation();
     const currentPath = location?.pathname;
+    const[ result, setResult ] = useState([]);
 
     const { isLoading, error, data, isFetching, refetch } = QueryApi(
         `${currentPath.replace("/admin/", "")}`,
@@ -135,9 +137,20 @@ export default function Companies() {
                     </select>
                 </div>
 
+                <div className="flex flex-row mb-5">
+                    <ReactHTMLTableToExcel
+                        className="button p-2"
+                        table="table-to-xls"
+                        filename="Companies Export"
+                        sheet="Companies Sheet"
+                        buttonText="Export to Excel"/>
+                </div>
+
                 {/* Show List of Users */}
                 {data?.companies?.length > 0 ? (
-                    <table className="w-full">
+                    <table 
+                    className="w-full"
+                    id="table-to-xls">
                         <thead className="bg-torange text-white text-left">
                             <tr>
                                 <th>Icon</th>

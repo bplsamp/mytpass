@@ -37,7 +37,6 @@ Route::controller(AuthController::class)->group(function() {
 
 Route::controller(CompanyController::class)->group(function () {
     Route::post('/company/create', 'createCompany');
-    Route::post('/company/deactivate', 'deactivate');
     Route::post('/company/activate', 'activate');
     Route::post('/company/requestDeactivate', 'requestDeactivate');
 });
@@ -81,6 +80,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/announcements', 'announcements');
     Route::post('/admin/approveCompany', 'approveCompany');
     Route::post('/admin/rejectCompany', 'rejectCompany');
+    Route::post('/admin/deactivate', 'deactivate');
+    Route::post('/admin/activate', 'activate');
     Route::get('/admin/audits', 'audits');
 });
 
