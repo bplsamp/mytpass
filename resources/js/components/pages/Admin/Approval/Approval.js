@@ -84,17 +84,17 @@ export default function Approval() {
                                     <td>
                                         <div className="flex flex-col">
                                             {app?.files?.map((doc, i) => (
-                                                <span
+                                                <a
                                                     className="text-blue-400 cursor-pointer hover:opacity-80"
                                                     key={doc?.id}
-                                                    onClick={() =>
-                                                        downloadFile(doc)
-                                                    }
+                                                    href={doc.url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
                                                 >
                                                     {doc?.filename
                                                         ? `${doc?.filename}`
                                                         : "None"}
-                                                </span>
+                                                </a>
                                             ))}
                                         </div>
                                     </td>

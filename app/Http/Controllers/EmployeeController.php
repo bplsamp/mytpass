@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Validation\Rule;
+use App\Models\Subscription;
 
 class EmployeeController extends Controller
 {
@@ -109,6 +110,27 @@ class EmployeeController extends Controller
 
             if(isset($notif->companyId)) {
                 $user = User::findOrFail($notif->userId);
+
+                //our subscription model
+                $subscription = Subscription::where('companyId', '=', $notif->companyId)->first();
+                $max = $subscription->maxEmployee;
+                error_log($max);
+
+                //get our company
+                $companyCount = Company::findOrFail($notif->companyId);
+
+                //check number of employees in company
+                //if this goes thru, the invitation will not push through,
+                //and the notification will be deleted.
+                if($companyCount->users->count() + 1 > $max) {
+                    Notification::where('companyId', '=', $notif->companyId)->where('userId', '=', $user->id)->delete();
+                    return response()->json([
+                        'message' => 'The company is already full.', 
+                        'status' => "failed", 
+                        400]);
+                }
+
+                //accepts invitation and deletes all company invite notification
                 if ($user->companyId == null) {
                     $user->companyId = $notif->companyId;
                     $user->isSearchable = false;

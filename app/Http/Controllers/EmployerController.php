@@ -17,12 +17,13 @@ use App\Models\Training;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Subscription;
+use App\Models\SubscriptionContent;
 
 class EmployerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api', ['except' => ['getSubscriptionContent']]);
     }
 
     public function dashboard(Request $request) 
@@ -33,14 +34,12 @@ class EmployerController extends Controller
         $obj = (object)json_decode($request->getContent());
         $company = Company::findOrFail($obj->id);
         $count = $company->users->count();
+        $subType = $company->subscription->type;
+        error_log($subType);
 
-        $trainingPlucked = Training::where('companyId', '=' , $user->companyId)->with('trainingUsers')->with('attendances')->get();
+        $trainingPlucked = Training::where('companyId', '=' , $user->companyId)->with('trainingUsers')->with('attendances')->get();   
 
-      
-        error_log(strval($trainingPlucked));
-    
-
-        $data = array('empCount' => $count, 'scheduledTrainings' => $trainingPlucked);
+        $data = array('empCount' => $count, 'scheduledTrainings' => $trainingPlucked, 'subType' => $subType);
 
 
         if($company) {
@@ -157,16 +156,14 @@ class EmployerController extends Controller
             $subscription = Subscription::where('companyId', '=', $user->companyId)->first();
             $max = $subscription->maxEmployee;
             error_log($max);
-
-
-
             
             //get our company
             $company = Company::findOrFail($obj->companyId, ['companyName']);
+            $companyCount = Company::findOrFail($obj->companyId);
 
             //check number of employees in company
-            if($company->users->count() + 1 > $max) {
-                return response()->json(['message' => 'Please upgrade, your company is full', 400]);
+            if($companyCount->users->count() + 1 > $max) {
+                return response()->json(['message' => 'You have reached the maximum employee limit, please upgrade your company subscription.', 400]);
             }
 
             //get our sender
@@ -319,6 +316,10 @@ class EmployerController extends Controller
             error_log($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 401);
         } 
+    }
+
+    public function getSubscriptionContent() {
+        return response()->json(SubscriptionContent::all());
     }
 
 }

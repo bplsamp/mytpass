@@ -37,6 +37,11 @@ class Company extends Model
         return $this->hasMany(File::class,'companyId', 'id');
     }
 
+    public function trainingUsers()
+    {
+        return $this->hasMany(TrainingUser::class, 'companyId', 'id');
+    }
+
     public function subscription()
     {
         return $this->hasOne(Subscription::class, 'companyId', 'id');

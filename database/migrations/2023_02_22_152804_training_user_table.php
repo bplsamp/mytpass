@@ -13,14 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('training_users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('trainingId');
             $table->foreign('trainingId')->references('id')->on('trainings')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('userId');
             $table->foreign('userId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->uuid('companyId')->nullable();
+            $table->foreign('companyId')->references('id')->on('company')->onDelete('set null')->onUpdate('cascade');
             $table->timestamps();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

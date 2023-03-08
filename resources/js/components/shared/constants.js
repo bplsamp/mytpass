@@ -27,6 +27,7 @@ export const CREATE_COMPANY = "/employer/createcompany";
 export const EDIT_COMPANY = "/employer/editcompany";
 export const SUBSCRIBE = "/employer/upgrade";
 export const SHOPPING_CART = "/employer/cart";
+export const SUCCESS_CART = "/employer/cart/success";
 export const PUBLIC_USER_PROFILE = "/employer/user";
 
 //Admin Paths
@@ -48,3 +49,7 @@ export const EXPERTISE_OPTIONS = [
     "Human Aspect",
     "Commercial Aspect",
 ];
+
+//Paymongo
+export const PAYMONGO_SECRET = "sk_test_obDHTprP2kNWQcudBZnubHXu";
+export const PAYMONGO_PUBLIC = "pk_test_RpjTA7asNJLVwiKyG8qToXad";

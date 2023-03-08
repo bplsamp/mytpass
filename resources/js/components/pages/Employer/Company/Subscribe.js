@@ -3,12 +3,18 @@ import React from "react";
 import logo from "../../../assets/images/logo.png";
 
 import { useNavigate } from "react-router-dom";
-import { subscriptions } from "../../Guest/Subscription/Subscription";
 import { SubscriptionCard } from "../../Guest/Subscription/Subscription";
+import { useAuth } from "../../../default/Session/SessionProvider";
+import QueryApi from "../../../Query/QueryApi";
 
 export default function Subscribe() {
-
     const navigate = useNavigate();
+    const user = useAuth();
+    const { data, isLoading } = QueryApi(
+        ["subscriptionContent"],
+        "/api/employer/getSubscriptionContent"
+    );
+    console.log(data);
     return (
         <form
             onSubmit={(e) => Submit(e)}
@@ -23,7 +29,8 @@ export default function Subscribe() {
             </h1>
 
             <div className="flex flex-row flex-wrap gap-4 items-center mb-8">
-                {subscriptions.map((sub, idx) => (
+                {data && 
+                data?.map((sub, idx) => (
                     <SubscriptionCard
                         sub={sub}
                         key={idx}
@@ -39,7 +46,7 @@ export default function Subscribe() {
             <button
                 type="button"
                 className="underline hover:opacity-80"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/employer/dashboard")}
             >
                 Cancel
             </button>

@@ -37,18 +37,7 @@ const labels = [
     "Dec",
 ];
 
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: "Test",
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 12 })),
-            backgroundColor: "#E59659",
-        },
-    ],
-};
-
-export default function BarChart({ title }) {
+export default function BarChart({ title, data }) {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -83,9 +72,16 @@ export default function BarChart({ title }) {
 
     return (
         <div className="h-[350px] w-[530px] p-4 4xl:w-[400px] 2xl:w-[300px]">
-            <h1 className="font-medim">{title}</h1>
+            <h1 className="font-medium">{title}</h1>
 
-            <Bar options={options} data={data} />
+            <Bar options={options} data={{
+                labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: "#E59659",
+                },
+                ]
+            }} />
         </div>
     );
 }

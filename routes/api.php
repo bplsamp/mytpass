@@ -10,6 +10,7 @@ use App\Http\Controllers\VerifyEmailController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TrainingsController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::controller(CompanyController::class)->group(function () {
 });
 
 Route::controller(EmployerController::class)->group(function () {
+    Route::post('/employer/dashboard', 'dashboard');
     Route::post('/employer/editcompany', 'editcompany');
     Route::post('/employer/search', 'search');
     Route::post('/employer/inviteUser', 'inviteUser');
@@ -52,6 +54,7 @@ Route::controller(EmployerController::class)->group(function () {
     Route::post('/employer/user', 'user');
     Route::post('/employer/transferOwnership', 'transferOwnership');
     Route::get('/employer/myCompanyUsers', 'myCompanyUsers');
+    Route::get('/employer/getSubscriptionContent', 'getSubscriptionContent');
 });
 
 Route::controller(EmployeeController::class)->group(function () {
@@ -71,6 +74,7 @@ Route::controller(TrainingsController::class)->group(function () {
     Route::post('/trainings/deleteTraining', 'deleteTraining');
     Route::post('/trainings/getUsersByTraining', 'getUsersByTraining');
     Route::post('/trainings/completeTraining', 'completeTraining');
+    Route::get('/trainings/getAllCompanyTrainings', 'getAllCompanyTrainings');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -83,6 +87,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('/admin/deactivate', 'deactivate');
     Route::post('/admin/activate', 'activate');
     Route::get('/admin/audits', 'audits');
+});
+
+Route::controller(PaymentController::class)->group(function () {
+    Route::post('/payment/upgrade', 'upgrade');
 });
 
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])

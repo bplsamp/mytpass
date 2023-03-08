@@ -36,10 +36,10 @@ export default function ScheduleTraining({ close, refetch }) {
         venueUrl: "TESTVENUEURL",
         certificate: '',
         isScheduled: true,
+        companyId: user?.companyId,
     });
 
     const handleChangeInvited = (e) => {
-        console.log("CLICKED");
         let newArr = [...Users];
         if (newArr[e].invited != true) {
             newArr[e].invited = true;

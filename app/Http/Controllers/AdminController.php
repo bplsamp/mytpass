@@ -56,7 +56,7 @@ class AdminController extends Controller
 
     public function companies() {
         try {
-        $company = Company::where('companyStatus', '!=', 'pending')->with('owner')->get();
+        $company = Company::where('companyStatus', '!=', 'pending')->with('owner')->with('subscription')->get();
         
         
         if($company != null) {

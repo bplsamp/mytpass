@@ -187,6 +187,7 @@ class TrainingsController extends Controller
                 TrainingUser::create([
                     'trainingId' => $training->id,
                     'userId' => $u->id,
+                    'companyId' => $loggedUser->companyId,
                 ]);
                 Attendance::create([
                     'userId' => $u->id,
@@ -282,4 +283,23 @@ class TrainingsController extends Controller
             return response()->json(['message' => $e->getMessage()], 401);
         }    
     } 
+
+    public function getAllCompanyTrainings(Request $req) {
+        try {
+            $user = Auth::user();
+            $trainingPlucked = Training::where('companyId', '=' , $user->companyId)->get();
+
+         
+          /*   error_log(json_encode($trainingPlucked));
+            $array_trainings = [];
+            foreach ($trainingPlucked as $obj) {
+                array_push($array_trainings, $obj);
+            } */
+            return response()->json($trainingPlucked);
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
 }

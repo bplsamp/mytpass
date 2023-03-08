@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Events\Registered;
 use App\Custom\AuditHelper;
 use Throwable;
+use Illuminate\Auth\Events\Verified;
 
 use Exception;
 
@@ -173,5 +174,4 @@ class AuthController extends Controller
         }
         //validate
     }
-
 }

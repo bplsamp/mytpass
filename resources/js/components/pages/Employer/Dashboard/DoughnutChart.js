@@ -10,7 +10,7 @@ export default function DoughnutChart({ empCount, max }) {
         datasets: [
             {
                 label: "",
-                data: [empCount, max],
+                data: [empCount, max-(empCount)],
 
                 backgroundColor: ["#E59659", "rgba(54, 162, 235, 0.2)"],
                 borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],

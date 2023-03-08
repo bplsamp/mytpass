@@ -114,12 +114,12 @@ export default function Dashboard() {
                 <h1 className="font-medium ">Number of Employees</h1>
                 <div className="max-w-[280px] max-h-[300px]">
                     <DoughnutChart
-                        empCount={data?.empCount && data?.empCount - 1}
-                        max={50}
+                        empCount={data?.empCount && data?.empCount}
+                        max={getMaxEmployees(data?.subType)}
                     />
                 </div>
                 <div className="relative bottom-40 font-bold text-[2rem] text-gray-600">
-                    {data?.empCount && data?.empCount - 1}
+                    {data?.empCount && data?.empCount}
                 </div>
             </Card>
 
@@ -127,13 +127,13 @@ export default function Dashboard() {
                 className={`flex flex-row gap-4 items-center justify-center mt-4`}
             >
                 <Card className={``}>
-                    <BarChart title={`Scheduled Trainings`} />
+                    <BarChart title={`Scheduled Trainings`} data={scheduled} />
                 </Card>
                 <Card>
-                    <BarChart title={`Number of Participants`} />
+                    <BarChart title={`Number of Participants`} data={participants} />
                 </Card>
                 <Card>
-                    <BarChart title={`Attendance Rate`} />
+                    <BarChart title={`Attendance Rate`} data={attendances} />
                 </Card>
             </div>
       </EmployerPage>

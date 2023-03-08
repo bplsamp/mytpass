@@ -35,6 +35,8 @@ import Subscribe from './pages/Employer/Company/Subscribe';
 import TrainingRecords from './pages/Employer/TrainingRecords/TrainingRecords';
 import CreateCompany from './pages/Employer/Company/CreateCompany';
 import EditCompany from './pages/Employer/Company/EditCompany';
+import ShoppingCart from './pages/Employer/Company/ShoppingCart';
+import SuccessCart from './pages/Employer/Company/SuccessCart';
 
 import Users from './pages/Admin/Users/Users';
 import Companies from './pages/Admin/Companies/Companies';
@@ -44,7 +46,6 @@ import Audits from './pages/Admin/Audits/Audits';
 
 import EmailSuccess from './pages/EmailVerification/EmailSuccess';
 import AlreadyVerifiedEmail from './pages/EmailVerification/AlreadyVerifiedEmail';
-
 
 const queryClient = new QueryClient();
 
@@ -246,6 +247,24 @@ export default function MyApp() {
                         element={
                             <WithSessionLogged>
                                 <Subscribe />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.SHOPPING_CART}
+                        element={
+                            <WithSessionLogged>
+                                <ShoppingCart />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.SUCCESS_CART}
+                        element={
+                            <WithSessionLogged>
+                                <SuccessCart />
                             </WithSessionLogged>
                         }
                     />
