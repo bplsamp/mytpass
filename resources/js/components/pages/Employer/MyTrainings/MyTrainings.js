@@ -38,8 +38,13 @@ export default function MyTrainings() {
                     disableButton={true}
                 />
                 <div className="flex items-center gap-4">
-                    <h1>Sort By:</h1>
-                    <Select label={``} options={["Test1", "Test2", "Test3"]} />
+                    <h1>Category:</h1>
+                    <Select label={``} options={["Default","General","Human Aspect","Technical Aspect","Commercial Aspect"]} />
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <h1>Status:</h1>
+                    <Select label={``} options={["Default", "Pending", "Completed"]} />
                 </div>
 
                 <button

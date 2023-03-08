@@ -21,7 +21,7 @@ export default function TrainingRecords() {
                 />
                 <div className="flex items-center gap-4">
                     <h1>Sort By:</h1>
-                    <Select label={``} options={["Test1", "Test2", "Test3"]} />
+                    <Select label={``} options={["Default","General","Commercial Aspect","Human Aspect","Technical Aspect"]} />
                 </div>
             </Card>
         </EmployerPage>
