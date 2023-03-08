@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('type');
             $table->string('category');
             $table->boolean('isScheduled')->default(false);
+            $table->uuid('companyId');
+            $table->foreign('companyId')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

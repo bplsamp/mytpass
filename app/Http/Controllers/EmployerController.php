@@ -27,7 +27,36 @@ class EmployerController extends Controller
 
     public function dashboard(Request $request) 
     {
+        $user = Auth::user();
+        try {
+        error_log('content'. json_encode($request->getContent()));
+        $obj = (object)json_decode($request->getContent());
+        $company = Company::findOrFail($obj->id);
+        $count = $company->users->count();
 
+        $trainingPlucked = Training::where('companyId', '=' , $user->companyId)->with('trainingUsers')->with('attendances')->get();
+
+      
+        error_log(strval($trainingPlucked));
+    
+
+        $data = array('empCount' => $count, 'scheduledTrainings' => $trainingPlucked);
+
+
+        if($company) {
+          return response()->json(
+                 $data,
+                200
+            );
+        } else {
+            return response()->json(['message' => "Failed to fetch company data."] , 401);
+        }
+
+
+        } catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => "Failed to fetch company data cause: ". $e->getMessage()] , 401);
+        }
     }
 
     public function editcompany(Request $request)

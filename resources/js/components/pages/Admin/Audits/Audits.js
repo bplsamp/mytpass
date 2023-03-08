@@ -1,30 +1,34 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import AdminPage from '../../../layouts/AdminPage'
 import QueryApi from '../../../Query/QueryApi'
 import moment from 'moment';
 import EmptyState from '../../../default/EmptyState/EmptyState';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 export default function Audits() {
 
 const { data } = QueryApi("audits", "/api/admin/audits");
 console.log(data);
+const tableRef = useRef(null);
   return (
     <AdminPage>
         <div className="p-12 w-full text-gray-600">
 
         <div className="flex flex-row mb-5">
-            <ReactHTMLTableToExcel
-                className="button p-2"
-                table="table-to-xls"
-                filename="Audits Export"
+            <DownloadTableExcel
+                filename="Audits Table"
                 sheet="Audits Sheet"
-                buttonText="Export to Excel"/>
+                currentTableRef={tableRef.current}
+            >
+                <button className="button p-2">
+                    Export to Excel
+                </button>
+            </DownloadTableExcel>
         </div>
         
         <table 
         className="w-full"
-        id="table-to-xls">
+        ref={tableRef}>
             <thead className="bg-torange text-white text-left">
                 <tr>
                     <th>User ID</th>

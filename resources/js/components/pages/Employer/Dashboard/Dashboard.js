@@ -9,21 +9,98 @@ import DoughnutChart from "./DoughnutChart";
 import BarChart from "./BarChart";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth, useAuthUpdate } from '../../../default/Session/SessionProvider';
+import { QueryApiPost } from '../../../Query/QueryApi';
+
+export const getMaxEmployees = (type) => {
+    switch (type) {
+        case "basic":
+            return 30;
+        case "premium":
+            return 100;
+        case "platinum":
+            return 1000;
+        default:
+            return 30;
+    }
+};
+
+const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const calculateAttendanceRate = (attended, total) => {
+    const rate = (attended / total) * 100;
+    return parseInt(rate.toFixed(0));
+  }
+
+const getScheduledTrainings = (data, month) => {
+    let arr = data?.filter((item) => {
+        return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+    });
+
+    return arr?.length ? arr?.length : 0;
+}
+
+const getParticipants = (data, month) => {
+    let participants = 0;
+    let arr = data?.filter((item) => {
+        return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+    });
+
+    let participantsArray = arr?.map((emp) => {
+        return emp?.training_users?.length
+    });
+
+    for (let i = 0; i < participantsArray?.length; i++) {
+        participants += participantsArray[i];
+    }
+
+    return participants;
+}
+
+const getAttendanceRate = (data, month) => {
+    let attendanceRate = 0;
+    let arr = data?.filter((item) => {
+        return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+    });
+
+    //get all just completed trainings
+    arr = arr?.filter((item) => item?.status == 'completed')
+    
+    let attendanceRateArray = arr?.map((emp) => {
+            let presents = emp?.attendances?.filter((person) => person?.isPresent)
+            return calculateAttendanceRate(presents?.length, emp?.attendances?.length)
+    });
+
+    //average all em
+    for (let i = 0; i < attendanceRateArray?.length; i++) {
+        attendanceRate += attendanceRateArray[i];
+    }
+
+    let final = (attendanceRate / attendanceRateArray?.length).toFixed(0)
+    return parseInt(!isNaN(final) ? final : 0);
+}
 
 export default function Dashboard() {
-    const navigate = useNavigate();
     const User = useAuth();
-    const getUser = useAuthUpdate();
-
     const location = useLocation();
     const currentPath = location?.pathname;
 
-    useEffect (() => {
-    localStorage.setItem('pathkey', JSON.stringify(currentPath))
-    }, [User])
+    const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
+        `${currentPath.replace("/employer/", "")}`,
+        `/api${currentPath}`,
+        { id: User?.company?.id }
+    );
 
+    const scheduled = mS.map((r, i) => {
+        return getScheduledTrainings(data?.scheduledTrainings, r);
+    });
 
-    const data = {empCount : 1}
+    const participants = mS.map((r) => {
+        return getParticipants(data?.scheduledTrainings, r);
+    })
+
+    const attendances = mS.map((r) => {
+        return getAttendanceRate(data?.scheduledTrainings, r);
+    })
 
   return (
     <>
@@ -33,7 +110,6 @@ export default function Dashboard() {
                 Analytics
             </Card>
 
-        {/*
             <Card className={`flex flex-col items-center mx-4`}>
                 <h1 className="font-medium ">Number of Employees</h1>
                 <div className="max-w-[280px] max-h-[300px]">
@@ -60,7 +136,6 @@ export default function Dashboard() {
                     <BarChart title={`Attendance Rate`} />
                 </Card>
             </div>
-  */}
       </EmployerPage>
     </>
   )

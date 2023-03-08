@@ -25,4 +25,7 @@ class TrainingUser extends Model
         return $this->belongsTo(Training::class, 'trainingId', 'id');
     }
 
+    public function company(){
+        return $this->belongsTo(Company::class, 'companyId', 'id');
+    }
 }

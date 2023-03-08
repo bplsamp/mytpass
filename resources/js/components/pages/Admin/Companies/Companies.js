@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import AdminPage from "../../../layouts/AdminPage";
 import { MdDomainDisabled, MdDomain } from "react-icons/md";
 import { CgTrash } from "react-icons/cg";
@@ -8,7 +8,7 @@ import Error from "../../../default/Error/Error";
 import Card from "../../../default/Card/Card";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import { apost } from "../../../shared/query";
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 const RenderStatus = ({ status }) => {
     if (status === "Active") {
@@ -79,9 +79,17 @@ const RenderButton = ({
     }
 };
 
-const options = {
-    me: "ako",
-    ako: "me",
+const optSub = {
+    "Default": "Default",
+    "Basic": "Basic",
+    "Premium": "Premium",
+    "Platinum": "Platinum"
+}
+
+const optSortBy = {
+    "Default": "Default",
+    "Alphabetical (A-Z)": "Alphabetical (A-Z)",
+    "Alphabetical (Z-A)": "Alphabetical (Z-A)",
 }
 
 export default function Companies() {
@@ -95,6 +103,7 @@ export default function Companies() {
     );
     console.log(data)
 
+    const tableRef = useRef(null);
     return(
         <AdminPage>
             <div className="p-12 w-full text-gray-600">
@@ -110,47 +119,50 @@ export default function Companies() {
                 </Card>
 
                 <div className="flex flex-row items-center gap-4 p-8">
-                    <label htmlFor="expertise" className="px-2">{"Expertise"}</label>
+                    <label htmlFor="subscription" className="px-2">{"Subscription"}</label>
                     <select
-                        id={"Expertise"}
-                        name={"Expertise"}
+                        id={"Subscription"}
+                        name={"Subscription"}
                         className="border 
                         border-gray-400 outline-0 px-2 py-1"
                         placeholder="Select..."
                     >
-                        {Object.keys(options).map((opt, idx) => (
+                        {Object.keys(optSub).map((opt, idx) => (
                             <option key={idx}>{opt}</option>
                         ))}
                     </select>
 
-                    <label htmlFor="subscription" className="px-2">{"Subscription:"}</label>
+                    <label htmlFor="sortby" className="px-2">{"Sort By:"}</label>
                     <select
-                        id={"subscription"}
-                        name={"subscription"}
+                        id={"sortby"}
+                        name={"sortby"}
                         className="border 
                         border-gray-400 outline-0 px-2 py-1"
                         placeholder="Select..."
                     >
-                        {Object.keys(options).map((opt, idx) => (
+                        {Object.keys(optSortBy).map((opt, idx) => (
                             <option key={idx}>{opt}</option>
                         ))}
                     </select>
                 </div>
 
                 <div className="flex flex-row mb-5">
-                    <ReactHTMLTableToExcel
-                        className="button p-2"
-                        table="table-to-xls"
-                        filename="Companies Export"
+                    <DownloadTableExcel
+                        filename="Companies Table"
                         sheet="Companies Sheet"
-                        buttonText="Export to Excel"/>
+                        currentTableRef={tableRef.current}
+                    >
+                        <button className="button p-2">
+                            Export to Excel
+                        </button>
+                    </DownloadTableExcel>
                 </div>
 
                 {/* Show List of Users */}
                 {data?.companies?.length > 0 ? (
                     <table 
                     className="w-full"
-                    id="table-to-xls">
+                    ref={tableRef}>
                         <thead className="bg-torange text-white text-left">
                             <tr>
                                 <th>Icon</th>

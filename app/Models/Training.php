@@ -26,6 +26,7 @@ class Training extends Model
             'category',
             'inputtedName',
             'isScheduled',
+            'companyId'
     ];
 
   public function user() {
@@ -34,6 +35,10 @@ class Training extends Model
 
   public function trainingUsers() {
     return $this->hasMany(TrainingUser::class, 'trainingId', 'id');
+  }
+
+  public function attendances() {
+    return $this->hasMany(Attendance::class, "trainingId", "id");
   }
     
 }
