@@ -18,7 +18,7 @@ export default function EmployeeSearch({ handleSearch, refetch, search }) {
                     <Select
                         labelStyle={`mr-auto ml-auto`}
                         label={`Expertise`}
-                        options={["Test1", "Test2", "Test3"]}
+                        options={["Commercial Aspect", "Human Aspect", "Technical Aspect", "Human Resource", "Business Owner"]}
                     />
                 </div>
                 <div className="flex flex-col">
@@ -37,7 +37,7 @@ export default function EmployeeSearch({ handleSearch, refetch, search }) {
                     <Select
                         label={`Sort`}
                         labelStyle={`mr-auto ml-auto`}
-                        options={["Test1", "Test2", "Test3"]}
+                        options={["Highest Trainings Taken", "Lowest Trainings Taken"]}
                     />
                 </div>
             </div>

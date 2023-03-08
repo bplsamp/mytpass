@@ -52,7 +52,7 @@ export default function MyEmployees () {
                     <Select
                         labelStyle={`mr-auto ml-auto`}
                         label={`Expertise`}
-                        options={["Test1", "Test2", "Test3"]}
+                        options={["Commercial Aspect", "Human Aspect", "Technical Aspect"]}
                     />
                 </div>
                 <div className="flex flex-col">
@@ -71,7 +71,7 @@ export default function MyEmployees () {
                     <Select
                         label={`Sort`}
                         labelStyle={`mr-auto ml-auto`}
-                        options={["Test1", "Test2", "Test3"]}
+                        options={["Highest Trainings Taken", "Lowest Trainings Taken"]}
                     />
                 </div>
         </div>
