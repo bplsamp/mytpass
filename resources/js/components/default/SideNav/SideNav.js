@@ -71,7 +71,7 @@ export default function SideNav({ withCompany, isActiveCompany }) {
                             <RxMagnifyingGlass /> <span>Public Search</span>
                         </Link>
                         {User &&
-                        User.role == "Business Owner" ? (
+                        User?.id == User?.company?.ownerId ? (
                             <Link
                                 to={`/employer/upgrade`}
                                 className={`flex items-center  ${row_gap} hover:text-torange ${
