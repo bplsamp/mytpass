@@ -46,7 +46,6 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                     <th>Feedback</th>
                     <th>Inputted Name</th>
                     <th>Date Added</th>
-                    <th>IDs</th>
                     {disableMore
                         ? (<></>) 
                         : (<th>Actions</th>)
@@ -81,7 +80,6 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                             <td>{moment(training?.created_at).format(
                                 "MMM DD, YYYY hh:mm A"
                             )}</td>
-                            <td>Logged: {User?.id} Inputted by: {training?.inputtedBy}</td>
                             {disableMore 
                             ? (<></>) 
                             : (<td>
@@ -113,7 +111,6 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                                     {disableEdit ? (<></>) 
                                         : (
                                             <>
-                                                <AiFillEdit className="icon text-yellow-400 cursor-pointer hover:opacity-80" />
                                                     <CgTrash
                                                         className="icon text-red-400 cursor-pointer hover:opacity-80"
                                                         onClick={(e) => {
