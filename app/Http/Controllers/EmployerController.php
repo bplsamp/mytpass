@@ -382,7 +382,10 @@ class EmployerController extends Controller
         try {
             $user = Auth::user();
 
-            $trainings = Training::where('inputtedBy', '=', $user->id)->where('isScheduled', '=', 1)->get();
+            $trainings = Training::where('inputtedBy', '=', $user->id)
+            ->where('isScheduled', '=', 1)
+            ->where('companyId', '=', $user->companyId)
+            ->get();
  
             if(!$trainings) {
              throw new Error("Failed to fetch my trainings");

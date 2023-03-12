@@ -23,7 +23,6 @@ export default function CreateCompany() {
         icon: "",
         ownerId: User?.id,
     });
-
     
     const [Files, setFiles] = useState([]);
     const [image, setImage] = useState(null);
