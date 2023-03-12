@@ -177,7 +177,25 @@ class EmployerController extends Controller
 
             //get our sender
             $sender = User::findOrFail($obj->senderId, ['firstName', 'lastName']);
+            
+            //is user already invited? checker
+            $senderId = User::find($obj->senderId);
+            $companyName = Company::find($senderId->companyId)->companyName;
+            $notifs = Notification::where('userId', '=', $obj->userId)
+            ->where('companyId', '=', $senderId->companyId)
+            ->whereNull('trainingId')
+            ->get();
+            error_log($notifs);
 
+            if($notifs->count() >= 1){
+                error_log("USER".$obj->userId);
+                error_log("COMPANY".$senderId->companyId);
+                error_log(json_encode($notifs->count()));
+                return response()->json([
+                    'message' => "User has already been invited to ".$companyName, 
+                    'status' => "Failed: ",
+                    401]);
+            } else {
             //build our notif
             Notification::create([
                 'senderId' => $obj->senderId,
@@ -188,24 +206,15 @@ class EmployerController extends Controller
             $user = $sender->firstName . ' '. $sender->lastName;
             $obj->content = $user . ' has invited you to their company ' . $company->companyName;
             error_log(json_encode($obj));
-
             
-            //is user already invited? checker
-            $senderId = User::find($obj->senderId);
-            $companyName = Company::find($senderId->companyId)->companyName;
-            $notifs = Notification::where('userId', '=', $obj->userId)
-            ->where('companyId', '=', $senderId->companyId)
-            ->whereNull('trainingId')
-            ->get();
-
-            if($notifs->count() >= 1){
-                error_log("USER".$user);
-                error_log("COMPANY".$senderId->companyId);
-                error_log(json_encode($notifs->count()));
-                return response()->json(['message' => "User has already been invited to ".$companyName, 401]);
-            }
-            
+            return response()->json([
+                'message' => "User successfully invited to company ".$companyName,
+                'status' => "Success: ",
+                401]);
             error_log("success invite user");
+            }
+
+            
         }
         catch(Throwable $e) {
             error_log($e->getMessage());

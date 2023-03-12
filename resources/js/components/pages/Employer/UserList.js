@@ -90,7 +90,7 @@ export default function UserList({ data, type, user, refetch }) {
                                                 userId: emp?.id,
                                                 companyId: user?.companyId,
                                             });
-                                            alert(res?.data?.message)
+                                            alert(res?.data?.status + res?.data?.message)
                                             break;
                                     }
                                 }}
