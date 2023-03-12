@@ -10,6 +10,6 @@ function BackDrop({ children, close }) {
     );
 }
 
-export default function BaseModal({ children, onOutsideclick }) {
-    return <BackDrop close={onOutsideclick}>{children}</BackDrop>;
+export default function BaseModal({ children }) {
+    return <BackDrop>{children}</BackDrop>;
 }

@@ -58,7 +58,7 @@ export default function UserList({ data, type, user, refetch }) {
                                     Trainings Taken:{" "}
                                 </span>
                                 <span className="text-torange font-bold">
-                                    {emp?.trainingsTaken}
+                                    {emp?.training_users?.length ? emp?.training_users?.length : 0}
                                 </span>
                             </span>
                         </div>
@@ -101,7 +101,7 @@ export default function UserList({ data, type, user, refetch }) {
                                         className="flex items-center gap-2"
                                         onClick={() => {
                                             navigate(
-                                                `/employer/tpass?id=${emp?.id}`
+                                                `/employer/myemployeetpass?id=${emp?.id}`
                                             );
                                         }}
                                     >

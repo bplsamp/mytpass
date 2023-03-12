@@ -33,6 +33,7 @@ import PublicSearch from './pages/Employer/PublicSearch/PublicSearch';
 import UserView from './pages/Employer/PublicSearch/UserView';
 import Subscribe from './pages/Employer/Company/Subscribe';
 import TrainingRecords from './pages/Employer/TrainingRecords/TrainingRecords';
+import MyEmployeeTPass from './pages/Employer/MyEmployees/MyEmployeeTPass';
 import CreateCompany from './pages/Employer/Company/CreateCompany';
 import EditCompany from './pages/Employer/Company/EditCompany';
 import ShoppingCart from './pages/Employer/Company/ShoppingCart';
@@ -274,6 +275,15 @@ export default function MyApp() {
                         element={
                             <WithSessionLogged>
                                 <TrainingRecords />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.TPASS}
+                        element={
+                            <WithSessionLogged>
+                                <MyEmployeeTPass />
                             </WithSessionLogged>
                         }
                     />

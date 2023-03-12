@@ -70,16 +70,23 @@ export default function SideNav({ withCompany, isActiveCompany }) {
                         >
                             <RxMagnifyingGlass /> <span>Public Search</span>
                         </Link>
-                        <Link
-                            to={`/employer/upgrade`}
-                            className={`flex items-center  ${row_gap} hover:text-torange ${
-                                currentPath == "/employer/upgrade"
-                                    ? "text-torange font-bold"
-                                    : ""
-                            }`}
-                        >
-                            <GiUpgrade /> <span>Upgrade</span>
-                        </Link>
+                        {User &&
+                        User.role == "Business Owner" ? (
+                            <Link
+                                to={`/employer/upgrade`}
+                                className={`flex items-center  ${row_gap} hover:text-torange ${
+                                    currentPath == "/employer/upgrade"
+                                        ? "text-torange font-bold"
+                                        : ""
+                                }`}
+                            >
+                                <GiUpgrade /> <span>Upgrade</span>
+                            </Link>
+                            ) : (
+                            <></>
+                            )
+                        }
+                        
                     </div>
 
                     <span className="font-medium text-[0.8rem]">

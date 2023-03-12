@@ -16,6 +16,8 @@ use App\Models\TrainingUser;
 use App\Models\Attendance;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\DB;
 
 class TrainingsController extends Controller
 {
@@ -52,10 +54,17 @@ class TrainingsController extends Controller
             ]);
 
             if($certificate) {
-                $filename = '/trainings'. '/'. $user->id. '/'. $certificate->getClientOriginalName();
-                $path = Storage::disk('s3')->put($filename, file_get_contents($certificate),'public');
-                //error_log(strval('path'.$path));
+                //get watermark
+                $waterMark = public_path('images/cert.png');
+                $image = Image::make(file_get_contents($certificate));
+                $image->insert($waterMark, 'center');
+                $fileWatermarked = $image->encode('png');
+                //make path and put into s3 bucket
+                $filename = '/trainings'. '/'. $user->id. '/'. $certificate->getClientOriginalName()."_wm";
+                $path = Storage::disk('s3')->put($filename, $fileWatermarked,'public');
+                //get url of image
                 $path = Storage::url($filename);
+                //store url into training certificate (DB)
                 $training->certificate = $path;
             }
             
@@ -66,6 +75,7 @@ class TrainingsController extends Controller
             $trainingUser = TrainingUser::create([
                 'trainingId' => $training->id, 
                 'userId' => $req->userId,
+                'userName' => $req->userName,
             ]);
             
             if(!$trainingUser) {
@@ -107,6 +117,7 @@ class TrainingsController extends Controller
         {
             $user = Auth::user();
             TrainingUser::where('trainingId', '=', $req->id)->where('userId', '=', $user->id)->delete();
+            Training::where('id', '=', $req->id)->where('isScheduled', '=', 0)->delete();
             //Delete Training URL
             
             return response()->json(['message' => 'Successfully deleted training'], 200);
@@ -182,12 +193,15 @@ class TrainingsController extends Controller
             $loggedUser = Auth::user();
             $training = (object)Training::create($req->training);
 
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             foreach($req->users as $user) {
                 $u = (object)$user;
+                $userName = $u->firstName." ".$u->lastName;
                 TrainingUser::create([
                     'trainingId' => $training->id,
                     'userId' => $u->id,
                     'companyId' => $loggedUser->companyId,
+                    'userName' => $userName,
                 ]);
                 Attendance::create([
                     'userId' => $u->id,
@@ -198,8 +212,9 @@ class TrainingsController extends Controller
                 ]);
                 
             }
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-                return response()->json(['message' => 'Successfully notified users'], 200);
+            return response()->json(['message' => 'Successfully notified users'], 200);
         }
         catch (Throwable $e)
         {
@@ -253,8 +268,6 @@ class TrainingsController extends Controller
                 'attendances' => $attendances]
                 , 200
             );
-
-
         }
         catch(Throwable $e) {
             error_log($e->getMessage());
@@ -265,7 +278,9 @@ class TrainingsController extends Controller
     public function getById(Request $req) {
         try {
             $trainings = TrainingUser::where('userId', '=', $req->id)->get()->pluck('training')->where('status', '!=', 'pending');
+            error_log("TRAININGS");
             $array_trainings = [];
+
             
             if(!$trainings) {
                 throw new Error("Failed to get training");
@@ -275,7 +290,6 @@ class TrainingsController extends Controller
                 array_push($array_trainings, $value);
             }
             
-            error_log("id1111".$req->id);
             return response()->json($array_trainings);
         }
         catch(Throwable $e) {
@@ -287,15 +301,22 @@ class TrainingsController extends Controller
     public function getAllCompanyTrainings(Request $req) {
         try {
             $user = Auth::user();
-            $trainingPlucked = Training::where('companyId', '=' , $user->companyId)->get();
-
+            error_log($user->companyId);
+            
+            $trainingPlucked = TrainingUser::where('companyId', '=', $user->companyId)->get()->pluck('training')->where('status', '!=', 'pending');
+            //error_log($trainingPlucked);
          
-          /*   error_log(json_encode($trainingPlucked));
+            $trainingPush = [];
             $array_trainings = [];
+            
             foreach ($trainingPlucked as $obj) {
-                array_push($array_trainings, $obj);
-            } */
-            return response()->json($trainingPlucked);
+                $trainingPush = TrainingUser::where('trainingId', '=', $obj->id)->with('training')->get();
+                foreach($trainingPush as $obj2) {
+                    array_push($array_trainings, $obj2);
+                }
+            }
+
+            return response()->json($array_trainings);
         }
         catch(Throwable $e) {
             error_log($e->getMessage());

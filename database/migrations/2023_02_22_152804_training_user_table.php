@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('userId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('companyId')->nullable();
             $table->foreign('companyId')->references('id')->on('company')->onDelete('set null')->onUpdate('cascade');
+            $table->string('userName');
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

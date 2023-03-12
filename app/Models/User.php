@@ -73,9 +73,20 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->belongsTo(Company::class, 'companyId', 'id');
     }
     
-    //User can only have ???
     public function mycompany() {
         return $this->hasOne(Company::class);
     }
+
+    public function  notifications() {
+        return $this->hasMany(Notification::class, 'userId', 'id');
+    }
+
+    public function trainings() {
+        return $this->hasMany(Training::class, 'userId', 'id');
+    }
+
+    public function trainingUsers() {
+        return $this->hasMany(TrainingUser::class, 'userId', 'id');
+   }
 
 }

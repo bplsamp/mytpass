@@ -14,6 +14,8 @@ class TrainingUser extends Model
      protected $fillable = [
             'trainingId',
             'userId',
+            'companyId',
+            'userName',
     ];
 
 

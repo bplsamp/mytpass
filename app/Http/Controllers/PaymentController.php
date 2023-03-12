@@ -20,7 +20,7 @@ class PaymentController extends Controller
     
     }
 
-    public function getMaxEmployee(string $type) : int {
+    public function getMaxEmployee(string $type) {
         switch($type) {
             case "basic":
                 return 30;
@@ -49,19 +49,25 @@ class PaymentController extends Controller
 
             if(!is_null($sub->expiryDate)) {
                 if($this->isNewSubscription($sub->type, $req->type)) {
+                    //if new type of sub, change sub then add 30 days to expiry (start from 30)
                     $expiry = Carbon::now()->addDays(30);
                 } else {
+                    // if same type of sub, take the expiry date and add 30 to it (stacking)
                     $expiry = Carbon::parse($sub->expiryDate)->addDays(30);
                 }
             }
 
-            $subscription = Subscription::where('companyId', '=', $user->companyId)->update(['type' => $req->type, 'expiryDate' => $expiry, 'startDate' => Carbon::now(), 'maxEmployee' => $this->getMaxEmployee($req->type)]);
+            $subscription = Subscription::where('companyId', '=', $user->companyId)
+            ->update([
+                'type' => $req->type, 
+                'expiryDate' => $expiry, 
+                'startDate' => Carbon::now(), 
+                'maxEmployee' => $this->getMaxEmployee($req->type)]);
          
             Receipt::create([
                 'userId' => $user->id,
                 'companyId' => $user->companyId,
                 'subscriptionId' => $sub->id
-             
             ]);
 
             return response()->json(['message', 'Successfully upgraded business']);

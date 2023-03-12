@@ -35,11 +35,18 @@ class EmployerController extends Controller
         $company = Company::findOrFail($obj->id);
         $count = $company->users->count();
         $subType = $company->subscription->type;
+        $maxEmployee = $company->subscription->maxEmployee;
+        error_log($maxEmployee);
         error_log($subType);
 
         $trainingPlucked = Training::where('companyId', '=' , $user->companyId)->with('trainingUsers')->with('attendances')->get();   
 
-        $data = array('empCount' => $count, 'scheduledTrainings' => $trainingPlucked, 'subType' => $subType);
+        $data = array(
+            'empCount' => $count, 
+            'scheduledTrainings' => $trainingPlucked, 
+            'subType' => $subType,
+            'maxEmployee' => $maxEmployee,
+        );
 
 
         if($company) {
@@ -105,7 +112,8 @@ class EmployerController extends Controller
             $data = User::where(function($query) use ($user) {
                 $query->whereNull('companyId')
                 ->where("isSearchable", '=', true)
-                ->where("email_verified_at", '!=', null);
+                ->where("email_verified_at", '!=', null)
+                ->with('trainingUsers');
             })
                 ->where('firstName', 'like', "%$obj->query%")
                 ->orWhere('lastName', 'like', "%$obj->query%")
@@ -116,6 +124,7 @@ class EmployerController extends Controller
             $data = User::whereNull('companyId')
             ->where("isSearchable", '=', true)
             ->where("email_verified_at", '!=', null)
+            ->with('trainingUsers')
             ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
             return response()->json($data);
             }
@@ -223,6 +232,7 @@ class EmployerController extends Controller
             $data = User::where('companyId', '=', $user->companyId)
                 ->where('role', '!=', 'business owner')
                 ->where('role', '!=', 'human resource')
+                ->with('trainingUsers')
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
                 return response()->json($data);
             }
@@ -240,6 +250,7 @@ class EmployerController extends Controller
             $data = User::where('companyId', '=', $user->companyId)
                 ->where('role', '!=', 'employee')
                 ->where('id', '!=', $user->id)
+                ->with('trainingUsers')
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
                 return response()->json($data);
             }
@@ -279,14 +290,24 @@ class EmployerController extends Controller
             $user->companyId = null;
             $user->isSearchable = true;
             $user->save();
+            
+            $deleteTraces = TrainingUser::where('userId', '=', $user->id)->get()->pluck('training')->where('status', '=', 'pending');
+            foreach($deleteTraces as $dT) {
+                Attendance::where('companyId', '=', $companyId)
+                ->where('userId', '=', $user->id)
+                ->where('trainingId', '=', $dT->id)
+                ->delete();
 
-            //Attendance::where('companyId', '=', $companyId)
-            //->where('userId', '=', $user->id)->delete();
-
-            //TrainingUser::where('userId', '=', $user->id)->get()->pluck('training')->where('status', '=', 'pending')->delete();
+                TrainingUser::where('userId', '=', $user->id)
+                ->where('companyId', '=', $companyId)
+                ->where('trainingId', '=', $dT->id)
+                ->delete();
+            } 
 
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     
+            error_log("11111111111111111111111".$deleteTraces);
+            //error_log("2222222222222222222222".$trainingDelete);
             return response()->json(['message' => 'Successfully removed user from company', 200]);
         }
         catch(Throwable $e) {
@@ -297,7 +318,31 @@ class EmployerController extends Controller
 
     public function getEmployeeTPass(Request $request)
     {
+        try {
+            $id = $request->query('id');
+            $user = User::findOrFail($id);
+            $array_trainings = [];
 
+            if(!$user) {
+                throw new Error("Failed to find user");
+            }
+
+            $trainings = TrainingUser::where('userId', '=', $user->id)->with('training')->get()->pluck('training')->where('status', '!=', 'pending');
+            foreach($trainings as $value) {
+                array_push($array_trainings, $value);
+            }
+
+            if(!$trainings) {
+                throw new Error("Failed to find training");
+            }
+            
+            error_log($trainings);
+            return response()->json(['array_trainings' => $array_trainings, 'userName' => $user->firstName." ".$user->middleInitial."."." ".$user->lastName]);
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        } 
     }
 
     public function mytrainings(Request $request) {

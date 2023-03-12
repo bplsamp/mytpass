@@ -130,7 +130,7 @@ class AdminController extends Controller
             AuditHelper::audit('update', 'company', 'Rejected ' . $company->companyName . ' company' , $user);            
 
             Mail::raw("Reason: ".$obj->reason.
-            "\nAfter a careful review of your company, we decided to reject your commany, please provideus more information and documents. Your account has been deleted along with the company information and documents, so please register an account and a company again.", function ($message) use($obj) {
+            "\nAfter a careful review of your company, we decided to reject your company, please provide us more information and documents. Your company has been deleted along with the information and documents, so please register an account and a company again.", function ($message) use($obj) {
                 $message->to($obj->ownerEmail)
                     ->subject("Your Company Has Been Rejected");
                 });

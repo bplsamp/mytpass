@@ -28,6 +28,7 @@ class EmployeeController extends Controller
     {
         try {
             $obj = json_decode($request->input('user'));
+            $user = User::findOrFail($obj->id);
 
             //validate inputs
             try {
@@ -47,16 +48,17 @@ class EmployeeController extends Controller
                 return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
             }
 
+            //if avatar exist (attached), upload image to s3 and url to db
             $avatar = $request->file('avatar');
             $path = '';
             if($avatar) {
                 $filename = "users/".$obj->id."/avatar"."/".$avatar->getClientOriginalName();
                 $path = Storage::disk('s3')->put($filename, file_get_contents($avatar),'public');
+                Storage::disk('s3')->delete(parse_url($user->avatar));
                 //error_log(strval('path'.$path));
                 $path = Storage::url($filename);
             }
-
-            $user = User::findOrFail($obj->id);
+ 
             if($user) {
                 //$user->email = $request->password;
                 if ($request->bio == null) {

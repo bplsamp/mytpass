@@ -12,7 +12,8 @@ import {
     BsFillArrowRightCircleFill,
     BsFillArrowLeftCircleFill,
 } from "react-icons/bs";
-const opts = ["Test1", "Test2"];
+const optsCategory = ["General", "Technical Aspect", "Human Aspect", "Commercial Aspect"];
+const optsType = ["Short Term", "Long Term", "Refresher", "Internationally Acknowledge"];
 
 export default function ScheduleTraining({ close, refetch }) {
     const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
@@ -25,12 +26,12 @@ export default function ScheduleTraining({ close, refetch }) {
         speaker: "b",
         provider: "c",
         completionDate: "2025-02-20",
-        category: "test1",
+        category: "General",
         expiryDate: null?null:"",
         feedback: "",
         result: "PENDING",
         status: "pending",
-        type: "test1",
+        type: "Long Term",
         inputtedBy: user?.id,
         inputtedName: user?.firstName + " " + user?.lastName,
         venueUrl: "TESTVENUEURL",
@@ -212,7 +213,7 @@ export default function ScheduleTraining({ close, refetch }) {
                         <ModalSelect
                             id={`category`}
                             label={`Category of Training`}
-                            options={opts}
+                            options={optsCategory}
                             value={Training.category}
                             setValue={handleInputChange}
                         />
@@ -291,7 +292,7 @@ export default function ScheduleTraining({ close, refetch }) {
                         <ModalSelect
                             id={`type`}
                             label={`Type of Training`}
-                            options={opts}
+                            options={optsType}
                             value={Training.type}
                             setValue={handleInputChange}
                         />

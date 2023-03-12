@@ -28,6 +28,7 @@ export const EDIT_COMPANY = "/employer/editcompany";
 export const SUBSCRIBE = "/employer/upgrade";
 export const SHOPPING_CART = "/employer/cart";
 export const SUCCESS_CART = "/employer/cart/success";
+export const TPASS = "/employer/myemployeetpass";
 export const PUBLIC_USER_PROFILE = "/employer/user";
 
 //Admin Paths

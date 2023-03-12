@@ -40,6 +40,10 @@ export default function EditProfile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if(Profile.oldpassword != Profile.newpassword){
+            return alert("")
+        }
         
         //send it by for because of image
         const data = new FormData();

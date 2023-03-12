@@ -73,3 +73,17 @@ tbody tr:nth-child(odd){
 .MuiSlider-track{
   color: #E0701D;
 }
+.underline2 {
+  font-size: 18px; border-bottom: solid 1px; padding-left: 1rem; padding-right: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.rowDetails {
+  display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 2rem;
+}
+.colDetails {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.col {
+  display: flex; flex-direction: column;
+}

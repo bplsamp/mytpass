@@ -3,10 +3,10 @@ import BaseModal from "./BackDrop";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 
-function Modal({ onOutsideclick, close, children, title, icon }) {
+function Modal({ close, children, title, icon }) {
     const Icon = icon;
     return (
-        <BaseModal onOutsideclick={onOutsideclick} close={close}>
+        <BaseModal close={close}>
             <div
                 onClick={(e) => e.stopPropagation()}
                 className="bg-white rounded-xl p-4 overflow-y-auto max-h-full text-gray-600"

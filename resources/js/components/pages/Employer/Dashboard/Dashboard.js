@@ -11,19 +11,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth, useAuthUpdate } from '../../../default/Session/SessionProvider';
 import { QueryApiPost } from '../../../Query/QueryApi';
 
-export const getMaxEmployees = (type) => {
-    switch (type) {
-        case "basic":
-            return 30;
-        case "premium":
-            return 100;
-        case "platinum":
-            return 1000;
-        default:
-            return 30;
-    }
-};
-
 const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const calculateAttendanceRate = (attended, total) => {
@@ -115,7 +102,7 @@ export default function Dashboard() {
                 <div className="max-w-[280px] max-h-[300px]">
                     <DoughnutChart
                         empCount={data?.empCount && data?.empCount}
-                        max={getMaxEmployees(data?.subType)}
+                        max={data?.maxEmployee}
                     />
                 </div>
                 <div className="relative bottom-40 font-bold text-[2rem] text-gray-600">

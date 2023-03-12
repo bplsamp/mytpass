@@ -37,6 +37,7 @@ export default function AddTrainingModal({ close, refetch }) {
             result: "completed",
             type: "Short Term",
             userId: id ? id : User?.id,
+            userName: User?.firstName + " " + User?.lastName,
             venueUrl: "url",
         });
 

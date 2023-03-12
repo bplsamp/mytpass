@@ -31,7 +31,7 @@ export default function Approval() {
         );
         refetch();
      };
-
+     
     return(
         <AdminPage>
             <div className="p-12 w-full text-gray-600">

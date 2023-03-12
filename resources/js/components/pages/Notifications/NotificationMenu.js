@@ -85,7 +85,7 @@ export default function NotificationMenu({ notifications, refetch, getUser }) {
             <h1 className="text-[1.5rem] font-medium">Notifications</h1>
             <div className="flex flex-col flex-wrap">
                 {notifications?.length > 0 ? (
-                    notifications.map((notif) => (
+                    notifications?.slice(0).reverse().map((notif) => (
                         <NotificationCard
                             notif={notif}
                             refetch={refetch}
