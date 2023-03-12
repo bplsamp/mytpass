@@ -13,8 +13,7 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
     if (trainings?.length <= 0) {
         return <EmptyState />;
     }
-
-    const { data } = QueryApi("myCompanyUsers", "/api/employer/myCompanyUsers");
+    
     const User = useAuth();
 
     const handleDeleteTraining = (e, trainingId) => {

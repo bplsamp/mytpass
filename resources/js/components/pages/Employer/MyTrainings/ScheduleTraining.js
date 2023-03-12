@@ -67,6 +67,7 @@ export default function ScheduleTraining({ close, refetch }) {
                 return {
                     id: user?.id,
                     firstName: user?.firstName,
+                    middleInitial: user?.middleInitial,
                     lastName: user?.lastName,
                     contact: user?.contact
                 };
@@ -242,10 +243,10 @@ export default function ScheduleTraining({ close, refetch }) {
                             setValue={handleInputChange}
                         />
                         <ModalInput
-                            id={`date`}
+                            id={`completionDate`}
                             label={`Date`}
                             type={`date`}
-                            value={Training.date}
+                            value={Training.completionDate}
                             setValue={handleInputChange}
                         />
                         <div className="flex flex-col">

@@ -179,6 +179,12 @@ class EmployerController extends Controller
             $sender = User::findOrFail($obj->senderId, ['firstName', 'lastName']);
 
             //build our notif
+            Notification::create([
+                'senderId' => $obj->senderId,
+                'userId' => $obj->userId,
+                'companyId' => $obj->companyId,
+                'content' => ' has invited you to their company ' . $company->companyName,
+            ]);
             $user = $sender->firstName . ' '. $sender->lastName;
             $obj->content = $user . ' has invited you to their company ' . $company->companyName;
             error_log(json_encode($obj));
@@ -189,6 +195,7 @@ class EmployerController extends Controller
             $companyName = Company::find($senderId->companyId)->companyName;
             $notifs = Notification::where('userId', '=', $obj->userId)
             ->where('companyId', '=', $senderId->companyId)
+            ->whereNull('trainingId')
             ->get();
 
             if($notifs->count() >= 1){
@@ -198,7 +205,6 @@ class EmployerController extends Controller
                 return response()->json(['message' => "User has already been invited to ".$companyName, 401]);
             }
             
-            return $n->createNotif($obj);
             error_log("success invite user");
         }
         catch(Throwable $e) {
@@ -253,6 +259,24 @@ class EmployerController extends Controller
                 ->with('trainingUsers')
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
                 return response()->json($data);
+            }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        } 
+    }
+
+    public function getCompany(Request $request)
+    {
+        try {
+            error_log($request->id);
+            $company = Company::findOrFail($request->id);
+            error_log($company);
+                if(!$company) {
+                    throw new Error('Failed to find company.');
+                }
+
+            return response()->json($company);
             }
         catch(Throwable $e) {
             error_log($e->getMessage());

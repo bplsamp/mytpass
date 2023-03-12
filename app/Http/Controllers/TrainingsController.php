@@ -14,6 +14,7 @@ use App\Models\Company;
 use App\Models\Training;
 use App\Models\TrainingUser;
 use App\Models\Attendance;
+use App\Models\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -51,6 +52,7 @@ class TrainingsController extends Controller
                 'type' => $req->type,
                 'category' => $req->category,
                 'feedback' => $req->feedback,
+                'companyId' =>$user->companyId,
             ]);
 
             if($certificate) {
@@ -196,7 +198,7 @@ class TrainingsController extends Controller
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             foreach($req->users as $user) {
                 $u = (object)$user;
-                $userName = $u->firstName." ".$u->lastName;
+                $userName = $u->firstName." ".$u->middleInitial.". ".$u->lastName;
                 TrainingUser::create([
                     'trainingId' => $training->id,
                     'userId' => $u->id,
@@ -209,6 +211,13 @@ class TrainingsController extends Controller
                     'companyId' => $loggedUser->companyId,
                     'userFullname' => $u->firstName . " " . $u->lastName,
                     'contact' => $u->contact,
+                ]);
+
+                Notification::create([
+                    'senderId' => $loggedUser->id,
+                    'userId' => $u->id,
+                    'trainingId' => $training->id,
+                    'content' => ' has invited you to a scheduled training ' . ucwords($training->title),
                 ]);
                 
             }

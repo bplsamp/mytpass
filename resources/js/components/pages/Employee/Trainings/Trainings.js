@@ -65,7 +65,7 @@ export default function Trainings() {
                         </button>
                     </div>
                 </div>
-                <TrainingsTable trainings={data} forwardedRef={componentRef} refetch={refetch} disableEdit={false}/>
+                <TrainingsTable trainings={data} forwardedRef={componentRef} refetch={refetch} disableMore={false}/>
             </div>
         <FooterLogged/>
         {ShowAdd && <AddTrainingModal close={() => setShowAdd(false)} refetch={refetch} />}

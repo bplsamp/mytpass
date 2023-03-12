@@ -5,6 +5,7 @@ import Card from "../../default/Card/Card";
 import avatar from "../../assets/images/user.png";
 import { apost } from "../../shared/query";
 import { toast, Toaster} from "react-hot-toast";
+import { IoMdClose } from "react-icons/io";
 
 const NotificationCard = ({ notif, refetch, getUser }) => {
     let split = notif?.content.split("has invited you to their company");
@@ -37,6 +38,16 @@ const handleRejectCompany = (e, notifId) => {
     );
 };
 
+const trashNotif = (e, notifId) => {
+    e.preventDefault();
+    apost(
+        "/api/trashNotif",
+        { id: notifId },
+        refetch
+    );
+    console.log(notifId)
+};
+
     return (
         <div className="flex flex-col border-b border-gray-200 pl-4 pr-4 py-2">
             <div className="flex flex-row gap-6">
@@ -49,30 +60,36 @@ const handleRejectCompany = (e, notifId) => {
                         {notif?.from?.firstName} {notif?.from?.lastName}
                     </span>{" "}
                     <span>
-                        {content}
-                        <span className="font-bold text-torange">
-                            {" "}
-                            {company}
-                        </span>
+                        {notif?.content}
                     </span>
                 </span>
-            </div>
-            <div className="flex flex-row ml-auto gap-4">
                 <button
-                    onClick={(e) => handleAcceptCompany(e, notif?.id)}
-                    type={`button`}
-                    className={`button py-2 text-[1.2rem] hover:opacity-80 flex flex-row items-center justify-center gap-4 
-                    !bg-green-500 !shadow-none px-4 py-1 text-white rounded-md hover:opacity-80 !text-[0.8rem]`}
+                    onClick={(e) => trashNotif(e, notif?.id)}
                 >
-                    Accept
+                    <IoMdClose
+                        className="ml-auto hover:text-red-700 cursor-pointer text-[1.5rem]"
+                    />
                 </button>
-                <button 
-                onClick={(e) => handleRejectCompany(e, notif?.id)}
-                type={`button`}
-                className="bg-red-500 px-4 py-1 text-white rounded-md hover:opacity-80 !text-[0.8rem]">
-                    Decline
-                </button>
+                
             </div>
+            {notif?.trainingId == null ? (
+                <div className="flex flex-row ml-auto gap-4">
+                    <button
+                        onClick={(e) => handleAcceptCompany(e, notif?.id)}
+                        type={`button`}
+                        className={`button py-2 text-[1.2rem] hover:opacity-80 flex flex-row items-center justify-center gap-4 
+                        !bg-green-500 !shadow-none px-4 py-1 text-white rounded-md hover:opacity-80 !text-[0.8rem]`}
+                    >
+                        Accept
+                    </button>
+                    <button 
+                    onClick={(e) => handleRejectCompany(e, notif?.id)}
+                    type={`button`}
+                    className="bg-red-500 px-4 py-1 text-white rounded-md hover:opacity-80 !text-[0.8rem]">
+                        Decline
+                    </button>
+                </div>) : (<></>)
+            }
         </div>
     );
 };

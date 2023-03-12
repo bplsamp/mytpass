@@ -5,10 +5,10 @@ import { toPng } from "html-to-image";
 import { AiOutlineDownload } from "react-icons/ai";
 import QueryApi from "../../../Query/QueryApi";
 
-export default function Certificate({ training, user, close }) {
+export default function CertificateATR({ training, user, close }) {
     const ref = useRef(null);
     const [isDownloading, setisDownloading] = useState(false);
-        
+    
     const { data } = QueryApi(
         ["company"],
         "/api/employer/getCompany",
@@ -76,7 +76,7 @@ export default function Certificate({ training, user, close }) {
                 </span>
 
                 <div
-                    class="text-[69px] capitalize"
+                    class="text-[69px]"
                     style={{
                         borderBottom: "solid 1px black",
                         paddingLeft: "2rem",
@@ -84,9 +84,7 @@ export default function Certificate({ training, user, close }) {
                         fontFamily: "Great Vibes",
                     }}
                 >
-                    {user?.firstName} {user?.middleInitial && user?.middleInitial[0]}{" "} 
-                    {user?.lastName}
-
+                    {user}
                 </div>
 
                 <div class="flex flex-row">

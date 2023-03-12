@@ -60,8 +60,9 @@ export default function MyEmployeeTPass({}) {
                 {data && (
                     <TrainingsTable
                         trainings={data?.array_trainings && data?.array_trainings}
-                        disableEdit={true}
+                        disableMore={false}
                         refetch={refetch}
+                        disableEdit={true}
                     />
                 )}
             </div>

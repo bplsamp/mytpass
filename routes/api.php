@@ -56,6 +56,7 @@ Route::controller(EmployerController::class)->group(function () {
     Route::get('/employer/getEmployeeTPass', 'getEmployeeTPass');
     Route::get('/employer/myCompanyUsers', 'myCompanyUsers');
     Route::get('/employer/getSubscriptionContent', 'getSubscriptionContent');
+    Route::get('/employer/getCompany', 'getCompany');
 });
 
 Route::controller(EmployeeController::class)->group(function () {
@@ -63,6 +64,7 @@ Route::controller(EmployeeController::class)->group(function () {
     Route::post('/acceptCompany', 'acceptCompany');
     Route::post('/rejectCompany', 'rejectCompany');
     Route::post('/updateProfile', 'updateProfile');
+    Route::post('/trashNotif', 'trashNotif');
 });
 
 Route::controller(TrainingsController::class)->group(function () {

@@ -7,7 +7,9 @@ use stdClass;
 use Throwable;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Training;
 use Error;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
 use Illuminate\Filesystem\AwsS3V3Adapter;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Validation\Rule;
 use App\Models\Subscription;
+use Mockery\Matcher\Not;
 
 class EmployeeController extends Controller
 {
@@ -95,9 +98,43 @@ class EmployeeController extends Controller
     {
         try {
             $user = Auth::user();
-            $notifs = Notification::where('userId', '=' ,$user->id)->with('from:id,firstName,lastName,avatar')->get();
-          
+            $notifs = Notification::where('userId', '=' ,$user->id)->where('trash', '!=', 1)->with('from:id,firstName,lastName,avatar')->get();
+            $array_trainings = [];
+
+            foreach ($notifs as $notif) {
+                $withTrainings = Training::where('id', '=', $notif->trainingId)->get();
+                error_log("withTrainings".$withTrainings);
+                foreach ($withTrainings as $withTraining) {
+                    $expiringTrainings = Training::where('id', '=', $withTraining->id)->whereNotNull('expiryDate')->get();
+                    error_log("expiringTrainings".$expiringTrainings);
+                    foreach ($expiringTrainings as $expiringTraining) {
+                        $nearExpiries = Training::where('id', '=', $expiringTraining->id)
+                        ->where('dateExpiry', '<=', Carbon::parse($expiringTraining->expiryDate)->subDays(7));
+
+                        //make training expiring notification
+                    }
+                }
+            }
+
             return response()->json($notifs, 200);
+        }
+            catch(Throwable $e) {
+                error_log($e->getMessage());
+        }
+    }
+
+    public function trashNotif(Request $request)
+    {
+        try {
+            $notif = Notification::findOrFail($request->id);
+
+            $notif->trash = 1;
+            $notif->save();
+
+            return response()->json([
+                'message' => 'The notification has been deleted.', 
+                'status' => "success", 
+                400]);
         }
             catch(Throwable $e) {
                 error_log($e->getMessage());
