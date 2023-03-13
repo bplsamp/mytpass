@@ -174,4 +174,42 @@ class AuthController extends Controller
         }
         //validate
     }
+
+    static public function createDefaultUsers() {
+        $g_password = 'mytpassbenilde2023!';
+        
+        try {
+            //Admin
+            $admin = User::create([
+            'email' => 'mytpasscsb@gmail.com',
+            'password' =>  Hash::make($g_password),
+            'role' => strtolower('admin'),
+            'expertise' => strtolower('admin'),
+            'firstName' => 'Admin',
+            'lastName' => 'MyTPass',
+            'middleInitial' => 'N',
+            'contact' => '09053172342',
+            'specify' => 'admin',
+            'isSearchable' => false,
+            'bio' => '',
+            'companyId' => '',
+            'liked' => '',
+            ]);
+
+            if(!$admin) {
+                throw new Exception("Failed to create admin");
+            }
+
+            if($admin->markEmailAsVerified()) {
+                error_log('called');
+                event(new Verified($admin));
+            }
+        } catch(Exception $e) {
+                error_log($e->getMessage());
+                return response()->json([
+                    'message' => 'Exception: ' + $e->getMessage(),
+                    'status'=> 'error'
+                 ], 400);
+            }
+        }
 }

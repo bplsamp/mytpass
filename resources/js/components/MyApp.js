@@ -38,6 +38,8 @@ import CreateCompany from './pages/Employer/Company/CreateCompany';
 import EditCompany from './pages/Employer/Company/EditCompany';
 import ShoppingCart from './pages/Employer/Company/ShoppingCart';
 import SuccessCart from './pages/Employer/Company/SuccessCart';
+import DeactivatedCompany from './pages/Employer/Company/DeactivatedCompany';
+import NotAllowedCompany from './pages/Employer/Company/NotAllowedCompany';
 
 import Users from './pages/Admin/Users/Users';
 import Companies from './pages/Admin/Companies/Companies';
@@ -302,6 +304,24 @@ export default function MyApp() {
                         element={
                             <WithSessionLogged>
                                 <EditCompany />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.DEACTIVATED_COMPANY}
+                        element={
+                            <WithSessionLogged>
+                                <DeactivatedCompany />
+                            </WithSessionLogged>
+                        }
+                    />
+
+                    <Route
+                        path={path.NOTALLOWED_COMPANY}
+                        element={
+                            <WithSessionLogged>
+                                <NotAllowedCompany />
                             </WithSessionLogged>
                         }
                     />

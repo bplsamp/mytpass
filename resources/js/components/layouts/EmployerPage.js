@@ -6,6 +6,7 @@ import { FaBuilding } from "react-icons/fa";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import NoCompany from "../pages/Employer/Dashboard/NoCompany";
 import WaitingApproval from "../pages/Employer/Company/WaitingApproval";
+import NotAllowedCompany from "../pages/Employer/Company/NotAllowedCompany";
 import { useAuth, useAuthUpdate } from "../default/Session/SessionProvider";
 import { toast } from "react-hot-toast";
 
@@ -17,17 +18,21 @@ export default function EmployerPage ({ children }) {
         
     const path = location?.pathname.replace("/employer/", "");
     
+    const isDeactivated = User?.company?.companyStatus == "inactive" ? true : false;
+    const isEmployer = User?.role == "Business Owner" || User?.role == "Human Resource" ? true : false;
     const withCompany = User?.companyId ? true : false;
     const isActiveCompany =
         (User?.company?.companyStatus == "active") ||
         User?.company?.companyStatus == "requested deactivation";
-
+    
     return (
         <div className="min-h-screen flex flex-col bg-[#ECF0F4]">
             <div className="flex flex-row">
                 <SideNav
                     withCompany={withCompany}
                     isActiveCompany={isActiveCompany}
+                    isEmployer={isEmployer}
+                    isDeactivated={isDeactivated}
                 />
                 <div className="flex flex-col w-full ">
                     <div className="px-4 bg-white">
@@ -79,12 +84,7 @@ export default function EmployerPage ({ children }) {
                                             Create company
                                         </span>
                                     </>
-                                )}
-                                    
-                                
-                                        
-                                    
-                                
+                                )}              
                             </div>
                         </div>
 
@@ -93,15 +93,13 @@ export default function EmployerPage ({ children }) {
                             <span className="capitalize">{path}</span>
                         </div>
                     </div>
-                    {withCompany ? (
-                        isActiveCompany ? (
-                            children
-                        ) : (
-                            <WaitingApproval />
-                        )
-                    ) : (
-                        <NoCompany />
-                    )}
+
+                    {withCompany && isActiveCompany && isEmployer ? (children) 
+                    : withCompany && isActiveCompany && !isEmployer ? (<NotAllowedCompany/>)
+                    : withCompany && isDeactivated && isEmployer ? (children)
+                    : withCompany && isDeactivated && !isEmployer ? (<NotAllowedCompany/>)
+                    : withCompany && !isActiveCompany ? (<WaitingApproval/>) : (<NoCompany/>)
+                    }
                 </div>
             </div>
         </div>

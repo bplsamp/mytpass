@@ -18,6 +18,11 @@ const routes = {
     "/employer/trainingrecords": "All Training Records",
 };
 
+const routesDeact = {
+    "/employer/myemployees": "My Employees",
+    "/employer/myemployers": "My Employers",
+};
+
 const row_gap = "gap-4";
 const logos = [
     <FaUserFriends />,
@@ -26,7 +31,7 @@ const logos = [
     <FaFolderOpen />,
 ];
 
-export default function SideNav({ withCompany, isActiveCompany }) {
+export default function SideNav({ withCompany, isActiveCompany, isEmployer, isDeactivated }) {
 
     const location = useLocation();
     const currentPath = location?.pathname;
@@ -45,7 +50,7 @@ export default function SideNav({ withCompany, isActiveCompany }) {
             <div className={`max-w-[120px] max-h-[55px] ml-auto mr-auto`}>
                 <img src={logo} className="max-w-[120px] object-cover" />
             </div>
-            {withCompany && isActiveCompany ? (
+            {withCompany && isActiveCompany && isEmployer ? (
                 <>
                     <div className="min-h-[1px] bg-gray-400 w-full"></div>
 
@@ -109,9 +114,43 @@ export default function SideNav({ withCompany, isActiveCompany }) {
                         ))}
                     </div>
                 </>
-            ) : (
-                <></>
-            )}
+            ) : withCompany && isDeactivated && isEmployer ? (
+                <>
+                    <div className="min-h-[1px] bg-gray-400 w-full"></div>
+                    <div className="flex flex-col py-2 gap-2">
+                        <Link
+                            to={`/employer/dashboard`}
+                            className={`flex items-center  ${row_gap} hover:text-torange ${
+                                currentPath == "/employer/dashboard"
+                                    ? "text-torange font-bold"
+                                    : ""
+                            }`}
+                        >
+                            <IoHome /> <span>Home</span>
+                        </Link>
+                    </div>
+
+                    <span className="font-medium text-[0.8rem]">
+                        EMPLOYEES MANAGEMENT
+                    </span>
+                    <div className="min-h-[1px] bg-gray-400 w-full"></div>
+                    <div className="flex flex-col py-4 gap-2">
+                        {Object.keys(routesDeact)?.map((route, i) => (
+                            <Link
+                                key={i}
+                                to={route}
+                                className={`flex flex-row items-center hover:text-torange ${row_gap} ${
+                                    currentPath == route
+                                        ? "text-torange font-bold"
+                                        : ""
+                                }`}
+                            >
+                                {logos[i]} {routes[route]}
+                            </Link>
+                        ))}
+                    </div>
+                </>
+            ) : (<></>)}
 
             <footer className="flex flex-row mt-auto gap-2 sticky bottom-6">
                 <img

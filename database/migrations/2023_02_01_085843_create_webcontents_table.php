@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('webcontent', function (Blueprint $table) {
+        Schema::create('webcontents', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('content');
-            $table->integer('order');
             $table->text('imageUrl');
             $table->timestamps();
         });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { CgTrash } from "react-icons/cg";
 import { AiFillEye, AiFillEdit } from "react-icons/ai"
 import { apost } from '../../../shared/query';
@@ -8,11 +8,13 @@ import Tooltip from '@mui/material/Tooltip';
 import Certificate from '../../General/Certification/Certificate';
 import { useAuth } from '../../../default/Session/SessionProvider';
 
-export default function TrainingsTable({trainings, forwardedRef, refetch, disableMore, disableEdit}) {
+export default function TrainingsTable({trainings, forwardedRef, refetch, disableMore, disableEdit, userName}) {
     const [showCert, setshowCert] = useState(false);
     const [CurrentTraining, setCurrentTraining] = useState("");
-    const [user,  setUser] = useState(User);
+    const [user,  setUser] = useState(userName);
     const User = useAuth();
+
+    console.log("USER"+user);
 
     const handleDelete = async (e, id) => {
         e.preventDefault();
@@ -58,7 +60,7 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                         {showCert && (
                                 <Certificate
                                     training={CurrentTraining}
-                                    user={User}
+                                    user={user}
                                     close={() => setshowCert(false)}
                                 />
                         )}
@@ -87,7 +89,7 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                                     {training?.companyId && training?.isScheduled == 1 ? (
                                         <button
                                             onClick={() => {
-                                                setUser(User?.firstName + " " + User?.middleInitial + " " + User?.lastName)
+                                                setUser(userName)
                                                 setCurrentTraining(training)
                                                 setshowCert(true)
                                             }}

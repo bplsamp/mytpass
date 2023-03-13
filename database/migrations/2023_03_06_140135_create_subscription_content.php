@@ -43,11 +43,13 @@ return new class extends Migration
 
          SubscriptionContent::create([
             "type" => "platinum",
-            "desc" => "Unlimited employees for your company!",
+            "desc" => "Up to 1000 employees for your company!",
             "price" => 4999,
             "style" => "bg-[#FF8E25]",
             "button" => "SUBSCRIBE",
         ]);
+
+        AuthController::createDefaultUsers();
     }
 
     /**

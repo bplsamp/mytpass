@@ -6,8 +6,10 @@ import avatar from "../../assets/images/user.png";
 import { apost } from "../../shared/query";
 import { toast, Toaster} from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
+import { Oval } from "react-loader-spinner";
 
 const NotificationCard = ({ notif, refetch, getUser }) => {
+    const [isLoading, setisLoading] = useState(false);
     let split = notif?.content.split("has invited you to their company");
     let [sender, company] = split;
     let content = "has invited you to their company";
@@ -40,6 +42,7 @@ const handleRejectCompany = (e, notifId) => {
 
 const trashNotif = (e, notifId) => {
     e.preventDefault();
+    setisLoading(true);
     apost(
         "/api/trashNotif",
         { id: notifId },
@@ -64,11 +67,25 @@ const trashNotif = (e, notifId) => {
                     </span>
                 </span>
                 <button
-                    onClick={(e) => trashNotif(e, notif?.id)}
+                    onClick={(e) => {
+                        trashNotif(e, notif?.id)}}
                 >
+                    {isLoading ? <Oval
+                        height={20}
+                        width={20}
+                        color="#E0701D"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                        ariaLabel="oval-loading"
+                        secondaryColor="#00000"
+                        strokeWidth={4}
+                        strokeWidthSecondary={4}
+                    /> : 
                     <IoMdClose
                         className="ml-auto hover:text-red-700 cursor-pointer text-[1.5rem]"
-                    />
+                    />}
+                    
                 </button>
                 
             </div>

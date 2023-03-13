@@ -312,18 +312,24 @@ class TrainingsController extends Controller
             $user = Auth::user();
             error_log($user->companyId);
             
-            $trainingPlucked = TrainingUser::where('companyId', '=', $user->companyId)->get()->pluck('training')->where('status', '!=', 'pending');
+            $trainingPlucked = Training::where('companyId', '=', $user->companyId)->where('status', '!=', 'pending')->get();
             //error_log($trainingPlucked);
          
             $trainingPush = [];
             $array_trainings = [];
             
             foreach ($trainingPlucked as $obj) {
-                $trainingPush = TrainingUser::where('trainingId', '=', $obj->id)->with('training')->get();
-                foreach($trainingPush as $obj2) {
-                    array_push($array_trainings, $obj2);
-                }
+                array_push($trainingPush, TrainingUser::where('trainingId', '=', $obj->id)
+                ->with('training')
+                ->with('user')
+                ->get());
             }
+
+            foreach ($trainingPush as $obj2) {
+                array_push($array_trainings, $obj2);
+            }
+
+
 
             return response()->json($array_trainings);
         }

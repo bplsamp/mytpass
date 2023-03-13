@@ -84,8 +84,7 @@ export default function Certificate({ training, user, close }) {
                         fontFamily: "Great Vibes",
                     }}
                 >
-                    {user?.firstName} {user?.middleInitial && user?.middleInitial[0]}{" "} 
-                    {user?.lastName}
+                    {user}
 
                 </div>
 

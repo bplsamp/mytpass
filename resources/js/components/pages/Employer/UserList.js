@@ -8,9 +8,11 @@ import { EmptyState2 } from "../../default/EmptyState/EmptyState";
 import avatar from "../../assets/images/user.png";
 import { useNavigate } from "react-router-dom";
 import { apost } from "../../shared/query"
+import { useAuth } from "../../default/Session/SessionProvider";
 
 export default function UserList({ data, type, user, refetch }) {
     const navigate = useNavigate();
+    const User = useAuth();
 
     const handleRemoveUser = async (e, id) => {
         e.preventDefault();
@@ -62,7 +64,7 @@ export default function UserList({ data, type, user, refetch }) {
                                 </span>
                             </span>
                         </div>
-
+                        
                         <div
                             className="text-white ml-auto flex items-center gap-4"
                         >
@@ -77,7 +79,8 @@ export default function UserList({ data, type, user, refetch }) {
                                     ? "Profile"
                                     : "View"}
                             </button>
-                            <button
+
+                            {User?.company?.companyStatus == "inactive" ? (<></>) : (<button
                                 onClick={async () => {
                                     switch (type) {
                                         case "employee":
@@ -127,7 +130,7 @@ export default function UserList({ data, type, user, refetch }) {
                                         Invite
                                     </>
                                 )}
-                            </button>
+                            </button>)}
                             <button className="bg-red-600 rounded-md px-4 py-1 flex items-center gap-2 hover:opacity-80">
                                 {type == "employee" || type == "employer" ? (
                                     <button

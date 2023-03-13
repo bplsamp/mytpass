@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EmployerPage from "../../../layouts/EmployerPage";
+import DeactivatedCompany from "../Company/DeactivatedCompany";
 import Card from "../../../default/Card/Card";
 import { RiUserSearchFill } from "react-icons/ri";
 import employees from "../users.json";
@@ -33,19 +34,23 @@ export default function PublicSearch() {
 
     return (
         <EmployerPage>
-            <Card className="font-medium text-[1.5rem] m-4 p-4 flex gap-2 items-center">
-                <RiUserSearchFill className="text-[1.8rem] text-torange" />
-                Find Employees
-            </Card>
+            {user?.company?.companyStatus == "inactive" ? (<DeactivatedCompany/>) 
+            : (
+            <>
+                <Card className="font-medium text-[1.5rem] m-4 p-4 flex gap-2 items-center">
+                    <RiUserSearchFill className="text-[1.8rem] text-torange" />
+                    Find Employees
+                </Card>
 
-            {/* SHOW LIST OF EMPLOYERS HERE */}
-            <EmployeeSearch
-            handleSearch={handleSearch}
-            refetch={refetch}
-            Search={Search}
-            />
-            <UserList data={data?.data} user={user} type={""}/>
-
+                {/* SHOW LIST OF EMPLOYERS HERE */}
+                <EmployeeSearch
+                handleSearch={handleSearch}
+                refetch={refetch}
+                Search={Search}
+                />
+                <UserList data={data?.data} user={user} type={""}/>
+            </>
+            )}
         </EmployerPage>
     );
 }

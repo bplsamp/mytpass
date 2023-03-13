@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TrainingsController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AnnouncementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +95,12 @@ Route::controller(AdminController::class)->group(function () {
 
 Route::controller(PaymentController::class)->group(function () {
     Route::post('/payment/upgrade', 'upgrade');
+});
+
+Route::controller(AnnouncementController::class)->group(function () {
+    Route::post('/announcements/create', 'create');
+    Route::post('/announcements/delete', 'delete');
+    Route::get('/announcements/get', "get");
 });
 
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])

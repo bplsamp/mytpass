@@ -30,6 +30,8 @@ export const SHOPPING_CART = "/employer/cart";
 export const SUCCESS_CART = "/employer/cart/success";
 export const TPASS = "/employer/myemployeetpass";
 export const PUBLIC_USER_PROFILE = "/employer/user";
+export const DEACTIVATED_COMPANY = "/employer/deactivatedcompany"
+export const NOTALLOWED_COMPANY = "/employer/notallowedcompany"
 
 //Admin Paths
 export const ADMIN_USERS = "/admin/users";

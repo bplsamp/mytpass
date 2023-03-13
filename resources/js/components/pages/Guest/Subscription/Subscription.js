@@ -21,7 +21,7 @@ export const subscriptions = [
     },
     {
         type: "platinum",
-        desc: "Unlimited employees for your company!",
+        desc: "Up to 1000 employees for your company!",
         price: "4,999/30 days",
         style: "bg-[#FF8E25]",
         button: "SUBSCRIBE",

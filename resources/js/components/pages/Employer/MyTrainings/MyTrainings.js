@@ -11,8 +11,10 @@ import SchedulesTable from "../../Employee/Schedules/SchedulesTable";
 import Select from "../../../default/Inputs/Select";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import AttendanceModal from "./AttendanceModal";
+import DeactivatedCompany from "../Company/DeactivatedCompany";
 
 export default function MyTrainings() {
+    const User = useAuth();
     const [ShowSchedule, setShowSchedule] = useState(false);
     const location = useLocation();
     const currentPath = location?.pathname;
@@ -26,59 +28,62 @@ export default function MyTrainings() {
 
     return (
         <EmployerPage>
-            <Card className="font-medium text-[1.5rem] m-4 p-4 flex gap-2 items-center">
-                <GiTiedScroll className="text-[1.8rem] text-torange" />
-                My Trainings
-            </Card>
+            {User?.company?.companyStatus == "inactive" ? (<DeactivatedCompany/>) 
+            :   (<>
+                    <Card className="font-medium text-[1.5rem] m-4 p-4 flex gap-2 items-center">
+                        <GiTiedScroll className="text-[1.8rem] text-torange" />
+                        My Trainings
+                    </Card>
 
-            <Card className={`mx-4 p-4 flex flex-row gap-14 items-center`}>
-                <Search
-                    placeholder={`Search Training`}
-                    style={`max-w-[600px]`}
-                    disableButton={true}
-                />
-                <div className="flex items-center gap-4">
-                    <h1>Category:</h1>
-                    <Select label={``} options={["Default","General","Human Aspect","Technical Aspect","Commercial Aspect"]} />
-                </div>
+                    <Card className={`mx-4 p-4 flex flex-row gap-14 items-center`}>
+                        <Search
+                            placeholder={`Search Training`}
+                            style={`max-w-[600px]`}
+                            disableButton={true}
+                        />
+                        <div className="flex items-center gap-4">
+                            <h1>Category:</h1>
+                            <Select label={``} options={["Default","General","Human Aspect","Technical Aspect","Commercial Aspect"]} />
+                        </div>
 
-                <div className="flex items-center gap-4">
-                    <h1>Status:</h1>
-                    <Select label={``} options={["Default", "Pending", "Completed"]} />
-                </div>
+                        <div className="flex items-center gap-4">
+                            <h1>Status:</h1>
+                            <Select label={``} options={["Default", "Pending", "Completed"]} />
+                        </div>
 
-                <button
-                    onClick={() => setShowSchedule(true)}
-                    className="button px-4 py-1 ml-auto"
-                >
-                    Schedule Training
-                </button>
-            </Card>
+                        <button
+                            onClick={() => setShowSchedule(true)}
+                            className="button px-4 py-1 ml-auto"
+                        >
+                            Schedule Training
+                        </button>
+                    </Card>
 
-            <Card className={`mx-4 p-4 mt-4`}>
-                {data && 
-                    <SchedulesTable 
-                        trainings={data} 
-                        setshowAttendanceModal={setshowAttendanceModal} 
-                        setSelectedTraining={setSelectedTraining}
-                        data2={data}
-                        refetch={refetch}
+                    <Card className={`mx-4 p-4 mt-4`}>
+                        {data && 
+                            <SchedulesTable 
+                                trainings={data} 
+                                setshowAttendanceModal={setshowAttendanceModal} 
+                                setSelectedTraining={setSelectedTraining}
+                                data2={data}
+                                refetch={refetch}
+                                />
+                            }
+                    </Card>
+
+                    {ShowSchedule && 
+                        <ScheduleTraining close={() => setShowSchedule(false)} refetch={refetch}  />
+                    }
+
+                    {showAttendanceModal && 
+                        <AttendanceModal 
+                            training={SelectedTraining} 
+                            close={() => setshowAttendanceModal(false)} 
+                            refetch={refetch} 
                         />
                     }
-            </Card>
 
-            {ShowSchedule && 
-                <ScheduleTraining close={() => setShowSchedule(false)} refetch={refetch}  />
-            }
-
-            {showAttendanceModal && 
-                <AttendanceModal 
-                    training={SelectedTraining} 
-                    close={() => setshowAttendanceModal(false)} 
-                    refetch={refetch} 
-                />
-            }
-
+                </>)}
         </EmployerPage>
     );
 }
