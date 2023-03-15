@@ -35,7 +35,7 @@ export default function CertificateATR({ training, user, close }) {
         return <Modal close={close}>No certificate found</Modal>;
     }
     return (
-        <Modal close={close} onOutsideclick={close}>
+        <Modal close={close}>
             {isDownloading ? (
                 <div className="cursor-pointer hover:opacity-80 transition text-[1.5rem] ml-auto">
                     Loading...

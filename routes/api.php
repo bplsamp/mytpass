@@ -41,6 +41,7 @@ Route::controller(CompanyController::class)->group(function () {
     Route::post('/company/create', 'createCompany');
     Route::post('/company/activate', 'activate');
     Route::post('/company/requestDeactivate', 'requestDeactivate');
+    Route::get('/company/getCompany', 'getCompany');
 });
 
 Route::controller(EmployerController::class)->group(function () {
@@ -66,6 +67,7 @@ Route::controller(EmployeeController::class)->group(function () {
     Route::post('/rejectCompany', 'rejectCompany');
     Route::post('/updateProfile', 'updateProfile');
     Route::post('/trashNotif', 'trashNotif');
+    Route::post('/getExpiringTraining', 'getExpiringTraining');
 });
 
 Route::controller(TrainingsController::class)->group(function () {

@@ -4,7 +4,6 @@ import { AiFillEye } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
 import { CgTrash } from "react-icons/cg";
 import { apost } from '../../../shared/query';
-import QueryApi from '../../../Query/QueryApi';
 import { useAuth } from '../../../default/Session/SessionProvider';
 import moment from 'moment';
 

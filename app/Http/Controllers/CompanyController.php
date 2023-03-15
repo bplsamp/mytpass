@@ -44,7 +44,6 @@ class CompanyController extends Controller
             $company = json_decode($request->input("company"));
 
             try {
-
             //upload Icon
             if($icon) {
                 $filename = '/companies/images/'. str_replace(" ", "_",$company->companyName). '/'. $icon->getClientOriginalName();
@@ -164,6 +163,20 @@ class CompanyController extends Controller
             $company->save();  
           
             return response()->json(['message' => 'Successfully requested deactivation.']);
+        } 
+        catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
+
+    public function getCompany(Request $request) {
+        try {
+            $user = Auth::user();
+            $company = Company::findOrFail($request->companyId);
+            $sub = $company->subscription;
+          
+            return response()->json($sub);
         } 
         catch(Throwable $e) {
             error_log((string)$e->getMessage());

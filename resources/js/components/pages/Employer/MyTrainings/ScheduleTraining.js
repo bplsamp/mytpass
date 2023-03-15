@@ -184,7 +184,6 @@ export default function ScheduleTraining({ close, refetch }) {
         <Modal
             title={`Enter Training Details`}
             close={close}
-            onOutsideclick={close}
         >
             <div className="flex flex-col">
                 <form className="flex flex-row gap-6 p-4">
@@ -245,7 +244,7 @@ export default function ScheduleTraining({ close, refetch }) {
                         <ModalInput
                             id={`completionDate`}
                             label={`Date`}
-                            type={`date`}
+                            type={`datetime-local`}
                             value={Training.completionDate}
                             setValue={handleInputChange}
                         />

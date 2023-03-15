@@ -80,7 +80,6 @@ export default function AttendanceModal({ close, training, refetch }) {
         <Modal
             icon={RiFileList3Fill}
             title={`Attendance Sheet / Generate Training Certificate`}
-            onOutsideclick={close}
             close={close}
         >
             <form

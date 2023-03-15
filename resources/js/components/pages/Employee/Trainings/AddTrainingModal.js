@@ -83,7 +83,6 @@ export default function AddTrainingModal({ close, refetch }) {
             <Modal
                 icon={GiTiedScroll}
                 title={`Enter Training Detail`}
-                onOutsideclick={close}
                 close={close}
             >
                 <form

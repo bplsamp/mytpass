@@ -268,6 +268,7 @@ class TrainingsController extends Controller
             $training = Training::where('id', "=", $req->trainingId)->delete();
             $trainingUser = TrainingUser::where('trainingId', '=', $req->trainingId)->delete();
             $attendances = Attendance::where('trainingId', '=', $req->trainingId)->delete();
+            $expiringNotif = Notification::where('trainingId', '=', $req->trainingId)->where('userId', '=', $user->id);
 
 
             return response()->json([

@@ -52,7 +52,12 @@ export default function Navbar() {
                 return { ...x };
             })
         );
+        
     };
+
+    const handleCheckExpiring = (e) => {
+        apost("/api/getExpiringTraining");
+    }
 
     return (
         <nav
@@ -83,7 +88,10 @@ export default function Navbar() {
                 ))}
                 <div className="ml-8 mr-8 flex gap-12 items-center">
                     <AiFillBell
-                        onClick={(e) => handleOpenNotification(e, User?.id)}
+                        onClick={(e) => {
+                            handleOpenNotification(e, User?.id)
+                            handleCheckExpiring(e);
+                        }}
                         className={`text-[2rem] hover:opacity-80 cursor-pointer ${
                             ShowNotification && "text-torange"
                         }`}

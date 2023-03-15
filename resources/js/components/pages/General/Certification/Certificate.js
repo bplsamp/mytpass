@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import moment from "moment";
 import Modal from "../../../modal/Modal";
 import { toPng } from "html-to-image";
 import { AiOutlineDownload } from "react-icons/ai";
 import QueryApi from "../../../Query/QueryApi";
+import { useAuth } from "../../../default/Session/SessionProvider";
 
 export default function Certificate({ training, user, close }) {
     const ref = useRef(null);
@@ -34,8 +35,16 @@ export default function Certificate({ training, user, close }) {
     if (training == null) {
         return <Modal close={close}>No certificate found</Modal>;
     }
+
+    if(user && user != null) {
+        console.log(user);
+    } else {
+        const User = useAuth();
+        user = User?.firstName + " " + User?.middleInitial + " " + User?.lastName
+    }
+
     return (
-        <Modal close={close} onOutsideclick={close}>
+        <Modal close={close}>
             {isDownloading ? (
                 <div className="cursor-pointer hover:opacity-80 transition text-[1.5rem] ml-auto">
                     Loading...

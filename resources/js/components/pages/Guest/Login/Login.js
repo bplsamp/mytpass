@@ -29,6 +29,8 @@ const handleLogin = async (e) => {
     navigate("/employer/dashboard")
     else
     navigate("/")
+    
+    apost("/api/getExpiringTraining");
 
     console.log(NewUser);
 };

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Validation\Rule;
 use App\Models\Subscription;
-use Mockery\Matcher\Not;
+use App\Models\TrainingUser;
 
 class EmployeeController extends Controller
 {
@@ -99,6 +99,7 @@ class EmployeeController extends Controller
         try {
             $user = Auth::user();
             $notifs = Notification::where('userId', '=' ,$user->id)->where('trash', '!=', 1)->with('from:id,firstName,lastName,avatar')->get();
+            
             $array_trainings = [];
 
             foreach ($notifs as $notif) {
@@ -117,6 +118,68 @@ class EmployeeController extends Controller
             }
 
             return response()->json($notifs, 200);
+        }
+            catch(Throwable $e) {
+                error_log($e->getMessage());
+        }
+    }
+
+    public function getExpiringTraining(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $date = Carbon::now();
+            //get all training where there is expiry
+            $trainings = Training::where('expiryDate', '!=', null)->get();            
+
+            $expiry_trainings = [];
+            $array_trainings = [];
+
+            //get all training (expiring) where user has this training
+            foreach($trainings as $training) {
+                $expiryTrainings = TrainingUser::where('trainingId', '=', $training->id)->where('userId', '=', $user->id)->get()->pluck('training');
+                array_push($expiry_trainings, $expiryTrainings);
+            }
+
+            //Filter and get only the training and not empty values from array
+            $results = collect($expiry_trainings)
+            ->filter()
+            ->flatten()
+            ->all();
+            
+            //check if user already has expiring notification
+            // if not, make a notification
+            foreach($results as $result) {
+                $expiryDate = Carbon::parse($result->expiryDate);
+                $weekBeforeExpiry = Carbon::parse($result->expiryDate)->subDays(7);
+                $notif = Notification::where('trainingId', '=', $result->id)->where('content', 'like', "%EXPIRING%")->get();
+
+                if(isset($notif) && count($notif) > 0) {
+                    error_log("MAY LAMAN");
+                    array_push($array_trainings, "MAY LAMAN!");
+                } else {
+                    if($date > $weekBeforeExpiry) {
+                        Notification::create([
+                            'userId' => $user->id,
+                            'content' => "Training"." ".$result->title." "."is EXPIRING soon.",
+                            'trainingId' => $result->id,
+                        ]);
+                        if($date > $expiryDate) {
+                            Notification::create([
+                                'userId' => $user->id,
+                                'content' => "Training"." [".$result->title."] "."has EXPIRED.",
+                                'trainingId' => $result->id,
+                            ]);
+                            array_push($array_trainings, "EXPIRED NA PO SIYA!");
+                        } 
+                        array_push($array_trainings, "WALANG LAMAN, MAG ADD NA!");
+                    } else {
+                        array_push($array_trainings, "DI PA SIYA MALAPIT SA EXPIRY DATE!");
+                    }
+                }
+            }
+                        
+            return response()->json([$array_trainings, 200]);
         }
             catch(Throwable $e) {
                 error_log($e->getMessage());

@@ -25,7 +25,6 @@ export default function RejectModal({ companyId, close, company, refetch, ownerE
         <Modal
             title={`Reject ${company}?`}
             close={close}
-            onOutsideclick={close}
         >
             <form className="flex flex-col gap-4 p-4 w-[350px]">
                 {/*<ModalInput label={`Email Address`} type={`email`} />*/}
