@@ -4,7 +4,7 @@ import employees from "./users.json";
 import { FaUser, FaUserPlus, FaPassport, FaCrown } from "react-icons/fa";
 import { BsSuitHeartFill } from "react-icons/bs";
 import { BiExit } from "react-icons/bi";
-import { EmptyState2 } from "../../default/EmptyState/EmptyState";
+import EmptyState from "../../default/EmptyState/EmptyState";
 import avatar from "../../assets/images/user.png";
 import { useNavigate } from "react-router-dom";
 import { apost } from "../../shared/query"
@@ -34,7 +34,7 @@ export default function UserList({ data, type, user, refetch }) {
     return (
         <Card className={`mx-4 p-12 flex flex-col gap-7 mt-4`}>
             {data?.length <= 0 ? (
-                <EmptyState2 />
+                <EmptyState />
             ) : (
                 data?.map((emp, i) => (
                     <div

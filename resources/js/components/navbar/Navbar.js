@@ -95,7 +95,7 @@ export default function Navbar() {
                         className={`text-[2rem] hover:opacity-80 cursor-pointer ${
                             ShowNotification && "text-torange"
                         }`}
-                />
+                    />
                     <div className="flex flex-row gap-4">
                         
                         {/* NOTIFICATION CODE HERE */}

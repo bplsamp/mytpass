@@ -33,7 +33,7 @@ return new class extends Migration
             "button" => "FREE",
         ]);
 
-         SubscriptionContent::create([
+        SubscriptionContent::create([
             "type" => "premium",
             "desc" => "Up to 100 employees for your company!",
             "price" => 2999,
@@ -41,7 +41,7 @@ return new class extends Migration
             "button" => "SUBSCRIBE",
         ]);
 
-         SubscriptionContent::create([
+        SubscriptionContent::create([
             "type" => "platinum",
             "desc" => "Up to 1000 employees for your company!",
             "price" => 4999,

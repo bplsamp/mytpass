@@ -152,18 +152,16 @@ class EmployeeController extends Controller
             foreach($results as $result) {
                 $expiryDate = Carbon::parse($result->expiryDate);
                 $weekBeforeExpiry = Carbon::parse($result->expiryDate)->subDays(7);
-                $notif = Notification::where('trainingId', '=', $result->id)->where('content', 'like', "%EXPIRING%")->get();
+                $notif = Notification::where('trainingId', '=', $result->id)
+                ->where('content', 'like', "%EXPIRING%")
+                ->orWhere('content', 'like', "%EXPIRED%")
+                ->get();
 
                 if(isset($notif) && count($notif) > 0) {
                     error_log("MAY LAMAN");
                     array_push($array_trainings, "MAY LAMAN!");
                 } else {
                     if($date > $weekBeforeExpiry) {
-                        Notification::create([
-                            'userId' => $user->id,
-                            'content' => "Training"." ".$result->title." "."is EXPIRING soon.",
-                            'trainingId' => $result->id,
-                        ]);
                         if($date > $expiryDate) {
                             Notification::create([
                                 'userId' => $user->id,
@@ -171,10 +169,19 @@ class EmployeeController extends Controller
                                 'trainingId' => $result->id,
                             ]);
                             array_push($array_trainings, "EXPIRED NA PO SIYA!");
-                        } 
+                            return response()->json([$array_trainings, 200]);
+                        }
+                        Notification::create([
+                            'userId' => $user->id,
+                            'content' => "Training"." ".$result->title." "."is EXPIRING soon.",
+                            'trainingId' => $result->id,
+                        ]);
                         array_push($array_trainings, "WALANG LAMAN, MAG ADD NA!");
+                        return response()->json([$array_trainings, 200]);
+                        
                     } else {
                         array_push($array_trainings, "DI PA SIYA MALAPIT SA EXPIRY DATE!");
+                        return response()->json([$array_trainings, 200]);
                     }
                 }
             }

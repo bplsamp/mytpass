@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('reason')->default('');
             $table->uuid('companyId')->nullable();
             $table->foreign('companyId')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
-            $table->uuid('senderId');
+            $table->uuid('senderId')->nullable();
             $table->foreign('senderId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('trainingId')->nullable();
             $table->foreign('trainingId')->references('id')->on('trainings')->onDelete('cascade')->onUpdate('cascade');
