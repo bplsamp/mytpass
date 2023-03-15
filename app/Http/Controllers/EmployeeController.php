@@ -100,23 +100,6 @@ class EmployeeController extends Controller
             $user = Auth::user();
             $notifs = Notification::where('userId', '=' ,$user->id)->where('trash', '!=', 1)->with('from:id,firstName,lastName,avatar')->get();
             
-            $array_trainings = [];
-
-            foreach ($notifs as $notif) {
-                $withTrainings = Training::where('id', '=', $notif->trainingId)->get();
-                error_log("withTrainings".$withTrainings);
-                foreach ($withTrainings as $withTraining) {
-                    $expiringTrainings = Training::where('id', '=', $withTraining->id)->whereNotNull('expiryDate')->get();
-                    error_log("expiringTrainings".$expiringTrainings);
-                    foreach ($expiringTrainings as $expiringTraining) {
-                        $nearExpiries = Training::where('id', '=', $expiringTraining->id)
-                        ->where('dateExpiry', '<=', Carbon::parse($expiringTraining->expiryDate)->subDays(7));
-
-                        //make training expiring notification
-                    }
-                }
-            }
-
             return response()->json($notifs, 200);
         }
             catch(Throwable $e) {
@@ -137,7 +120,7 @@ class EmployeeController extends Controller
 
             //get all training (expiring) where user has this training
             foreach($trainings as $training) {
-                $expiryTrainings = TrainingUser::where('trainingId', '=', $training->id)->where('userId', '=', $user->id)->get()->pluck('training');
+                $expiryTrainings = TrainingUser::where('trainingId', '=', $training->id)->where('userId', '=', $user->id)->get()->pluck('training')->where('expiryDate', '!=', null);
                 array_push($expiry_trainings, $expiryTrainings);
             }
 
@@ -150,17 +133,20 @@ class EmployeeController extends Controller
             //check if user already has expiring notification
             // if not, make a notification
             foreach($results as $result) {
-                $expiryDate = Carbon::parse($result->expiryDate);
-                $weekBeforeExpiry = Carbon::parse($result->expiryDate)->subDays(7);
                 $notif = Notification::where('trainingId', '=', $result->id)
-                ->where('content', 'like', "%EXPIRING%")
-                ->orWhere('content', 'like', "%EXPIRED%")
+                ->where('userId', '=', $user->id)
+                ->where('content', 'like', '%EXPIR%')
                 ->get();
+                
+                error_log("HAS NOTIF ALREADY ".$notif);
 
-                if(isset($notif) && count($notif) > 0) {
-                    error_log("MAY LAMAN");
-                    array_push($array_trainings, "MAY LAMAN!");
+                if(count($notif)>0){
+                    array_push($array_trainings, $notif);
                 } else {
+                    array_push($array_trainings, "ITO YUNG EMPTY HUHUHUHU".$result->id);
+                    $expiryDate = Carbon::parse($result->expiryDate);
+                    $weekBeforeExpiry = Carbon::parse($result->expiryDate)->subDays(7);
+
                     if($date > $weekBeforeExpiry) {
                         if($date > $expiryDate) {
                             Notification::create([
@@ -168,25 +154,21 @@ class EmployeeController extends Controller
                                 'content' => "Training"." [".$result->title."] "."has EXPIRED.",
                                 'trainingId' => $result->id,
                             ]);
-                            array_push($array_trainings, "EXPIRED NA PO SIYA!");
-                            return response()->json([$array_trainings, 200]);
+                            return response()->json(["message" => "Expired, added notif."]);
                         }
                         Notification::create([
                             'userId' => $user->id,
-                            'content' => "Training"." ".$result->title." "."is EXPIRING soon.",
+                            'content' => "Training"." [".$result->title."] "."is EXPIRING soon.",
                             'trainingId' => $result->id,
                         ]);
-                        array_push($array_trainings, "WALANG LAMAN, MAG ADD NA!");
-                        return response()->json([$array_trainings, 200]);
-                        
+                        return response()->json(["message" => "Expiring, added notif."]);
                     } else {
-                        array_push($array_trainings, "DI PA SIYA MALAPIT SA EXPIRY DATE!");
-                        return response()->json([$array_trainings, 200]);
+                        return response()->json(["message" => "Not yet expiring."]);
                     }
                 }
             }
-                        
-            return response()->json([$array_trainings, 200]);
+
+            return response()->json([$array_trainings]);
         }
             catch(Throwable $e) {
                 error_log($e->getMessage());

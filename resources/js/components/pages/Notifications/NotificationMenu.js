@@ -9,7 +9,7 @@ import { IoMdClose } from "react-icons/io";
 import { Oval } from "react-loader-spinner";
 
 const NotificationCard = ({ notif, refetch, getUser }) => {
-    const [isLoading, setisLoading] = useState(true);
+    const [isLoading, setisLoading] = useState(false);
     let split = notif?.content.split("has invited you to their company");
     let [sender, company] = split;
     let content = "has invited you to their company";
@@ -40,16 +40,17 @@ const handleRejectCompany = (e, notifId) => {
     );
 };
 
-const trashNotif = (e, notifId) => {
+const trashNotif = async (e, notifId) => {
+    setisLoading(true);
     e.preventDefault();
-    setisLoading(false);
-    apost(
+    await apost(
         "/api/trashNotif",
         { id: notifId },
         refetch
     );
-    setisLoading(true);
+    setisLoading(false);
     console.log(notifId)
+    
 };
 
     return (
@@ -71,11 +72,9 @@ const trashNotif = (e, notifId) => {
                     onClick={(e) => {
                         trashNotif(e, notif?.id)
                     }}
+                    className="ml-auto"
                 >
-                    {isLoading ? <IoMdClose
-                        className="ml-auto hover:text-red-700 cursor-pointer text-[1.5rem]"
-                    /> : 
-                    <Oval
+                    {isLoading ? <Oval
                         height={20}
                         width={20}
                         color="#E0701D"
@@ -86,6 +85,9 @@ const trashNotif = (e, notifId) => {
                         secondaryColor="#00000"
                         strokeWidth={4}
                         strokeWidthSecondary={4}
+                    /> : 
+                    <IoMdClose
+                        className="hover:text-red-700 cursor-pointer text-[1.5rem]"
                     />}
                     
                 </button>
