@@ -15,11 +15,11 @@ export default function CreateCompany() {
     const token = Cookies.get("mytpass_session");
 
     const [Company, setCompany] = useState({
-        companyName: "test",
-        address: "test",
-        dtiNumber: "test",
-        companyEmail: "test@gmail.com",
-        companyContact: "123",
+        companyName: "",
+        address: "",
+        dtiNumber: "",
+        companyEmail: "",
+        companyContact: "",
         icon: "",
         ownerId: User?.id,
     });

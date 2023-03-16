@@ -27,14 +27,14 @@ export default function AddTrainingModal({ close, refetch }) {
         const [previewUrl, setPreviewUrl] = useState("");
         const [isTrainingExpiring, setisTrainingExpiring] = useState(false);
         const [Training, setTraining] = useState({
-            title: "a",
-            speaker: "b",
-            provider: "c",
-            completionDate: "2000-10-12",
+            title: "",
+            speaker: "",
+            provider: "",
+            completionDate: "",
             category: "General",
             expiryDate: null?null:"",
-            feedback: "a",
-            result: "completed",
+            feedback: "",
+            result: "",
             type: "Short Term",
             userId: id ? id : User?.id,
             userName: User?.firstName + " " + User?.middleInitial + ". " + User?.lastName,
