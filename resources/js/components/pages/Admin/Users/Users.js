@@ -114,8 +114,8 @@ export default function Users() {
                                 <th></th>
                                 <th>Role</th>
                                 <th>Expertise</th>
-                                <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>First Name</th>
                                 <th>Email Address</th>
                                 <th>Company</th>
                                 <th>Action</th>
@@ -141,8 +141,8 @@ export default function Users() {
                                         <td className="capitalize">
                                             {user?.expertise}
                                         </td>
-                                        <td>{user?.firstName}</td>
                                         <td>{user?.lastName}</td>
+                                        <td>{user?.firstName}</td>
                                         <td>{user?.email}</td>
                                         <td>
                                             {user?.companyId
