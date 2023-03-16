@@ -183,7 +183,7 @@ class AdminController extends Controller
             error_log($request->id);
             User::findOrFail($request->id)->delete();
 
-            return response()->json(['message', 'Succesfully deleted user']);
+            return response()->json(['message' => 'Successfully deleted user']);
         } 
         catch(Throwable $e) {
             error_log((string)$e->getMessage());

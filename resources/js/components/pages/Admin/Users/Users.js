@@ -10,6 +10,7 @@ import axios from "axios";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import avatar from "../../../assets/images/user.png";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { apost } from "../../../shared/query";
 
 export default function Users() {
     const location = useLocation();
@@ -37,10 +38,11 @@ export default function Users() {
         console.log(data)
     );
 
-    const handleDelete = (e, id) => {
+    const handleDelete = async (e, id) => {
         e.preventDefault();
 
-
+        const res = await apost("/api/admin/deleteUser", {id})
+        alert(res?.data?.message)
     }
 
     console.log("ERROR", String(error));
@@ -149,7 +151,7 @@ export default function Users() {
                                         </td>
                                         <td>
                                             <CgTrash 
-                                                className="icon text-red-400" 
+                                                className="icon text-red-400 hover:opacity-80 cursor-pointer" 
                                                 onClick={(e) => {
                                                     handleDelete(e, user?.id);
                                                 }}
