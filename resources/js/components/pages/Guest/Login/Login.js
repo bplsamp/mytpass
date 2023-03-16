@@ -28,6 +28,8 @@ const handleLogin = async (e) => {
     navigate("/employee")
     else if (res?.data?.user?.role == "Business Owner" || res?.data?.user?.role == "Human Resource")
     navigate("/employer/dashboard")
+    else if (res?.data?.user?.role == "admin" || res?.data?.user?.role == "admin")
+    navigate("/admin/users")
     else
     navigate("/")
     
@@ -41,7 +43,9 @@ useEffect (() => {
     if (User?.role == "Employee")
     navigate("/employee")
     else if (User?.role == "Business Owner" || User?.role == "Human Resource")
-    navigate("/employer/dashboard") 
+    navigate("/employer/dashboard")
+    else if (User?.role == "admin" || User?.role == "admin")
+    navigate("/admin/users") 
 }, [User])
 
 const handleInputChange = (e) => {
