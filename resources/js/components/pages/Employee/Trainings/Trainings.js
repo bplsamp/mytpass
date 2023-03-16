@@ -21,15 +21,16 @@ export default function Trainings() {
     const currentPath = location?.pathname;
 
     const [ShowAdd, setShowAdd] = useState(false);
+    const [SearchQuery, setSearchQuery] = useState("");
 
     const { isLoading, error, data, isFetching, isError, refetch } = QueryApi(
         `trainings`,
         `/api/trainings/get`,
     );
-    
-    useEffect (() => {
-    localStorage.setItem('pathkey', JSON.stringify(currentPath))
-    }, []);
+
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value.toLowerCase());
+    };
 
   return (
     <EmployeePage>
@@ -54,8 +55,7 @@ export default function Trainings() {
                     </div>
 
                     <div className="flex flex-row">
-                        <Search />
-                        
+                        <Search handleSearch={handleSearch} />
                         <button
                             onClick={() => setShowAdd(true)}
                             className="text-[0.9rem] ml-auto bg-torange text-white px-8 py-1 flex flex-row items-center justify-center gap-4 rounded-md hover:opacity-80"
@@ -65,7 +65,18 @@ export default function Trainings() {
                         </button>
                     </div>
                 </div>
-                <TrainingsTable trainings={data} forwardedRef={componentRef} refetch={refetch} disableMore={false}/>
+                <TrainingsTable trainings={data?.filter(
+                            (t) =>
+                                t?.title.toLowerCase().includes(SearchQuery) ||
+                                t?.speaker
+                                    .toLowerCase()
+                                    .includes(SearchQuery) ||
+                                t?.provider.toLowerCase().includes(SearchQuery)
+                        )
+                    } 
+                    forwardedRef={componentRef} 
+                    refetch={refetch} 
+                    disableMore={false}/>
             </div>
         <FooterLogged/>
         {ShowAdd && <AddTrainingModal close={() => setShowAdd(false)} refetch={refetch} />}

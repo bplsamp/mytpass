@@ -7,7 +7,7 @@ import { apost } from '../../../shared/query';
 import { useAuth } from '../../../default/Session/SessionProvider';
 import moment from 'moment';
 
-export default function SchedulesTable({ trainings, setSelectedTraining, setshowAttendanceModal, refetch }) {
+export default function SchedulesTable({ trainings, setSelectedTraining, setshowAttendanceModal, refetch, setShowEdit }) {
 
     if (trainings?.length <= 0) {
         return <EmptyState />;
@@ -77,7 +77,13 @@ export default function SchedulesTable({ trainings, setSelectedTraining, setshow
                                     setSelectedTraining(training)
                                 }} className="icon cursor-pointer text-yellow-500" />
 
-                                <AiFillEdit className="icon cursor-pointer text-orange-500"/>
+                                <AiFillEdit 
+                                    onClick={() => {
+                                        setSelectedTraining(training);
+                                        setShowEdit(true);
+                                    }}
+                                    className="icon cursor-pointer text-orange-500"
+                                />
                                 
                                 <CgTrash onClick={(e) => {
                                         console.log("CLICKED DELETE TRAINING");

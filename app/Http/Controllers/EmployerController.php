@@ -362,7 +362,7 @@ class EmployerController extends Controller
     
             error_log("11111111111111111111111".$deleteTraces);
             //error_log("2222222222222222222222".$trainingDelete);
-            return response()->json(['message' => 'Successfully removed user from company', 200]);
+            return response()->json(['message' => 'Successfully removed user from company']);
         }
         catch(Throwable $e) {
             error_log($e->getMessage());

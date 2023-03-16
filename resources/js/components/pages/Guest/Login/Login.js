@@ -23,7 +23,10 @@ const handleLogin = async (e) => {
     e.preventDefault();
     console.log(NewUser);
     const res = await axios.post("http://localhost:8000/api/login", NewUser) 
- 
+
+    console.log('resssssss', res)
+    alert(res?.data?.message)
+
     if (res?.data?.user?.role == "Employee")
     navigate("/employee")
     else if (res?.data?.user?.role == "Business Owner" || res?.data?.user?.role == "Human Resource")
@@ -32,8 +35,9 @@ const handleLogin = async (e) => {
     navigate("/admin/users")
     else
     navigate("/")
-    
+
     apost("/api/getExpiringTraining");
+
 
     console.log(NewUser);
 };

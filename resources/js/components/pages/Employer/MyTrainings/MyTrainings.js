@@ -12,6 +12,7 @@ import Select from "../../../default/Inputs/Select";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import AttendanceModal from "./AttendanceModal";
 import DeactivatedCompany from "../Company/DeactivatedCompany";
+import EditTrainingModal from "./EditTrainingModal";
 
 export default function MyTrainings() {
     const User = useAuth();
@@ -19,6 +20,7 @@ export default function MyTrainings() {
     const location = useLocation();
     const currentPath = location?.pathname;
     const [showAttendanceModal, setshowAttendanceModal] = useState(false);
+    const [ShowEdit, setShowEdit] = useState("");
     const [SelectedTraining, setSelectedTraining] = useState("");
 
     const [Category, setCategory] = useState("");
@@ -97,6 +99,7 @@ export default function MyTrainings() {
                                 )} 
                                 setshowAttendanceModal={setshowAttendanceModal} 
                                 setSelectedTraining={setSelectedTraining}
+                                setShowEdit={setShowEdit}
                                 data2={data}
                                 refetch={refetch}
                                 />
@@ -114,7 +117,13 @@ export default function MyTrainings() {
                             refetch={refetch} 
                         />
                     }
-
+                    
+                    {ShowEdit && (
+                        <EditTrainingModal
+                            training={SelectedTraining}
+                            close={() => setShowEdit(false)}
+                        />
+                    )}
                 </>)}
         </EmployerPage>
     );

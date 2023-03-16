@@ -65,6 +65,7 @@ export default function CreateCompany() {
             headers: { Authorization: `Bearer ${token}`},
         })
         navigate("/employer/dashboard");
+        alert(res?.data?.message)
     };
 
     useEffect (() => {

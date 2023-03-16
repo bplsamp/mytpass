@@ -6,6 +6,7 @@ export const CONTACT = "/contact";
 export const SUBSCRIPTION = "/subscription";
 export const ABOUT = "/about";
 export const FORGOT = "/forgotpassword";
+export const RESET = "/reset-password";
 export const TERMS = "/terms";
 export const PRIVACY = "/privacy";
 

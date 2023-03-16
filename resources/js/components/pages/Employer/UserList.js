@@ -16,20 +16,19 @@ export default function UserList({ data, type, user, refetch }) {
 
     console.log("data from userlist", data)
 
-    const handleRemoveUser = async (e, id) => {
-        e.preventDefault();
-
-        await apost("/api/employer/removeUser", {
+    const handleRemoveUser = (e, id) => {
+        const res = apost("/api/employer/removeUser", {
             id: id,
         });
         refetch();
     };
 
-    const handleTransferOwnership = async (e, id) => {
-        await apost("/api/employer/transferOwnership", {
+    const handleTransferOwnership = (e, id) => {
+        const res = apost("/api/employer/transferOwnership", {
             targetId: id
         });
         refetch();
+        alert(res?.data?.message)
         window.location.reload();
     };
 

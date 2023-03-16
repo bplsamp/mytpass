@@ -22,7 +22,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api',  ['except' => ['login', 'register', 'validateToken']]);
+        $this->middleware('auth:api',  ['except' => ['login', 'register', 'validateToken', 'resetPassword']]);
     }
 
     public function register(Request $request)
@@ -100,10 +100,9 @@ class AuthController extends Controller
 
         $token = Auth::attempt($credentials);
 
-        if (!$token) {
+        if (!$token || $token == '' || $token == null) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid email or password',
+                'message' => 'Invalid email or password'
             ], 401);
         }
 
@@ -151,6 +150,29 @@ class AuthController extends Controller
         ]);
     }
 
+    public function resetPassword(Request $req) 
+    {
+        try {          
+            error_log("CALLED");
+            $init = User::where('email', '=', $req->email)->first();
+
+            error_log($init);
+            $user = User::findOrFail($init->id);
+            $user->password = Hash::make($req->newPassword);
+            $user->save();
+            return response()->json([
+                'message' => 'Successfully changed password',
+
+                'status'=> 'success'
+            ], 200);         
+            } catch(Exception $e) {
+                return response()->json([
+                'message' => 'Exception: ' + $e->getMessage(),
+                'status'=> 'error'
+                ], 400);
+        }
+    }
+    
     public function validateToken(Request $request) 
     {
         try {
@@ -174,6 +196,7 @@ class AuthController extends Controller
         }
         //validate
     }
+    
 
     static public function createDefaultUsers() {
         $g_password = 'mytpassbenilde2023!';

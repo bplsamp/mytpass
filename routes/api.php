@@ -37,6 +37,7 @@ Route::controller(AuthController::class)->group(function() {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
     Route::post('validateToken', 'validateToken');
+    Route::post('resetPassword', 'resetPassword');
 });
 
 Route::controller(CompanyController::class)->group(function () {
@@ -84,6 +85,7 @@ Route::controller(TrainingsController::class)->group(function () {
     Route::post('/trainings/getUsersByTraining', 'getUsersByTraining');
     Route::post('/trainings/completeTraining', 'completeTraining');
     Route::get('/trainings/getAllCompanyTrainings', 'getAllCompanyTrainings');
+    Route::post('/trainings/update', 'update');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -105,6 +107,7 @@ Route::controller(PaymentController::class)->group(function () {
 
 Route::controller(ContactController::class)->group(function () {
     Route::post('/sendEmail', 'sendEmail');
+    Route::post('/forgotPassword', 'forgotPassword')->name('password.email');
 });
 
 Route::controller(AnnouncementController::class)->group(function () {

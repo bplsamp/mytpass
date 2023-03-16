@@ -16,6 +16,7 @@ import About from './pages/Guest/About/About';
 import Login from './pages/Guest/Login/Login';
 import Register from './pages/Guest/Register/Register';
 import ForgotPassword from './pages/Guest/ForgotPassword/ForgotPassword';
+import ResetPass from "./pages/Guest/ForgotPassword/ResetPass";
 import Terms from './pages/Guest/Terms/Terms';
 import Privacy from './pages/Guest/Privacy/Privacy'
 
@@ -98,6 +99,15 @@ export default function MyApp() {
                         element={
                             <WithSession>
                                 <ForgotPassword />
+                            </WithSession>
+                        }
+                    />
+                    
+                    <Route
+                        path={path.RESET}
+                        element={
+                            <WithSession>
+                                <ResetPass />
                             </WithSession>
                         }
                     />

@@ -37,23 +37,29 @@ class TrainingsController extends Controller
             if ($req->expiryDate == null) $expiryDate = null;
             else $expiryDate = $req->expiryDate;
             
-            $training = Training::create([
-                'title' => $req->title, 
-                'speaker' => $req->speaker,
-                'provider' => $req->provider,
-                'date' => null,
-                'completionDate' => $req->completionDate,
-                'expiryDate' => $expiryDate,
-                'inputtedBy' => $user->id,
-                'inputtedName' => $user->firstName." ".$user->lastName,
-                'status' => 'completed',
-                'result' => $req->result,
-                'venueUrl' => $req->venueUrl,
-                'type' => $req->type,
-                'category' => $req->category,
-                'feedback' => $req->feedback,
-                'companyId' =>$user->companyId,
-            ]);
+            try {
+                $training = Training::create([
+                    'title' => $req->title, 
+                    'speaker' => $req->speaker,
+                    'provider' => $req->provider,
+                    'date' => null,
+                    'completionDate' => $req->completionDate,
+                    'expiryDate' => $expiryDate,
+                    'inputtedBy' => $user->id,
+                    'inputtedName' => $user->firstName." ".$user->lastName,
+                    'status' => 'completed',
+                    'result' => $req->result,
+                    'venueUrl' => $req->venueUrl,
+                    'type' => $req->type,
+                    'category' => $req->category,
+                    'feedback' => $req->feedback,
+                    'companyId' =>$user->companyId,
+                ]);
+            } catch(Throwable $e) {
+                error_log($e->getMessage());
+                return response()->json(['message' => $e->getMessage()]);
+            }
+            
 
             if($certificate) {
                 //get watermark
@@ -108,9 +114,20 @@ class TrainingsController extends Controller
         }         
     }
 
-    public function update() 
+    public function update(Request $req) 
     {
-
+        try 
+        {
+            $training = Training::findOrFail($req->id)->update($req->training);
+            error_log('status'.$training);
+               
+            return response()->json(['message' => 'Successfully updated training'], 200);
+        }
+        catch(Throwable $e) 
+        {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
     }
 
     public function delete(Request $req)
@@ -246,7 +263,7 @@ class TrainingsController extends Controller
              //Update all attendance
              foreach ($req->users as $user) {
                  $u = (object)$user;
-                 Attendance::where('userId', '=', $u->userId)->update(['isPresent' => $u->isPresent]);
+                 Attendance::where('userId', '=', $u->userId)->where('trainingId', '=', $t->id)->update(['isPresent' => $u->isPresent]);
  
                  //if absent
                  if($u->isPresent == false) {
