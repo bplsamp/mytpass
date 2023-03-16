@@ -108,26 +108,37 @@ class EmployerController extends Controller
             $obj = (object)json_decode($request->getContent());
             
             if(isset($obj->query) && $obj->query != '') {
-
-            $data = User::where(function($query) use ($user) {
-                $query->whereNull('companyId')
-                ->where("isSearchable", '=', true)
-                ->where("email_verified_at", '!=', null)
-                ->with('trainingUsers');
+             $data = User::where(function($query) use ($user) {
+                $query->where('companyId', '!=', $user->companyId)
+                ->orWhereNull('companyId');
             })
-            
-                ->where('firstName', 'like', "%$obj->query%")
-                ->orWhere('lastName', 'like', "%$obj->query%")
+            ->where(function($query) use ($user) {
+                $query->whereRaw("REPLACE(role, ' ', '') = 'humanresource'")
+                ->orWhere('role', '=', 'employee');
+            })
+            ->where(function($query) use($obj) {
+                $query->where('firstName', 'like', "%$obj->query%")
+                ->orWhere('lastName', 'like', "%$obj->query%");
+            }) 
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
+        
              return response()->json($data);
             }
             else {
-            $data = User::whereNull('companyId')
-            ->where("isSearchable", '=', true)
-            ->where("email_verified_at", '!=', null)
-            ->with('trainingUsers')
-            ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
-            return response()->json($data);
+                $data = User::where(function($query) use ($user) {
+                    $query->where('companyId', '!=', $user->companyId)
+                    ->orWhereNull('companyId');
+                })
+                ->where(function($query) use ($user) {
+                    $query->whereRaw("REPLACE(role, ' ', '') = 'humanresource'")
+                    ->orWhere('role', '=', 'employee');
+                })
+                ->where("isSearchable", '=', true)
+                ->with('trainingUsers')
+                ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
+                error_log('data'.strval($data));
+    
+                return response()->json($data);
             }
         }
             catch(Throwable $e) {
