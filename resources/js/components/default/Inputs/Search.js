@@ -8,7 +8,7 @@ export function Search({
     handleSearch,
     search,
 }) {
-    /*
+
     let { q } = useParams();
 
     const handleURLSearch = (e) => {
@@ -16,7 +16,6 @@ export function Search({
         url.searchParams.set("q", e.target.value);
         window.history.pushState({}, "", url);
     };
-    */
 
     const [Search, setSearch] = useState("");
 

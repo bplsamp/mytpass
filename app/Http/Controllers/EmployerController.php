@@ -115,6 +115,7 @@ class EmployerController extends Controller
                 ->where("email_verified_at", '!=', null)
                 ->with('trainingUsers');
             })
+            
                 ->where('firstName', 'like', "%$obj->query%")
                 ->orWhere('lastName', 'like', "%$obj->query%")
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
@@ -158,6 +159,7 @@ class EmployerController extends Controller
         try {
             $user = Auth::user();
             $obj = (object)json_decode($request->getContent());
+            $emp = User::findOrFail($obj->userId);
             
             $n = new NotificationHelper();
 
@@ -178,41 +180,49 @@ class EmployerController extends Controller
             //get our sender
             $sender = User::findOrFail($obj->senderId, ['firstName', 'lastName']);
             
+            //does user already have company??
             //is user already invited? checker
             $senderId = User::find($obj->senderId);
             $companyName = Company::find($senderId->companyId)->companyName;
-            $notifs = Notification::where('userId', '=', $obj->userId)
-            ->where('companyId', '=', $senderId->companyId)
-            ->where('content', 'like', '%has invited you to their company%')
-            ->whereNull('trainingId')
-            ->get();
-            error_log($notifs);
+            if($emp->companyId == null) {
+                $notifs = Notification::where('userId', '=', $obj->userId)
+                ->where('companyId', '=', $senderId->companyId)
+                ->where('content', 'like', '%has invited you to their company%')
+                ->whereNull('trainingId')
+                ->get();
+                error_log($notifs);
 
-            if($notifs->count() >= 1){
-                error_log("USER".$obj->userId);
-                error_log("COMPANY".$senderId->companyId);
-                error_log(json_encode($notifs->count()));
+                if($notifs->count() >= 1){
+                    error_log("USER".$obj->userId);
+                    error_log("COMPANY".$senderId->companyId);
+                    error_log(json_encode($notifs->count()));
+                    return response()->json([
+                        'message' => "User has already been invited to ".$companyName, 
+                        'status' => "Failed: ",
+                        401]);
+                } else {
+                //build our notif
+                Notification::create([
+                    'senderId' => $obj->senderId,
+                    'userId' => $obj->userId,
+                    'companyId' => $obj->companyId,
+                    'content' => ' has invited you to their company ' . $company->companyName,
+                ]);
+                $user = $sender->firstName . ' '. $sender->lastName;
+                $obj->content = $user . ' has invited you to their company ' . $company->companyName;
+                error_log(json_encode($obj));
+                }
+                
                 return response()->json([
-                    'message' => "User has already been invited to ".$companyName, 
+                    'message' => "User successfully invited to company ".$companyName,
+                    'status' => "Success: ",
+                    401]);
+                error_log("success invite user");
+            } else {
+                return response()->json([
+                    'message' => "User has already has company ".$emp->companyId, 
                     'status' => "Failed: ",
                     401]);
-            } else {
-            //build our notif
-            Notification::create([
-                'senderId' => $obj->senderId,
-                'userId' => $obj->userId,
-                'companyId' => $obj->companyId,
-                'content' => ' has invited you to their company ' . $company->companyName,
-            ]);
-            $user = $sender->firstName . ' '. $sender->lastName;
-            $obj->content = $user . ' has invited you to their company ' . $company->companyName;
-            error_log(json_encode($obj));
-            
-            return response()->json([
-                'message' => "User successfully invited to company ".$companyName,
-                'status' => "Success: ",
-                401]);
-            error_log("success invite user");
             }
 
             
