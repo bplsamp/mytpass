@@ -65,7 +65,7 @@ export default function Navbar() {
         className="bg-white text-black shadow-lg flex text-white sticky top-0 mt-[0.5rem]"
 
         >
-        <img src={logo} className="mr-auto ml-8 " width={100} />
+        <img src={logo} className="mr-auto ml-8" width={125}/>
         <ul className="ml-auto flex flex-row items-center justify-center uppercase">
                 {Object.keys(routes).map((route, idx) => (
                     <li key={idx} className="flex">
@@ -100,16 +100,16 @@ export default function Navbar() {
                         
                         {/* NOTIFICATION CODE HERE */}
                             
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col text-center'>
                             <span className='capitalize text-center'>
                                 {User?.firstName + " " + User?.lastName}
                             </span> 
                             {User?.role != "Employee" && (
-                                <span>
-                                    <Link to={`/employer/dashboard`} className="capitalize cursor-pointer underline text-blue-400 text-[0.6rem] hover:opacity-70">
+                                <Link to={`/employer/dashboard`} className="capitalize cursor-pointer underline text-white text-[0.6rem]">
+                                    <button className='py-.75 px-2 bg-torange rounded-lg hover:opacity-70 my-[2px]'>
                                         Switch To Employer Side
-                                    </Link>
-                                </span>
+                                    </button>
+                                </Link>
                             )}
                             <button
                                 onClick={async () => {
@@ -120,7 +120,8 @@ export default function Navbar() {
                                         navigate("/")
                                     }
                                 }
-                                className="mr-auto ml-auto underline text-blue-400 text-[0.6rem] hover:opacity-70"
+                                className="mr-auto ml-auto text-white text-[0.6rem] hover:opacity-70
+                                py-.75 px-2 bg-torange rounded-lg "
                             >
                                 Logout
                             </button>

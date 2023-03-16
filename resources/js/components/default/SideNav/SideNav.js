@@ -165,22 +165,25 @@ export default function SideNav({ withCompany, isActiveCompany, isEmployer, isDe
                     <span className="text-[0.9rem] text-center capitalize">
                         {User?.firstName + " " + User?.lastName}
                     </span>
-                    <Link to={`/employee`} className="underline text-blue-600">
+                    <Link to={`/employee`} className="text-white py-.75 px-2 bg-torange rounded-lg hover:opacity-70 my-[2px]">
                         Switch To Employee Side
                     </Link>
-                    <button 
-                    className="underline text-blue-600"
-                    onClick={async () => {
-                        await axios.post("http://localhost:8000/api/logout",
-                        null, {
-                            headers: { Authorization: `Bearer ${token}`},
-                        })
-                        navigate("/")
-                    }
-                }
-                    >
-                        Logout
-                    </button>
+                    <div>
+                        <button 
+                        className="text-white py-.75 px-2 bg-torange rounded-lg hover:opacity-70 my-[2px]"
+                        onClick={async () => {
+                            await axios.post("http://localhost:8000/api/logout",
+                            null, {
+                                headers: { Authorization: `Bearer ${token}`},
+                            })
+                            navigate("/")
+                            }
+                        }
+                        >
+                            Logout
+                        </button>
+                    </div>
+                    
                 </div>
             </footer>
         </nav>

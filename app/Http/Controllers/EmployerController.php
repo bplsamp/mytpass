@@ -136,7 +136,6 @@ class EmployerController extends Controller
                 ->where("isSearchable", '=', true)
                 ->with('trainingUsers')
                 ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
-                error_log('data'.strval($data));
     
                 return response()->json($data);
             }
