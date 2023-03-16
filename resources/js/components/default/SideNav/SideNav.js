@@ -40,18 +40,6 @@ export default function SideNav({ withCompany, isActiveCompany, isEmployer, isDe
     const User = useAuth();
     const getUser = useAuthUpdate();
     const token = Cookies.get("mytpass_session");
-    
-    const { data } = QueryApi(
-        ["getCompany"],
-        "/api/company/getCompany",
-        null,
-        { companyId: User?.companyId }
-    )
-    const currentDate = new Date();
-    const expiryDate = data && new Date(data?.expiryDate);
-    const weekBeforeDate = data && new Date(data?.expiryDate).setDate(expiryDate.getDate() - 7);
-
-    //console.log(new Date(weekBeforeDate).toDateString());
 
     useEffect(() => {
         getUser();
@@ -174,29 +162,6 @@ export default function SideNav({ withCompany, isActiveCompany, isEmployer, isDe
                 {/*<RxAvatar className="text-[2rem]" />*/}
 
                 <div className="flex flex-col text-[0.7rem] text-center">
-                    {expiryDate > currentDate > weekBeforeDate 
-                    ? (<span className="text-[0.9rem] animate-pulse mb-[1rem] font-bold text-red-500">
-                        Subscription is expiring soon.
-                        </span>) 
-                    : currentDate > expiryDate ? (
-                        <span className="text-[0.9rem] animate-pulse mb-[1rem] font-bold text-red-500">
-                        Subscription has expired.
-                        </span>)
-                    : (<></>)}
-                    <span className="flex flex-col text-[0.9rem] capitalize mb-[1rem]">
-                        <span>
-                            Subscription Type: 
-                        </span>
-                        <span className="uppercase font-bold">{data?.type}</span>
-                    </span>
-                    <span className="flex flex-col text-[0.9rem] capitalize mb-[1rem]">
-                        <span>
-                            Expiry Date:
-                        </span>
-                        <span className="uppercase font-bold">
-                            {data?.expiryDate}
-                        </span>
-                    </span>
                     <span className="text-[0.9rem] text-center capitalize">
                         {User?.firstName + " " + User?.lastName}
                     </span>

@@ -31,6 +31,16 @@ export default function UserList({ data, type, user, refetch }) {
         window.location.reload();
     };
 
+    const handleLikeUser = async (e, id) => {
+        e.preventDefault();
+
+        const res = await apost("/api/employer/likeUser", {
+            id: id,
+        });
+        alert(res?.data?.message)
+        refetch();
+    };
+
     return (
         <Card className={`mx-4 p-12 flex flex-col gap-7 mt-4`}>
             {data?.length <= 0 ? (
@@ -142,10 +152,15 @@ export default function UserList({ data, type, user, refetch }) {
                                         Remove
                                     </button>
                                 ) : (
-                                    <>
+                                    <button
+                                        className="flex items-center gap-2"
+                                        onClick={(e) => {
+                                            handleLikeUser(e, emp?.id)
+                                        }}
+                                    >
                                         <BsSuitHeartFill />
                                         Like
-                                    </>
+                                    </button>
                                 )}
                             </button>
                         </div>

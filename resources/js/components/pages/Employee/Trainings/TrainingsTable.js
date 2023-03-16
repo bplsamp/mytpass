@@ -55,7 +55,7 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                 </tr>
             </thead>
             <tbody>
-                {trainings?.slice(0).reverse().map((training) => (
+                {trainings?.slice(0).reverse().map((training, idx) => (
                     <>
                         {showCert && (
                                 <Certificate
@@ -64,7 +64,7 @@ export default function TrainingsTable({trainings, forwardedRef, refetch, disabl
                                     close={() => setshowCert(false)}
                                 />
                         )}
-                        <tr key={training?.id}>
+                        <tr key={idx}>
                             <td>{training?.title}</td>
                             <td>{training?.speaker}</td>
                             <td>{training?.provider}</td>

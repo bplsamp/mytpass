@@ -97,7 +97,7 @@ const trashNotif = async (e, notifId) => {
                 </button>
                 
             </div>
-            {notif?.trainingId == null ? (
+            {notif?.trainingId == null && notif?.content.includes("invited you to their company") ? (
                 <div className="flex flex-row ml-auto gap-4">
                     <button
                         onClick={(e) => handleAcceptCompany(e, notif?.id)}
@@ -112,7 +112,7 @@ const trashNotif = async (e, notifId) => {
                     type={`button`}
                     className="bg-red-500 px-4 py-1 text-white rounded-md hover:opacity-80 !text-[0.8rem]">
                         Decline
-                    </button>
+                </button>
                 </div>) : (<></>)
             }
         </div>

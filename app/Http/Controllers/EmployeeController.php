@@ -162,13 +162,11 @@ class EmployeeController extends Controller
                             'trainingId' => $result->id,
                         ]);
                         return response()->json(["message" => "Expiring, added notif."]);
-                    } else {
-                        return response()->json(["message" => "Not yet expiring."]);
-                    }
+                    } 
                 }
             }
 
-            return response()->json([$array_trainings]);
+            return response()->json(["message" => "No Expiring or Expired Training."]);
         }
             catch(Throwable $e) {
                 error_log($e->getMessage());

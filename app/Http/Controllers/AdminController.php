@@ -177,4 +177,17 @@ class AdminController extends Controller
             return response()->json(['message' => $e->getMessage()], 401);
         }
     }
+
+    public function deleteUser(Request $request) {
+        try {
+            error_log($request->id);
+            User::findOrFail($request->id)->delete();
+
+            return response()->json(['message', 'Succesfully deleted user']);
+        } 
+        catch(Throwable $e) {
+            error_log((string)$e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
 }

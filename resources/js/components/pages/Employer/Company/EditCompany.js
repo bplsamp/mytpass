@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DeactivateModal from "./DeactivateModal";
 import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
 import { apost } from "../../../shared/query";
+import QueryApi from "../../../Query/QueryApi";
 
 export default function EditCompany() {
     const user = useAuth();
@@ -56,6 +57,15 @@ export default function EditCompany() {
         getUser();
     };
 
+        
+    const { data } = QueryApi(
+        ["getCompany"],
+        "/api/company/getCompany",
+        null,
+        { companyId: user?.company?.id }
+    )
+    console.log(data)
+
     return (
         <form
             onSubmit={(e) => handleUpdateCompany(e)}
@@ -88,7 +98,6 @@ export default function EditCompany() {
                             </span>
                         </div>
                     )}
-
                     <input
                         type="file"
                         className=" max-w-[300px]"
@@ -97,7 +106,28 @@ export default function EditCompany() {
                             handleFile(file);
                         }}
                     />
+                    <div className="mt-[1rem] p-6 border-[.3rem] rounded-lg border-torange">
+                        <div>
+                            <span>
+                                Your Company Subscription: 
+                                <span className={`font-bold uppercase 
+                                ${data?.type == "premium" ? "text-torange" 
+                                : data?.type == "platinum" ? "text-green-700" : ""}`}>
+                                    {" "}{data?.type}
+                                </span>
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                                Subscription Expiry Date: 
+                                <span className="font-bold uppercase">
+                                    {" "}{data?.expiryDate}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
+
                 <div className="flex flex-col gap-4 w-[700px]">
                     <label>Company Email</label>
                         <input
@@ -132,25 +162,26 @@ export default function EditCompany() {
                             Cancel
                         </button>
                     </div>
+                    <div className="mr-auto ml-auto">
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirm(true)}
+                            className="underline hover:opacity-80 text-[1.5rem] text-blue-400"
+                        >
+                            Deactivate company?
+                        </button>
+                        {user?.company?.companyStatus == "requested deactivation" ? (
+                            <span
+                                className="hover:opacity-80 text-[1rem] text-red-400"
+                            >
+                                Already Requested for Deactivation
+                            </span>
+                        ) : ShowConfirm && (
+                            <DeactivateModal close={() => setShowConfirm(false)} />
+                        )}
+                    </div>
                 </div>
             </div>
-
-            <button
-                type="button"
-                onClick={() => setShowConfirm(true)}
-                className="underline hover:opacity-80 text-[1.5rem] text-blue-400"
-            >
-                Deactivate company?
-            </button>
-            {user?.company?.companyStatus == "requested deactivation" ? (
-                <span
-                    className="hover:opacity-80 text-[1rem] text-red-400"
-                >
-                    Already Requested for Deactivation
-                </span>
-            ) : ShowConfirm && (
-                <DeactivateModal close={() => setShowConfirm(false)} />
-            )}
         </form>
     );
 }

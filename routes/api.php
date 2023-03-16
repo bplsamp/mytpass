@@ -12,6 +12,8 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TrainingsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,7 @@ Route::controller(EmployerController::class)->group(function () {
     Route::post('/employer/trainings', 'mytrainings');
     Route::post('/employer/user', 'user');
     Route::post('/employer/transferOwnership', 'transferOwnership');
+    Route::post('/employer/likeUser', 'likeUser');
     Route::get('/employer/getEmployeeTPass', 'getEmployeeTPass');
     Route::get('/employer/myCompanyUsers', 'myCompanyUsers');
     Route::get('/employer/getSubscriptionContent', 'getSubscriptionContent');
@@ -92,11 +95,16 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('/admin/rejectCompany', 'rejectCompany');
     Route::post('/admin/deactivate', 'deactivate');
     Route::post('/admin/activate', 'activate');
+    Route::post('/admin/deleteUser', 'deleteUser');
     Route::get('/admin/audits', 'audits');
 });
 
 Route::controller(PaymentController::class)->group(function () {
     Route::post('/payment/upgrade', 'upgrade');
+});
+
+Route::controller(ContactController::class)->group(function () {
+    Route::post('/sendEmail', 'sendEmail');
 });
 
 Route::controller(AnnouncementController::class)->group(function () {
@@ -105,6 +113,7 @@ Route::controller(AnnouncementController::class)->group(function () {
     Route::get('/announcements/get', "get");
 });
 
+//verifying email address
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
     ->middleware(['signed', 'throttle:6,1'])
     ->name('verification.verify');//<--- built in, verifies email when clicked in gmail mismo

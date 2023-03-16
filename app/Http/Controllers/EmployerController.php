@@ -183,6 +183,7 @@ class EmployerController extends Controller
             $companyName = Company::find($senderId->companyId)->companyName;
             $notifs = Notification::where('userId', '=', $obj->userId)
             ->where('companyId', '=', $senderId->companyId)
+            ->where('content', 'like', '%has invited you to their company%')
             ->whereNull('trainingId')
             ->get();
             error_log($notifs);
@@ -401,6 +402,42 @@ class EmployerController extends Controller
 
     public function getSubscriptionContent() {
         return response()->json(SubscriptionContent::all());
+    }
+
+    public function likeUser(Request $req) {
+        $user = Auth::user();
+        $company = Company::findOrFail($user->companyId);
+
+        error_log($company->id);
+
+        try {
+            $notif = Notification::where('userId', '=', $req->id)
+                ->where('senderId', '=', $user->id)
+                ->where('companyId', '=', $company->id)
+                ->where('content', 'like', '%LIKED%')
+                ->get();
+
+                if(count($notif)>0){
+                    error_log("HAS LIKE NOTIF ALREADY ".$notif);
+                    return response()->json(["message" => "Have already liked this employee."]);
+                } else {
+                    Notification::create([
+                        'userId' => $req->id,
+                        'senderId' => $user->id,
+                        'companyId' => $company->id,
+                        'content' => "from company ".$company->companyName." has liked your MyT-Pass Profile!"
+                    ]);
+                    return response()->json(["message" => "Liked the employee! :)"]);
+                }
+                    
+                
+            
+            return response()->json($req->id);
+        }
+        catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        } 
     }
 
 }

@@ -14,6 +14,7 @@ import { DownloadTableExcel } from 'react-export-table-to-excel';
 export default function Users() {
     const location = useLocation();
     const currentPath = location?.pathname;
+    const[ result, setResult] = useState([]);
 
     const optExpertise = {
         "Default": "Default",
@@ -30,13 +31,17 @@ export default function Users() {
         "Alphabetical (Z-A)": "Alphabetical (Z-A)",
     }
 
-    const[ result, setResult] = useState([]);
-
     const { isLoading, error, data, isFetching, isError } = QueryApi(
         `${currentPath.replace("/admin/", "")}`,
         `/api${currentPath}`,
         console.log(data)
     );
+
+    const handleDelete = (e, id) => {
+        e.preventDefault();
+
+
+    }
 
     console.log("ERROR", String(error));
 
@@ -116,8 +121,8 @@ export default function Users() {
                         </thead>
                         <tbody>
                             {data &&
-                                data?.users?.map((user) => (
-                                    <tr key={user?.id}>
+                                data?.users?.map((user, idx) => (
+                                    <tr key={idx}>
                                         <td>
                                             <img
                                                 src={
@@ -143,7 +148,12 @@ export default function Users() {
                                                 : "None"}
                                         </td>
                                         <td>
-                                            <CgTrash className="icon text-red-400" />
+                                            <CgTrash 
+                                                className="icon text-red-400" 
+                                                onClick={(e) => {
+                                                    handleDelete(e, user?.id);
+                                                }}
+                                            />
                                         </td>
                                     </tr>
                                 ))}

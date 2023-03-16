@@ -160,7 +160,7 @@ class CompanyController extends Controller
             $company = Company::findOrFail($company->id);
             $company->companyStatus = "requested deactivation";
             $company->reason = $request->reason;
-            $company->save();  
+            $company->save();
           
             return response()->json(['message' => 'Successfully requested deactivation.']);
         } 
