@@ -6,6 +6,7 @@
         <meta name="description" content="MyT-Pass is a Web-Based Training Record and Document Management System designed to the Employees, Owners, and the Human Resource of the Manufacturing Industry.">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <title>My T-Pass</title>
+        <link rel="icon" href="{{ url('https://i.ibb.co/fXg4h6d/My-T-Pass-Logo-No-Image.png') }}">
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
