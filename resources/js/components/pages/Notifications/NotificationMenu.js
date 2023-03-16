@@ -16,41 +16,45 @@ const NotificationCard = ({ notif, refetch, getUser }) => {
 
 const handleAcceptCompany = async (e, notifId) => {
     e.preventDefault();
-    const res = await apost(
-        "/api/acceptCompany",
-        { id: notifId },
-        refetch
-    );
-
-    //if(res?.data?.status == "failed") alert("User already in a company.");
-    console.log(1111111, res?.data);
-    alert(res?.data?.status + ": " + res?.data?.message)
-
-    setTimeout(() => {
-        getUser();
-    }, 1000)
+    if (notif?.companyId) {
+        const res = await apost(
+            "/api/acceptCompany",
+            { id: notifId },
+            refetch
+        );
+    
+        //if(res?.data?.status == "failed") alert("User already in a company.");
+        console.log(1111111, res?.data);
+        alert(res?.data?.status + ": " + res?.data?.message)
+    
+        setTimeout(() => {
+            getUser();
+        }, 1000)
+    }
 };
 
 const handleRejectCompany = (e, notifId) => {
     e.preventDefault();
-    apost(
-        "/api/rejectCompany",
-        { id: notifId },
-        refetch
-    );
+
+    if (notif?.companyId) {
+        apost(
+            "/api/rejectCompany",
+            { id: notifId },
+            refetch
+        );
+    }
+    
 };
 
 const trashNotif = async (e, notifId) => {
-    setisLoading(true);
     e.preventDefault();
+    setisLoading(true)
     await apost(
-        "/api/trashNotif",
-        { id: notifId },
-        refetch
-    );
-    setisLoading(false);
+            "/api/trashNotif",
+            { id: notifId },
+            refetch,
+    ).then(setisLoading(false))
     console.log(notifId)
-    
 };
 
     return (
