@@ -21,10 +21,27 @@ export default function MyTrainings() {
     const [showAttendanceModal, setshowAttendanceModal] = useState(false);
     const [SelectedTraining, setSelectedTraining] = useState("");
 
+    const [Category, setCategory] = useState("");
+    const [SearchText, setSearchText] = useState("");
     const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
         `/api${currentPath}`,
     );
+
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+        //refetch();
+    };
+
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+
+        if (e.target.value == "Default") {
+            setCategory("");
+            return;
+        }
+        setCategory(value);
+    };
 
     return (
         <EmployerPage>
@@ -37,18 +54,25 @@ export default function MyTrainings() {
 
                     <Card className={`mx-4 p-4 flex flex-row gap-14 items-center`}>
                         <Search
+                            handleSearch={handleSearch}
                             placeholder={`Search Training`}
                             style={`max-w-[600px]`}
                             disableButton={true}
                         />
                         <div className="flex items-center gap-4">
                             <h1>Category:</h1>
-                            <Select label={``} options={["Default","General","Human Aspect","Technical Aspect","Commercial Aspect"]} />
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <h1>Status:</h1>
-                            <Select label={``} options={["Default", "Pending", "Completed"]} />
+                            <Select
+                                value={Category}
+                                setValue={handleInput}
+                                label={``}
+                                options={[
+                                    "Default",
+                                    "General",
+                                    "Human Aspect",
+                                    "Technical Aspect",
+                                    "Commercial Aspect",
+                                ]}
+                            />
                         </div>
 
                         <button
@@ -62,7 +86,15 @@ export default function MyTrainings() {
                     <Card className={`mx-4 p-4 mt-4`}>
                         {data && 
                             <SchedulesTable 
-                                trainings={data} 
+                                trainings={data && data?.filter(
+                                    (t) =>
+                                        t?.title
+                                            .toLowerCase()
+                                            .includes(SearchText.toLowerCase()) &&
+                                        t?.category
+                                            .toLowerCase()
+                                            .includes(Category.toLowerCase())
+                                )} 
                                 setshowAttendanceModal={setshowAttendanceModal} 
                                 setSelectedTraining={setSelectedTraining}
                                 data2={data}

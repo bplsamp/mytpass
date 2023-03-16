@@ -12,14 +12,16 @@ import CertificateATR from "../../General/Certification/CertificateATR";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import moment from "moment";
 import DeactivatedCompany from "../Company/DeactivatedCompany";
+import { Search } from "../../Admin/Search";
 
 export default function TrainingRecords() {
     const User = useAuth();
     const [user, setUser] = useState("");
     const [CurrentTraining, setCurrentTraining] = useState("");
     const [Trainings, setTrainings] = useState([]);
-    const [Search, setSearch] = useState("");
-    const [showCert, setshowCert] = useState(false);    
+    const [SearchText, setSearchText] = useState("");
+    const [showCert, setshowCert] = useState(false);   
+    const [Category, setCategory] = useState(""); 
 
     let { data, isLoading } = QueryApi(
         ["alltrainings"],
@@ -45,9 +47,21 @@ export default function TrainingRecords() {
         }
     }, [data]);
 
+    
+
     const handleSearch = (e) => {
-        setSearch(e.target.value);
+        setSearchText(e.target.value);
         //refetch();
+    };
+
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+
+        if (e.target.value == "Default") {
+            setCategory("");
+            return;
+        }
+        setCategory(value);
     };
 
     return (
@@ -61,14 +75,26 @@ export default function TrainingRecords() {
                 </Card>
 
                 <Card className={`mx-4 p-4 flex flex-row gap-14 items-center`}>
-                    <input
-                        className="outline-0 border border-gray-400 px-2 py-2 rounded-md text-black w-full max-w-[500px]"
-                        placeholder="🔍︎ Search Record..."
-                    >
-                    </input>
+                    <Search
+                        placeholder={`Search Training`}
+                        style={`max-w-[600px]`}
+                        disableButton={true}
+                        handleSearch={handleSearch}
+                    />
                     <div className={`flex items-center gap-4`}>
-                        <h1>Sort By:</h1>
-                        <Select label={``} options={["Default","General","Commercial Aspect","Human Aspect","Technical Aspect"]} />
+                    <h1>Category:</h1>
+                    <Select
+                        label={``}
+                        options={[
+                            "Default",
+                            "General",
+                            "Human Aspect",
+                            "Technical Aspect",
+                            "Commercial Aspect",
+                        ]}
+                        setValue={handleInput}
+                        value={Category}
+                    />
                     </div>
                 </Card>
                 <Card className={`mx-4 p-4 mt-4`}>
@@ -94,7 +120,15 @@ export default function TrainingRecords() {
                             <tbody>
                                 
                                 {Trainings &&
-                                Trainings?.map((app) => 
+                                Trainings?.filter(
+                                    (t) =>
+                                        t?.training?.title
+                                            .toLowerCase()
+                                            .includes(SearchText.toLowerCase()) &&
+                                        t?.training?.category
+                                            .toLowerCase()
+                                            .includes(Category.toLowerCase())
+                                ).slice(0).reverse().map((app) => 
                                 (
                                     <>
                                         {showCert && (
@@ -148,7 +182,7 @@ export default function TrainingRecords() {
                                                             <AiFillEye className="icon text-torange  cursor-pointer hover:opacity-80" />
                                                         </a>
                                                         ) : (
-                                                                <div><AiFillEye className="icon text-gray-400  cursor-pointer hover:opacity-80" /></div>
+                                                            <div><AiFillEye className="icon text-gray-400  cursor-pointer hover:opacity-80" /></div>
                                                         )
                                                     }
                                                 </div>

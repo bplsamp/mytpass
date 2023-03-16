@@ -4,7 +4,7 @@ import "../../css/app.css"
 import * as path from "./shared/constants";
 import { createRoot } from "react-dom/client";
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import UserProvider, { WithSession, WithSessionLogged } from './default/Session/SessionProvider';
+import UserProvider, { WithSession, WithSessionLogged, WithSessionAdmin } from './default/Session/SessionProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Loading from './default/Loading/Loading';
 import toast, { Toaster } from "react-hot-toast";
@@ -332,9 +332,9 @@ export default function MyApp() {
                     <Route 
                         path={path.ADMIN_USERS} 
                         element={
-                            <WithSessionLogged>
+                            <WithSessionAdmin>
                                 <Users/>
-                            </WithSessionLogged>
+                            </WithSessionAdmin>
                         }
                         />
 
@@ -342,34 +342,34 @@ export default function MyApp() {
                     < Route
                         path={path.ADMIN_COMPANIES} 
                         element={
-                        <WithSessionLogged>
+                        <WithSessionAdmin>
                             <Companies/>
-                        </WithSessionLogged>
+                        </WithSessionAdmin>
                         }
                         />
 
                     <Route 
                         path={path.ADMIN_APPROVAL} 
                         element={
-                        <WithSessionLogged>
+                        <WithSessionAdmin>
                             <Approval/>
-                        </WithSessionLogged>}
+                        </WithSessionAdmin>}
                     />
 
                     <Route 
                         path={path.ADMIN_ANNOUNCEMENT} 
                         element={
-                        <WithSessionLogged>
+                        <WithSessionAdmin>
                             <Announcement/>
-                        </WithSessionLogged>}
+                        </WithSessionAdmin>}
                     />
 
                     <Route 
                         path={path.ADMIN_AUDITS} 
                         element={
-                        <WithSessionLogged>
+                        <WithSessionAdmin>
                             <Audits/>
-                        </WithSessionLogged>}
+                        </WithSessionAdmin>}
                     />
                     
                     <Route 

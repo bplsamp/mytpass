@@ -105,8 +105,8 @@ export default function Navbar() {
                                 {User?.firstName + " " + User?.lastName}
                             </span> 
                             {User?.role != "Employee" && (
-                                <Link to={`/employer/dashboard`} className="capitalize cursor-pointer underline text-white text-[0.6rem]">
-                                    <button className='py-.75 px-2 bg-torange rounded-lg hover:opacity-70 my-[2px]'>
+                                <Link to={`/employer/dashboard`} className="capitalize cursor-pointer underline text-blue-600 text-[0.6rem]">
+                                    <button className='hover:opacity-70 my-[2px]'>
                                         Switch To Employer Side
                                     </button>
                                 </Link>
@@ -120,8 +120,7 @@ export default function Navbar() {
                                         navigate("/")
                                     }
                                 }
-                                className="mr-auto ml-auto text-white text-[0.6rem] hover:opacity-70
-                                py-.75 px-2 bg-torange rounded-lg "
+                                className="mr-auto ml-auto text-blue-600 text-[0.6rem] hover:opacity-70 underline"
                             >
                                 Logout
                             </button>

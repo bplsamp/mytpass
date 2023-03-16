@@ -91,6 +91,23 @@ export function WithSession({ children }) {
     );
 }
 
+export function WithSessionAdmin({ children }) {
+    const user = useAuth();
+    const getUser = useAuthUpdate();
+
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    return user == null ? (
+        <Loading />
+    ) : Object.keys(user).length > 0  && user?.role == "admin" ? (
+            children
+    ) : (
+        <Navigate to={"/login"} />
+    );
+}
+
 export function Navigate({ children, to }) {
     const navigate = useNavigate();
 

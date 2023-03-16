@@ -269,7 +269,7 @@ class EmployerController extends Controller
                 ->where('role', '!=', 'business owner')
                 ->where('role', '!=', 'human resource')
                 ->with('trainingUsers')
-                ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
+                ->get();
                 return response()->json($data);
             }
         catch(Throwable $e) {

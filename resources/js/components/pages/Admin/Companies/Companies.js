@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AdminPage from "../../../layouts/AdminPage";
 import { MdDomainDisabled, MdDomain } from "react-icons/md";
 import { CgTrash } from "react-icons/cg";
@@ -9,6 +9,8 @@ import Card from "../../../default/Card/Card";
 import EmptyState from "../../../default/EmptyState/EmptyState";
 import { apost } from "../../../shared/query";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { Search } from "../AdminDefault/Search";
+import { AdminSelect } from "../AdminDefault/AdminSelect";
 
 const RenderStatus = ({ status }) => {
     if (status === "Active") {
@@ -79,71 +81,78 @@ const RenderButton = ({
     }
 };
 
-const optSub = {
-    "Default": "Default",
-    "Basic": "Basic",
-    "Premium": "Premium",
-    "Platinum": "Platinum"
-}
-
-const optSortBy = {
-    "Default": "Default",
-    "Alphabetical (A-Z)": "Alphabetical (A-Z)",
-    "Alphabetical (Z-A)": "Alphabetical (Z-A)",
-}
-
 export default function Companies() {
     const location = useLocation();
     const currentPath = location?.pathname;
-    const[ result, setResult ] = useState([]);
+    
+    const [SearchText, setSearchText] = useState("");
+    const [SortBy, setSortBy] = useState("Alphabetical (A-Z)");
+    const [Type, setType] = useState("");
 
-    const { isLoading, error, data, isFetching, refetch } = QueryApi(
+    let { isLoading, error, data, isFetching, refetch } = QueryApi(
         `${currentPath.replace("/admin/", "")}`,
         `/api${currentPath}`,
     );
-    console.log(data)
+
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+
+        if (e.target.value == "Default") {
+            setType("");
+            return;
+        }
+        setType(value);
+    };
+
+    const handleSort = (e) => {
+        const { name, value } = e.target;
+
+        setSortBy(value);
+    };
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+        //refetch();
+    };
+
+    useEffect(() => {
+        if (data) {
+            if (SortBy == "Alphabetical (A-Z)") {
+                data = data?.companies?.sort((a, b) =>
+                    b?.companyName.localeCompare(a?.companyName)
+                );
+            } else {
+                data = data?.companies?.sort((a, b) =>
+                    a?.companyName.localeCompare(b?.companyName)
+                );
+            }
+        }
+    }, [SortBy, data]);
 
     const tableRef = useRef(null);
     return(
         <AdminPage>
             <div className="p-12 w-full text-gray-600">
                 <Card className={`mx-4 p-8 flex flex-col gap-4`}>
-                    <div className={`flex flex-row w-full gap-12`}>
-                        <input
-                            id="search_users"
-                            name="search_users"
-                            className="outline-0 px-4 py-2 border border-gray-200 w-full rounded-md"
-                            placeholder={`Search Companies...`}
-                        />
-                    </div>
+                <Search
+                    value={SearchText}
+                    handleSearch={handleSearch}
+                    placeholder="🔍︎ Search Company..."
+                />
                 </Card>
 
                 <div className="flex flex-row items-center gap-4 p-8">
-                    <label htmlFor="subscription" className="px-2">{"Subscription"}</label>
-                    <select
-                        id={"Subscription"}
-                        name={"Subscription"}
-                        className="border 
-                        border-gray-400 outline-0 px-2 py-1"
-                        placeholder="Select..."
-                    >
-                        {Object.keys(optSub).map((opt, idx) => (
-                            <option key={idx}>{opt}</option>
-                        ))}
-                    </select>
-
-                    <label htmlFor="sortby" className="px-2">{"Sort By:"}</label>
-                    <select
-                        id={"sortby"}
-                        name={"sortby"}
-                        className="border 
-                        border-gray-400 outline-0 px-2 py-1"
-                        placeholder="Select..."
-                    >
-                        {Object.keys(optSortBy).map((opt, idx) => (
-                            <option key={idx}>{opt}</option>
-                        ))}
-                    </select>
+                    <AdminSelect
+                        label={`Subscription`}
+                        value={Type}
+                        setValue={handleInput}
+                        options={["Default", "Basic", "Premium", "Platinum"]}
+                    />
+                    <AdminSelect
+                        label={`Sort By:`}
+                        value={SortBy}
+                        setValue={handleSort}
+                        options={["Alphabetical (A-Z)", "Alphabetical (Z-A)"]}
+                    />
                 </div>
 
                 <div className="flex flex-row mb-5">
@@ -179,7 +188,18 @@ export default function Companies() {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.companies?.map((company) => (
+                            {data?.companies?.filter(
+                                    (company) =>
+                                        company?.subscription?.type
+                                            .toLowerCase()
+                                            .includes(
+                                                Type.toLowerCase()
+                                            ) &&
+                                        company?.companyName
+                                            .toLowerCase()
+                                            .includes(SearchText.toLowerCase())
+                                )
+                                ?.map((company) => (
                                 <tr key={company?.id}>
                                     <td>
                                         <img

@@ -11,28 +11,18 @@ import EmptyState from "../../../default/EmptyState/EmptyState";
 import avatar from "../../../assets/images/user.png";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { apost } from "../../../shared/query";
+import { Search } from "../AdminDefault/Search";
+import { AdminSelect } from "../AdminDefault/AdminSelect";
 
 export default function Users() {
     const location = useLocation();
     const currentPath = location?.pathname;
-    const[ result, setResult] = useState([]);
+    
+    const [SearchText, setSearchText] = useState("");
+    const [SortBy, setSortBy] = useState("Alphabetical (A-Z)");
+    const [Expertise, setExpertise] = useState("");
 
-    const optExpertise = {
-        "Default": "Default",
-        "Commercial Aspect": "Commercial Aspect",
-        "Human Aspect": "Human Aspect",
-        "Technical Aspect": "Technical Aspect",
-        "Business Owner": "Business Owner",
-        "Human Resource": "Human Resource",
-    }
-
-    const optSortBy = {
-        "Default": "Default",
-        "Alphabetical (A-Z)": "Alphabetical (A-Z)",
-        "Alphabetical (Z-A)": "Alphabetical (Z-A)",
-    }
-
-    const { isLoading, error, data, isFetching, isError } = QueryApi(
+    let { isLoading, error, data, isFetching, isError } = QueryApi(
         `${currentPath.replace("/admin/", "")}`,
         `/api${currentPath}`,
         console.log(data)
@@ -45,51 +35,74 @@ export default function Users() {
         alert(res?.data?.message)
     }
 
-    console.log("ERROR", String(error));
+    const handleInput = (e) => {
+        const { name, value } = e.target;
 
-    console.log("user", data);
+        if (e.target.value == "Default") {
+            setExpertise("");
+            return;
+        }
+        setExpertise(value);
+    };
+
+    const handleSort = (e) => {
+        const { name, value } = e.target;
+
+        setSortBy(value);
+    };
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+        //refetch();
+    };
+
+    useEffect(() => {
+        if (data) {
+            if (SortBy == "Alphabetical (A-Z)") {
+                data = data?.users?.sort((a, b) =>
+                    b?.lastName.localeCompare(a?.lastName)
+                );
+                console.log("called1");
+            } else {
+                data = data?.users?.sort((a, b) =>
+                    a?.lastName.localeCompare(b?.lastName)
+                );
+                console.log("called2");
+            }
+        }
+    }, [SortBy, data]);
     
     const tableRef = useRef(null);
     return (
         <AdminPage>
             <div className="p-12 w-full text-gray-600">
                 <Card className={`mx-4 p-8 flex flex-col gap-4`}>
-                    <div className={`flex flex-row w-full gap-12`}>
-                        <input
-                            id="search_users"
-                            name="search_users"
-                            className="outline-0 px-4 py-2 border border-gray-200 w-full rounded-md"
-                            placeholder={`Search Users...`}
-                        />
-                    </div>
+                    <Search
+                        value={SearchText}
+                        handleSearch={handleSearch}
+                        placeholder="🔍︎ Search Users..."
+                    />
                 </Card>
 
                 <div className="flex flex-row items-center gap-4 p-8">
-                    <label htmlFor="expertise" className="px-2">{"Expertise"}</label>
-                    <select
-                        id={"Expertise"}
-                        name={"Expertise"}
-                        className="border 
-                        border-gray-400 outline-0 px-2 py-1"
-                        placeholder="Select..."
-                    >
-                        {Object.keys(optExpertise).map((opt, idx) => (
-                            <option key={idx}>{opt}</option>
-                        ))}
-                    </select>
-
-                    <label htmlFor="expertise" className="px-2">{"Sort by:"}</label>
-                    <select
-                        id={"sortby"}
-                        name={"sortby"}
-                        className="border 
-                        border-gray-400 outline-0 px-2 py-1"
-                        placeholder="Select..."
-                    >
-                        {Object.keys(optSortBy).map((opt, idx) => (
-                            <option key={idx}>{opt}</option>
-                        ))}
-                    </select>
+                    <AdminSelect
+                        label={`Expertise`}
+                        value={Expertise}
+                        setValue={handleInput}
+                        options={[
+                            "Default",
+                            "Commercial Aspect",
+                            "Human Aspect",
+                            "Technical Aspect",
+                            "Human Resource",
+                            "Business Owner",
+                        ]}
+                    />
+                    <AdminSelect
+                        label={`Sort By:`}
+                        value={SortBy}
+                        setValue={handleSort}
+                        options={["Alphabetical (A-Z)", "Alphabetical (Z-A)"]}
+                    />
                 </div>
 
                 <div className="flex flex-row mb-5">
@@ -123,7 +136,21 @@ export default function Users() {
                         </thead>
                         <tbody>
                             {data &&
-                                data?.users?.map((user, idx) => (
+                               data?.users
+                               ?.filter(
+                                   (user) =>
+                                       user?.expertise
+                                           ?.toLowerCase()
+                                           .includes(
+                                               Expertise.toLowerCase()
+                                           ) &&
+                                       user?.firstName
+                                           .toLowerCase()
+                                           .includes(
+                                               SearchText.toLowerCase()
+                                           )
+                               )
+                               ?.map((user, idx) => (
                                     <tr key={idx}>
                                         <td>
                                             <img

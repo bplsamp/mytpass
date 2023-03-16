@@ -11,7 +11,6 @@ import QueryApi, { QueryApiPost } from "../../../Query/QueryApi";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../../default/Session/SessionProvider";
 
-
 const user = {
     role: "business owner",
 }
@@ -24,6 +23,7 @@ export default function MyEmployers () {
     const currentPath = location?.pathname;
 
     const [Page, setPage] = useState(0);
+    const [SearchText, setSearchText] = useState("");
 
     const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
@@ -31,11 +31,10 @@ export default function MyEmployers () {
         { page: Page }
     );
 
-    console.log(1111,data);
-
-    useEffect (() => {
-        localStorage.setItem('pathkey', JSON.stringify(currentPath))
-    }, [User])
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+        //refetch();
+    };
     
     return (
         <>
@@ -48,17 +47,23 @@ export default function MyEmployers () {
                         Employers
                     </Card>
                     <Card className={`mx-4 p-8 flex flex-col gap-4`}>
-                        <div className={`flex flex-row w-full gap-12`}>
-                            <input
-                                id="search_users"
-                                name="search_users"
-                                className="outline-0 px-4 py-2 border border-gray-200 w-full rounded-md"
-                                placeholder={`Search Employer...`}
-                            />
-                        </div>
+                        <Search
+                            handleSearch={handleSearch}
+                            placeholder={`Search Employer...`}
+                        />
                     </Card>
 
-                <UserList data={data?.data} user={User} type={`employer`}  refetch={refetch} />
+                <UserList 
+                data={data?.data && data?.data?.filter(
+                    (emp) =>
+                        emp?.firstName
+                            .toLowerCase()
+                            .includes(SearchText.toLowerCase()) ||
+                        emp?.lastName
+                            .toLowerCase()
+                            .includes(SearchText.toLowerCase())
+                )} 
+                user={User} type={`employer`}  refetch={refetch} />
 
                 </EmployerPage>
             )}

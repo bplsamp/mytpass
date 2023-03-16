@@ -21,8 +21,13 @@ export default function PublicSearch() {
 
     const [Page, setPage] = useState(0);
     const [Search, setSearch] = useState("");
+    const [SortBy, setSortBy] = useState("Default");
+    const [Expertise, setExpertise] = useState("");
 
-    const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
+    const queryParameters = new URLSearchParams(window.location.search);
+    const q = queryParameters.get("q");
+
+    let { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
         `/api/employer/search`,
     { page: Page , query: Search}
@@ -30,6 +35,22 @@ export default function PublicSearch() {
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
+    };
+
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+
+        if (e.target.value == "Default") {
+            setExpertise("");
+            return;
+        }
+        setExpertise(value);
+    };
+
+    const handleSortBy = (e) => {
+        const { name, value } = e.target;
+
+        setSortBy(value);
     };
 
     return (
@@ -47,8 +68,21 @@ export default function PublicSearch() {
                 handleSearch={handleSearch}
                 refetch={refetch}
                 Search={Search}
+                handleSortBy={handleSortBy}
+                handleExpertise={handleInput}
                 />
-                <UserList data={data?.data} user={user} type={""}/>
+                <UserList data={
+                        data?.data &&
+                        data?.data?.filter(
+                            (emp) =>
+                                emp?.expertise
+                                    .toLowerCase()
+                                    .includes(Expertise.toLowerCase()) &&
+                                emp?.lastName
+                                    .toLowerCase()
+                                    .includes(Search.toLowerCase())
+                        )
+                    } user={user} type={""}/>
             </>
             )}
         </EmployerPage>

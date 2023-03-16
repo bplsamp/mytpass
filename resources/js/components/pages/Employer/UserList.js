@@ -14,6 +14,8 @@ export default function UserList({ data, type, user, refetch }) {
     const navigate = useNavigate();
     const User = useAuth();
 
+    console.log("data from userlist", data)
+
     const handleRemoveUser = async (e, id) => {
         e.preventDefault();
 
@@ -48,7 +50,7 @@ export default function UserList({ data, type, user, refetch }) {
             ) : (
                 data?.map((emp, i) => (
                     <div
-                        key={emp?.id}
+                        key={i}
                         className="flex flex-row gap-12 border-b-2 border-gray-200 p-2"
                     >
                         <img

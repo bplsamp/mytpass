@@ -30,7 +30,7 @@ export default function ScheduleTraining({ close, refetch }) {
         expiryDate: null?null:"",
         feedback: "",
         result: "",
-        status: "",
+        status: "pending",
         type: "Long Term",
         inputtedBy: user?.id,
         inputtedName: user?.firstName + " " + user?.lastName,

@@ -3,7 +3,15 @@ import Card from "../../default/Card/Card";
 import Select from "../../default/Inputs/Select";
 import Slider from "@mui/material/Slider";
 import { Search } from "../../default/Inputs/Search";
-export default function EmployeeSearch({ handleSearch, refetch, search }) {
+export default function EmployeeSearch({
+    handleSearch,
+    refetch,
+    search,
+    sortBy,
+    expertise,
+    handleSortBy,
+    handleExpertise,
+}) {
     return (
         <Card className={`mx-4 p-8 flex flex-col gap-4`}>
             <Search
@@ -18,26 +26,25 @@ export default function EmployeeSearch({ handleSearch, refetch, search }) {
                     <Select
                         labelStyle={`mr-auto ml-auto`}
                         label={`Expertise`}
-                        options={["Default","Commercial Aspect", "Human Aspect", "Technical Aspect", "Human Resource", "Business Owner"]}
+                        setValue={handleExpertise}
+                        options={[
+                            "Default",
+                            "Commercial Aspect",
+                            "Human Aspect",
+                            "Technical Aspect",
+                        ]}
                     />
                 </div>
                 <div className="flex flex-col">
-                    <div className="flex flex-col  items-center justify-center">
-                        <label>Trainings Taken</label>
-                        <div className="flex flex-row min-w-[400px] gap-4 items-center">
-                            <span>0</span>
-
-                            <Slider value={[0, 100]} />
-
-                            <span>100</span>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-col">
                     <Select
+                        setValue={handleSortBy}
                         label={`Sort`}
                         labelStyle={`mr-auto ml-auto`}
-                        options={["Default","Highest Trainings Taken", "Lowest Trainings Taken"]}
+                        options={[
+                            "Default",
+                            "Highest Trainings Taken",
+                            "Lowest Trainings Taken",
+                        ]}
                     />
                 </div>
             </div>

@@ -4,6 +4,7 @@ import Card from "../../../default/Card/Card";
 import { FaUserFriends } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth, useAuthUpdate } from "../../../default/Session/SessionProvider";
+import EmployeeSearch from "../EmployeeSearch";
 import Input from "../../../default/Inputs/Input"
 import Select from "../../../default/Inputs/Select"
 import Slider from "@mui/material/Slider";
@@ -18,18 +19,59 @@ export default function MyEmployees () {
     const currentPath = location?.pathname;
 
     const [Page, setPage] = useState(0);
+    const [Search, setSearch] = useState("");
+    const [SortBy, setSortBy] = useState("Default");
+    const [Expertise, setExpertise] = useState("");
 
-    const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
+    let { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
         `/api${currentPath}`,
         { page: Page }
     );
 
-    console.log(data);
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        //refetch();
+    };
 
-    useEffect (() => {
-        localStorage.setItem('pathkey', JSON.stringify(currentPath))
-    }, [User])
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+
+        if (e.target.value == "Default") {
+            setExpertise("");
+            return;
+        }
+        setExpertise(value);
+    };
+
+    const handleSortBy = (e) => {
+        const { name, value } = e.target;
+
+        setSortBy(value);
+    };
+
+    useEffect(() => {
+        if (data) {
+            if (SortBy == "Highest Trainings Taken") {
+                data = data?.sort(
+                    (a, b) =>
+                        a?.training_users?.length - b?.training_users?.length
+                );
+                console.log(data);
+            } else if (SortBy == "Lowest Trainings Taken") {
+                data = data?.sort(
+                    (a, b) =>
+                        b?.training_users?.length - a?.training_users?.length
+                );
+                console.log(data);
+            } else {
+                data = data?.sort((a, b) =>
+                    b?.lastName.localeCompare(a?.firstName)
+                );
+            }
+        }
+    }, [SortBy, data]);
+    console.log(Expertise);
 
     return (
     <EmployerPage>
@@ -38,48 +80,28 @@ export default function MyEmployees () {
             Employees
         </Card>
 
-        <Card className={`mx-4 p-8 flex flex-col gap-4`}>
-            <div className={`flex flex-row w-full gap-12`}>
-                <input
-                    id="search_users"
-                    name="search_users"
-                    className="outline-0 px-4 py-2 border border-gray-200 w-full rounded-md"
-                    placeholder={`Search Employee...`}
-                />
-            </div>
-            <div className="flex flex-row justify-around">
-                <div className="flex flex-col">
-                    <Select
-                        labelStyle={`mr-auto ml-auto`}
-                        label={`Expertise`}
-                        options={["Default","Commercial Aspect", "Human Aspect", "Technical Aspect"]}
-                    />
-                </div>
-                <div className="flex flex-col">
-                    <div className="flex flex-col  items-center justify-center">
-                        <label>Trainings Taken</label>
-                        <div className="flex flex-row min-w-[400px] gap-4 items-center">
-                            <span>0</span>
-
-                            <Slider value={[0, 100]} />
-
-                            <span>100</span>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-col">
-                    <Select
-                        label={`Sort`}
-                        labelStyle={`mr-auto ml-auto`}
-                        options={["Default","Highest Trainings Taken", "Lowest Trainings Taken"]}
-                    />
-                </div>
-        </div>
-        </Card>
+        <EmployeeSearch
+                handleSearch={handleSearch}
+                handleSortBy={handleSortBy}
+                handleExpertise={handleInput}
+            />
         
-        <UserList data={data?.data} user={User} type={`employee`} refetch={refetch}/>
-
-
+        <UserList data={
+            data &&
+            data?.filter(
+                (emp) =>
+                    emp?.expertise
+                        .toLowerCase()
+                        .includes(Expertise.toLowerCase()) &&
+                    emp?.lastName
+                        .toLowerCase()
+                        .includes(Search.toLowerCase())
+            )
+        }
+            user={User}
+            type={`employee`}
+            refetch={refetch}
+        />
     </EmployerPage>
 );
 }

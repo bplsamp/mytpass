@@ -162,15 +162,15 @@ export default function SideNav({ withCompany, isActiveCompany, isEmployer, isDe
                 {/*<RxAvatar className="text-[2rem]" />*/}
 
                 <div className="flex flex-col text-[0.7rem] text-center">
-                    <span className="text-[0.9rem] text-center capitalize">
-                        {User?.firstName + " " + User?.lastName}
+                    <span className="text-[0.9rem] text-center capitalize font-bold">
+                        User: {User?.firstName + " " + User?.lastName}
                     </span>
-                    <Link to={`/employee`} className="text-white py-.75 px-2 bg-torange rounded-lg hover:opacity-70 my-[2px]">
+                    <Link to={`/employee`} className="text-blue-600 underline hover:opacity-70 my-[2px]">
                         Switch To Employee Side
                     </Link>
                     <div>
                         <button 
-                        className="text-white py-.75 px-2 bg-torange rounded-lg hover:opacity-70 my-[2px]"
+                        className="text-blue-600 underline hover:opacity-70 my-[2px]"
                         onClick={async () => {
                             await axios.post("http://localhost:8000/api/logout",
                             null, {
