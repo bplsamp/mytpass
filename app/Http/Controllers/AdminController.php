@@ -34,7 +34,7 @@ class AdminController extends Controller
 
     public function users() {
         try {
-        $users = User::with('company:id,companyName')->get();
+        $users = User::where('role', '!=', 'admin')->with('company:id,companyName')->get();
         
         if($users != null) {
           return response()->json([
