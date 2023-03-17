@@ -92,18 +92,6 @@ class TrainingsController extends Controller
             $trainingUser->save();
             $training->save();
 
-            /*$path = $this->database->uploadFileWatermarked(
-                '/trainings'. '/',
-                $request->file("certificate"),
-                $training->id,
-                true
-            );
-
-            if(!$path) {
-                Training::find($training->id)->delete();
-                throw new Error("Failed to upload certificate");
-            }*/
-
             return response()->json(['message' => 'Successfully added training'], 200);
 
         }
