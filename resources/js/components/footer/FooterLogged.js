@@ -2,8 +2,8 @@ import React from 'react'
 import questions from "../assets/images/questions.png";
 
 const socials = {
-    "https://www.facebook.com/": "Facebook",
-    "https://www.instagram.com/": "Instagram",
+    "https://www.facebook.com/mytpass": "Facebook",
+    "https://www.instagram.com/mytpassph/": "Instagram",
 };
 
 export default function FooterLogged() {

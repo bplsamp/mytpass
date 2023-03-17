@@ -9,8 +9,8 @@ const routes = {
 };
 
 const socials = {
-    "https://www.facebook.com/": "Facebook",
-    "https://www.instagram.com/": "Instagram",
+    "https://www.facebook.com/mytpass": "Facebook",
+    "https://www.instagram.com/mytpassph/": "Instagram",
 };
 
 export default function Footer() {
