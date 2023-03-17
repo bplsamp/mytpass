@@ -12,58 +12,67 @@ import { QueryApiPost } from '../../../Query/QueryApi';
 
 const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const calculateAttendanceRate = (attended, total) => {
-    const rate = (attended / total) * 100;
-    return parseInt(rate.toFixed(0));
-  }
+    const calculateAttendanceRate = (attended, total) => {
+      const rate = (attended / total) * 100;
+     return parseInt(rate.toFixed(0));
+     }
 
-const getScheduledTrainings = (data, month) => {
-    let arr = data?.filter((item) => {
-        return item.isScheduled == 1 && new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
-    });
+    const getScheduledTrainings = (data, month) => {
+       let filtered = data?.filter(
+              (item) => item?.isScheduled == true
+          );
+          let arr = filtered?.filter((item) => {
+              return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+          });
+  
+       return arr?.length ? arr?.length : 0;
+     };
 
-    return arr?.length ? arr?.length : 0;
-}
+    const getParticipants = (data, month) => {
+     let filtered = data?.filter((item) => item?.isScheduled == true);
+     let participants = 0;
+        let arr = filtered?.filter((item) => {
+            return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+        });
 
-const getParticipants = (data, month) => {
-    let participants = 0;
-    let arr = data?.filter((item) => {
-        return item.isScheduled == 1 && new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
-    });
+        let participantsArray = arr?.map((emp) => {
+            return emp?.training_users?.length;
+        });
 
-    let participantsArray = arr?.map((emp) => {
-        return emp?.training_users?.length
-    });
+     for (let i = 0; i < participantsArray?.length; i++) {
+            participants += participantsArray[i];
+     }
 
-    for (let i = 0; i < participantsArray?.length; i++) {
-        participants += participantsArray[i];
-    }
+     return participants;
+    };
 
-    return participants;
-}
+    const getAttendanceRate = (data, month) => {
+        let filtered = data?.filter((item) => item?.isScheduled == true);
+        let attendanceRate = 0;
+        let arr = filtered?.filter((item) => {
+            return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+        });
 
-const getAttendanceRate = (data, month) => {
-    let attendanceRate = 0;
-    let arr = data?.filter((item) => {
-        return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
-    });
+     //get all just comleted trainings
+        arr = arr?.filter((item) => item?.status == "completed");
 
-    //get all just completed trainings
-    arr = arr?.filter((item) => item?.status == 'completed')
-    
-    let attendanceRateArray = arr?.map((emp) => {
-            let presents = emp?.attendances?.filter((person) => person?.isPresent)
-            return calculateAttendanceRate(presents?.length, emp?.attendances?.length)
-    });
+     let attendanceRateArray = arr?.map((emp) => {
+           let presents = emp?.attendances?.filter((person) => person?.isPresent);
+            return calculateAttendanceRate(
+               presents?.length,
+                emp?.attendances?.length
+            );
+        });
 
-    //average all em
-    for (let i = 0; i < attendanceRateArray?.length; i++) {
-        attendanceRate += attendanceRateArray[i];
-    }
+     //average all em
+        for (let i = 0; i < attendanceRateArray?.length; i++) {
+            attendanceRate += attendanceRateArray[i];
+        }
 
-    let final = (attendanceRate / attendanceRateArray?.length).toFixed(0)
-    return parseInt(!isNaN(final) ? final : 0);
-}
+     let final = (attendanceRate / attendanceRateArray?.length).toFixed(0);
+
+        return parseInt(!isNaN(final) ? final : 0);
+    };
 
 export default function Dashboard() {
     const User = useAuth();

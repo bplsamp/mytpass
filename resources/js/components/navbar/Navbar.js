@@ -106,7 +106,7 @@ export default function Navbar() {
                             </span> 
                             {User?.role != "Employee" && (
                                 <Link to={`/employer/dashboard`} className="capitalize cursor-pointer underline text-blue-600 text-[0.6rem]">
-                                    <button className='hover:opacity-70 my-[2px]'>
+                                    <button className='underline hover:opacity-70 my-[2px]'>
                                         Switch To Employer Side
                                     </button>
                                 </Link>
