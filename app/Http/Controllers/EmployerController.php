@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use Illuminate\Http\Request;
 use Throwable;
 use App\Models\Company;

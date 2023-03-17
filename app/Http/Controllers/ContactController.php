@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Error;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Throwable;

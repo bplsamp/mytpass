@@ -10,6 +10,9 @@ use Error;
 use App\Models\Audit;
 use Throwable;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 use Exception;
 

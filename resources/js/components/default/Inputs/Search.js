@@ -19,14 +19,6 @@ export function Search({
 
     const [Search, setSearch] = useState("");
 
-    /*
- const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
-     `${currentPath.replace("/employer/", "")}`,
-     `/api${currentPath}`,
-     { page: Page, query: Search }
- );
- */
-
     return (
         <form
             onSubmit={(e) => {

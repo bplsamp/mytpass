@@ -9,25 +9,8 @@ export function Search({
     handleSearch,
     search,
 }) {
-    /*
-    let { q } = useParams();
-
-    const handleURLSearch = (e) => {
-        const url = new URL(window.location);
-        url.searchParams.set("q", e.target.value);
-        window.history.pushState({}, "", url);
-    };
-    */
 
     const [Search, setSearch] = useState("");
-
-    /*
- const { isLoading, error, data, isFetching, refetch } = QueryApiPost(
-     `${currentPath.replace("/employer/", "")}`,
-     `/api${currentPath}`,
-     { page: Page, query: Search }
- );
- */
 
     return (
         <form

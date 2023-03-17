@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
+use Error;
+use Illuminate\Filesystem\AwsS3V3Adapter;
+use Illuminate\Support\Facades\DB;
+use Exception;
 use Illuminate\Http\Request;
 use Throwable;
 use App\Models\Company;

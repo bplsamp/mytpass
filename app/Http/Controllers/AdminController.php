@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Error;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Webcontent;
+use App\Models\Approval;
 use App\Models\Audit;
-use App\Custom\AuditHelper;
+use stdClass;
 use Throwable;
 use Exception;
 use Illuminate\Support\Facades\Mail;
@@ -121,7 +125,6 @@ class AdminController extends Controller
 
             $company = Company::findOrFail($obj->companyId);
             Company::destroy($obj->companyId);
-            AuditHelper::audit('update', 'company', 'Rejected ' . $company->companyName . ' company' , $user);            
 
             Mail::raw("Reason: ".$obj->reason.
             "\nAfter a careful review of your company, we decided to reject your company, please provide us more information and documents. Your company has been deleted along with the information and documents, so please register an account and a company again.", function ($message) use($obj) {
