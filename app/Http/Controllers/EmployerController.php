@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use stdClass;
 use Illuminate\Http\Request;
-use stdClass;
 use Throwable;
 use App\Models\Company;
 use App\Models\User;

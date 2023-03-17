@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use Error;
-=======
-
 use App\Helpers\Help;
 use App\Models\Attendance;
->>>>>>> parent of fbe3c0a (LAST PUSH WORKING ALL)
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
-use Error;
 use Throwable;
 
 class ContactController extends Controller
