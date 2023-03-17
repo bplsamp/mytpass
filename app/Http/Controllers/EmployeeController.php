@@ -3,19 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use stdClass;
 use Throwable;
 use App\Models\Company;
 use App\Models\User;
 use App\Models\Training;
-use Error;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
-use Illuminate\Filesystem\AwsS3V3Adapter;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Exception;
 use Illuminate\Validation\Rule;
 use App\Models\Subscription;
 use App\Models\TrainingUser;

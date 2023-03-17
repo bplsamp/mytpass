@@ -2,28 +2,22 @@
  
 namespace App\Http\Controllers;
 
-use App\Custom\AuditHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Webcontents;
 use Illuminate\Http\Request;
-use App\Providers\Database;
 use App\Models\Approval;
-use stdClass;
 use Throwable;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Audit;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+
 
 use App\Helpers\Help;
 
 class AnnouncementController extends Controller
 {
-    private $database;
     /**
      * Show a list of all of the application's users.
      *

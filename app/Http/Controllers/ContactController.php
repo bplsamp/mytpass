@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Helpers\Help;
-use App\Models\Attendance;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
-use Error;
 use Throwable;
 
 class ContactController extends Controller

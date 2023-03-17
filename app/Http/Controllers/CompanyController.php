@@ -3,21 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\Company;
 use App\Models\User;
 use App\Models\Subscription;
 use App\Models\File;
 use Throwable;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 
 use Exception;
 
 class CompanyController extends Controller
 {
-    private $database;
     /**
      * Handle the incoming request.
      *

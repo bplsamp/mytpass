@@ -30,7 +30,7 @@ export default function PublicSearch() {
     let { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
         `/api/employer/search`,
-    { page: Page , query: Search}
+    { query: Search }
     );
 
     const handleSearch = (e) => {
@@ -53,6 +53,28 @@ export default function PublicSearch() {
         setSortBy(value);
     };
 
+    useEffect(() => {
+        if (data) {
+            if (SortBy == "Highest Trainings Taken") {
+                data = data?.sort(
+                    (a, b) =>
+                        a?.training_users?.length - b?.training_users?.length
+                );
+            } else if (SortBy == "Lowest Trainings Taken") {
+                data = data?.sort(
+                    (a, b) =>
+                        b?.training_users?.length - a?.training_users?.length
+                );
+            } else {
+                data = data?.sort((a, b) =>
+                    a?.firstName.localeCompare(b?.firstName)
+                );
+            }
+            console.log(SortBy)
+        }
+    }, [SortBy, data]);
+    console.log(Expertise);
+
     return (
         <EmployerPage>
             {user?.company?.companyStatus == "inactive" ? (<DeactivatedCompany/>) 
@@ -72,8 +94,8 @@ export default function PublicSearch() {
                 handleExpertise={handleInput}
                 />
                 <UserList data={
-                        data?.data &&
-                        data?.data?.filter(
+                        data &&
+                        data?.filter(
                             (emp) =>
                                 emp?.expertise
                                     .toLowerCase()

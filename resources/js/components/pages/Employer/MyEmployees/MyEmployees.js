@@ -25,9 +25,9 @@ export default function MyEmployees () {
 
     let { isLoading, error, data, isFetching, refetch } = QueryApiPost(
         `${currentPath.replace("/employer/", "")}`,
-        `/api${currentPath}`,
-        { page: Page }
+        `/api${currentPath}`
     );
+    
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
@@ -57,18 +57,17 @@ export default function MyEmployees () {
                     (a, b) =>
                         a?.training_users?.length - b?.training_users?.length
                 );
-                console.log(data);
             } else if (SortBy == "Lowest Trainings Taken") {
                 data = data?.sort(
                     (a, b) =>
                         b?.training_users?.length - a?.training_users?.length
                 );
-                console.log(data);
             } else {
                 data = data?.sort((a, b) =>
-                    b?.lastName.localeCompare(a?.firstName)
+                    a?.firstName.localeCompare(b?.firstName)
                 );
             }
+            console.log(SortBy)
         }
     }, [SortBy, data]);
     console.log(Expertise);

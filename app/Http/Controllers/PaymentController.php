@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use App\Helpers\Help;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Receipt;
+use App\Models\User;
 use Throwable;
 
 
@@ -79,6 +80,38 @@ class PaymentController extends Controller
 
     }
 
+    public function checkSubscription() {
+        try {
+            $user = Auth::user();
+            $sub = Subscription::where('companyId', '=', $user->companyId)->first();
+            $now = Carbon::now();
+            $expirySub = Carbon::parse($sub->expiryDate);
+
+            if(!is_null($sub->expiryDate)) {
+                if($now > $expirySub) {
+                    //bring back subscription type to basic
+                    // make max employees 30
+                    $subscription = Subscription::where('companyId', '=', $user->companyId)
+                    ->update([
+                        'type' => "basic", 
+                        'expiryDate' => null, 
+                        'startDate' => null, 
+                        'maxEmployee' => 30
+                    ]);
+                    return response()->json(['message', 'Downgraded business to BASIC.']);
+                } else {
+                    // if not expired, just bring back json message
+                    return response()->json(['message', 'Your subscription is not yet expired']);
+                }
+            }
+            
+            return response()->json(['message', 'Downgraded business to BASIC.']);
+
+        } catch(Throwable $e) {
+            error_log($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
 
     public function updateSubscription(Request $req) {
         

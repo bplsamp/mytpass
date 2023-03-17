@@ -5,23 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Providers\Database;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use App\Models\User;
-use App\Models\Webcontent;
-use App\Models\Approval;
 use App\Models\Audit;
 use App\Custom\AuditHelper;
-use stdClass;
 use Throwable;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
-    private $database;
     /**
      * Show a list of all of the application's users.
      *

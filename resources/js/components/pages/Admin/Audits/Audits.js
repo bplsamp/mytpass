@@ -26,6 +26,7 @@ const tableRef = useRef(null);
             </DownloadTableExcel>
         </div>
         
+        {data?.length > 0 ? (
         <table 
         className="w-full"
         ref={tableRef}>
@@ -40,10 +41,10 @@ const tableRef = useRef(null);
                     <th>Created At</th>
                 </tr>
             </thead>
-            {data?.length > 0 ? (
+            
             <tbody>
                 {data && 
-                data?.map((audit) => (
+                data?.slice(0).reverse().map((audit) => (
                     <tr key={audit?.id}>
                         <td>{audit?.id}</td>
                         <td>{audit?.by}</td>
@@ -57,8 +58,8 @@ const tableRef = useRef(null);
                         </td>
                     </tr>
                 ))}
-            </tbody>) : (<EmptyState/>) }
-        </table>
+            </tbody>
+        </table> ) : (<EmptyState/>) }
         </div>
     </AdminPage>
   )
