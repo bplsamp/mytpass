@@ -122,6 +122,7 @@ export default function MyTrainings() {
                         <EditTrainingModal
                             training={SelectedTraining}
                             close={() => setShowEdit(false)}
+                            refetch={refetch} 
                         />
                     )}
                 </>)}
