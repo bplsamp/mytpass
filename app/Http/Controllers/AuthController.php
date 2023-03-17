@@ -5,9 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use CaliCastle\Cuid;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Events\Registered;
-use Error;
-use App\Models\Audit;
+use App\Custom\AuditHelper;
 use Throwable;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Cookie;
@@ -29,6 +32,7 @@ class AuthController extends Controller
     {
         error_log("call_API");
         try {
+            /*
             try {
                 $validator = (object)$request->validate([
                     'email' => 'required|string|max:100|email|unique:users',
@@ -42,7 +46,9 @@ class AuthController extends Controller
             } catch (Throwable $e) {
                 error_log($e->getMessage());
                 return response()->json(['message' => "Unexpected server error cause: ". $e->getMessage()] , 200);
-            }            
+            }
+            */
+            
 
             $user = User::create([
                 'email' => $request->email,
@@ -70,25 +76,7 @@ class AuthController extends Controller
     
             event(new Registered($user));
 
-            try {
-                $audit = Audit::create([
-                'operation' => "create",
-                'targetModel'  => "user",
-                'description'  => "created user account",
-                'by'  => $user->firstName . " " . $user->lastName,
-                'userId'  => $user->id,
-                ]);
-
-
-                if(!$audit) {
-                throw new Error("Failed to create audit");
-                }
-
-                error_log('created audit');
-            } catch (Exception $e) {
-                error_log($e);
-                return null;
-            }
+            AuditHelper::audit('create', 'user', 'created user account', $user);
 
             return response()->json([
                 'status' => 'success',

@@ -18,19 +18,19 @@ const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'
      }
 
     const getScheduledTrainings = (data, month) => {
-        let filtered = data?.filter(
-                (item) => item?.isScheduled == true
-            );
-        let arr = filtered?.filter((item) => {
-            return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
-        });
+       let filtered = data?.filter(
+              (item) => item?.isScheduled == true
+          );
+          let arr = filtered?.filter((item) => {
+              return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
+          });
   
-        return arr?.length ? arr?.length : 0;
-    };
+       return arr?.length ? arr?.length : 0;
+     };
 
     const getParticipants = (data, month) => {
-        let filtered = data?.filter((item) => item?.isScheduled == true);
-        let participants = 0;
+     let filtered = data?.filter((item) => item?.isScheduled == true);
+     let participants = 0;
         let arr = filtered?.filter((item) => {
             return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
         });
@@ -39,11 +39,11 @@ const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'
             return emp?.training_users?.length;
         });
 
-        for (let i = 0; i < participantsArray?.length; i++) {
-                participants += participantsArray[i];
-        }
+     for (let i = 0; i < participantsArray?.length; i++) {
+            participants += participantsArray[i];
+     }
 
-        return participants;
+     return participants;
     };
 
     const getAttendanceRate = (data, month) => {
@@ -53,25 +53,25 @@ const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'
             return new Date(item.created_at).getMonth() === mS.indexOf(month); // 1 represents February (0 is January, 1 is February, etc.)
         });
 
-        //get all just comleted trainings
-            arr = arr?.filter((item) => item?.status == "completed");
+     //get all just comleted trainings
+        arr = arr?.filter((item) => item?.status == "completed");
 
-        let attendanceRateArray = arr?.map((emp) => {
-            let presents = emp?.attendances?.filter((person) => person?.isPresent);
-                return calculateAttendanceRate(
-                presents?.length,
-                    emp?.attendances?.length
-                );
+     let attendanceRateArray = arr?.map((emp) => {
+           let presents = emp?.attendances?.filter((person) => person?.isPresent);
+            return calculateAttendanceRate(
+               presents?.length,
+                emp?.attendances?.length
+            );
         });
 
-        //average all em
-            for (let i = 0; i < attendanceRateArray?.length; i++) {
-                attendanceRate += attendanceRateArray[i];
-            }
+     //average all em
+        for (let i = 0; i < attendanceRateArray?.length; i++) {
+            attendanceRate += attendanceRateArray[i];
+        }
 
-        let final = (attendanceRate / attendanceRateArray?.length).toFixed(0);
+     let final = (attendanceRate / attendanceRateArray?.length).toFixed(0);
 
-            return parseInt(!isNaN(final) ? final : 0);
+        return parseInt(!isNaN(final) ? final : 0);
     };
 
 export default function Dashboard() {

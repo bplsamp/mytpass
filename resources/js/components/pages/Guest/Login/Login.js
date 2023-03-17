@@ -37,7 +37,6 @@ const handleLogin = async (e) => {
     navigate("/")
 
     apost("/api/getExpiringTraining");
-    apost("/api/payment/checkSubscription", { id: User?.id });
 
 
     console.log(NewUser);

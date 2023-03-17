@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\Help;
 use Error;
+use App\Providers\Database;
+use App\Custom\NotificationHelper;
 use Throwable;
+use App\Models\User;
+use App\Models\Company;
 use App\Models\Training;
 use App\Models\TrainingUser;
 use App\Models\Attendance;
@@ -88,6 +94,18 @@ class TrainingsController extends Controller
             $trainingUser->save();
             $training->save();
 
+            /*$path = $this->database->uploadFileWatermarked(
+                '/trainings'. '/',
+                $request->file("certificate"),
+                $training->id,
+                true
+            );
+
+            if(!$path) {
+                Training::find($training->id)->delete();
+                throw new Error("Failed to upload certificate");
+            }*/
+
             return response()->json(['message' => 'Successfully added training'], 200);
 
         }
@@ -126,7 +144,7 @@ class TrainingsController extends Controller
         }
         catch(Throwable $e) 
         {
-            error_log($e->getMessage());
+                error_log($e->getMessage());
         }
     }
 

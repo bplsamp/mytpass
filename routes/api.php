@@ -103,7 +103,6 @@ Route::controller(AdminController::class)->group(function () {
 
 Route::controller(PaymentController::class)->group(function () {
     Route::post('/payment/upgrade', 'upgrade');
-    Route::api('/payment/checkSubscription', 'checkSubscription');
 });
 
 Route::controller(ContactController::class)->group(function () {

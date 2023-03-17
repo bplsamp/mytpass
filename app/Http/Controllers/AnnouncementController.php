@@ -2,6 +2,7 @@
  
 namespace App\Http\Controllers;
 
+use App\Custom\AuditHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Exception;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Webcontents;
 use Illuminate\Http\Request;
+use App\Providers\Database;
 use App\Models\Approval;
 use stdClass;
 use Throwable;
