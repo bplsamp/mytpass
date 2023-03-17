@@ -54,7 +54,7 @@ export default function MyEmployers () {
                     </Card>
 
                 <UserList 
-                data={data && data?.filter(
+                data={data?.data && data?.data?.filter(
                     (emp) =>
                         emp?.firstName
                             .toLowerCase()

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use stdClass;
 use Illuminate\Http\Request;
+use stdClass;
 use Throwable;
 use App\Models\Company;
 use App\Models\User;
 use Error;
 use Illuminate\Support\Facades\Auth;
+use App\Custom\NotificationHelper;
 use App\Models\Notification;
 use App\Models\TrainingUser;
 use App\Models\Attendance;
@@ -47,11 +49,16 @@ class EmployerController extends Controller
             'maxEmployee' => $maxEmployee,
         );
 
-            if($company) {
-            return response()->json($data,200);
-            } else {
-                return response()->json(['message' => "Failed to fetch company data."] , 401);
-            }
+
+        if($company) {
+          return response()->json(
+                 $data,
+                200
+            );
+        } else {
+            return response()->json(['message' => "Failed to fetch company data."] , 401);
+        }
+
 
         } catch(Throwable $e) {
             error_log((string)$e->getMessage());
@@ -114,7 +121,7 @@ class EmployerController extends Controller
                 $query->where('firstName', 'like', "%$obj->query%")
                 ->orWhere('lastName', 'like', "%$obj->query%");
             }) 
-                ->get();
+                ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
         
              return response()->json($data);
             }
@@ -129,7 +136,7 @@ class EmployerController extends Controller
                 })
                 ->where("isSearchable", '=', true)
                 ->with('trainingUsers')
-                ->get();
+                ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
     
                 return response()->json($data);
             }
@@ -145,11 +152,17 @@ class EmployerController extends Controller
             $data = User::findOrFail($obj->id);
             $company = User::findOrFail($obj->id)->company;
 
+
             return response()->json(['user' => $data, 'company' => $company]);
         }
         catch(Throwable $e) {
               error_log($e->getMessage());
         }
+    }
+
+    public function searchUser(Request $request)
+    {
+
     }
 
     public function inviteUser(Request $request)
@@ -159,6 +172,8 @@ class EmployerController extends Controller
             $obj = (object)json_decode($request->getContent());
             $emp = User::findOrFail($obj->userId);
             
+            $n = new NotificationHelper();
+
             //our subscription model
             $subscription = Subscription::where('companyId', '=', $user->companyId)->first();
             $max = $subscription->maxEmployee;
@@ -216,7 +231,7 @@ class EmployerController extends Controller
                 error_log("success invite user");
             } else {
                 return response()->json([
-                    'message' => "User already belongs to a company.", 
+                    'message' => "User has already has company ".$emp->companyId, 
                     'status' => "Failed: ",
                     401]);
             }
@@ -250,18 +265,12 @@ class EmployerController extends Controller
     {
         try {
             $user = Auth::user();
-            $sub = Subscription::where('companyId', '=', $user->companyId)->first();
-            $maxEmp = $this->getMaxEmployee($sub->type);
-
             $obj = (object)json_decode($request->getContent());
             $data = User::where('companyId', '=', $user->companyId)
                 ->where('role', '!=', 'business owner')
                 ->where('role', '!=', 'human resource')
                 ->with('trainingUsers')
-                ->orderBy('firstName','asc')
-                ->take($maxEmp)
                 ->get();
-
                 return response()->json($data);
             }
         catch(Throwable $e) {
@@ -274,18 +283,12 @@ class EmployerController extends Controller
     {
         try {
             $user = Auth::user();
-            $sub = Subscription::where('companyId', '=', $user->companyId)->first();
-            $maxEmp = $this->getMaxEmployee($sub->type);
-
             $obj = (object)json_decode($request->getContent());
             $data = User::where('companyId', '=', $user->companyId)
                 ->where('role', '!=', 'employee')
                 ->where('id', '!=', $user->id)
                 ->with('trainingUsers')
-                ->orderBy('firstName','asc')
-                ->take($maxEmp)
-                ->get();
-
+                ->paginate($perPage = 5, $columns = ['*'], $pageName = 'page', $page = $obj->page);
                 return response()->json($data);
             }
         catch(Throwable $e) {
@@ -359,7 +362,7 @@ class EmployerController extends Controller
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     
             error_log("11111111111111111111111".$deleteTraces);
-
+            //error_log("2222222222222222222222".$trainingDelete);
             return response()->json(['message' => 'Successfully removed user from company']);
         }
         catch(Throwable $e) {
@@ -456,19 +459,6 @@ class EmployerController extends Controller
             error_log($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 401);
         } 
-    }
-
-    public function getMaxEmployee(string $type) {
-        switch($type) {
-            case "basic":
-                return 30;
-            case "premium":
-                return 100;
-            case "platinum":
-                return 1000;
-            default:
-                return 30;
-        }
     }
 
 }

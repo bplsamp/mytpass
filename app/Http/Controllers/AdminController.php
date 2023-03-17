@@ -6,6 +6,10 @@ use Error;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+<<<<<<< HEAD
+=======
+use App\Providers\Database;
+>>>>>>> parent of fbe3c0a (LAST PUSH WORKING ALL)
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
@@ -13,6 +17,10 @@ use App\Models\User;
 use App\Models\Webcontent;
 use App\Models\Approval;
 use App\Models\Audit;
+<<<<<<< HEAD
+=======
+use App\Custom\AuditHelper;
+>>>>>>> parent of fbe3c0a (LAST PUSH WORKING ALL)
 use stdClass;
 use Throwable;
 use Exception;
@@ -20,6 +28,7 @@ use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
+    private $database;
     /**
      * Show a list of all of the application's users.
      *
