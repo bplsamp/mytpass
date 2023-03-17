@@ -9,7 +9,6 @@ use App\Models\Company;
 use App\Models\User;
 use Error;
 use Illuminate\Support\Facades\Auth;
-use App\Custom\NotificationHelper;
 use App\Models\Notification;
 use App\Models\TrainingUser;
 use App\Models\Attendance;
@@ -170,8 +169,6 @@ class EmployerController extends Controller
             $user = Auth::user();
             $obj = (object)json_decode($request->getContent());
             $emp = User::findOrFail($obj->userId);
-            
-            $n = new NotificationHelper();
 
             //our subscription model
             $subscription = Subscription::where('companyId', '=', $user->companyId)->first();
