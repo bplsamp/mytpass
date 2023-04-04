@@ -130,7 +130,7 @@ class EmployeeController extends Controller
             ->flatten()
             ->all();
             
-            //check if user already has expiring notification
+            //check if user already has expiring/expired notification
             // if not, make a notification
             foreach($results as $result) {
                 $notif = Notification::where('trainingId', '=', $result->id)
@@ -138,9 +138,33 @@ class EmployeeController extends Controller
                 ->where('content', 'like', '%EXPIR%')
                 ->get();
                 
-                error_log("HAS NOTIF ALREADY ".$notif);
+                //error_log("HAS NOTIF ALREADY ".$notif);
 
                 if(count($notif)>0){
+                    $notif = Notification::where('trainingId', '=', $result->id)
+                        ->where('userId', '=', $user->id)
+                        ->where('content', 'like', '%expiring%')
+                        ->get();
+
+                    $expiryDate = Carbon::parse($result->expiryDate);
+
+                    if($date > $expiryDate) {
+                        $notif = Notification::where('trainingId', '=', $result->id)
+                            ->where('userId', '=', $user->id)
+                            ->where('content', 'like', '%expired%')
+                            ->get();
+
+                        if(count($notif)>0) {
+                            array_push($array_trainings, $notif);
+                        } else {
+                            Notification::create([
+                                'userId' => $user->id,
+                                'content' => "Training"." [".$result->title."] "."has EXPIRED.",
+                                'trainingId' => $result->id,
+                            ]);
+                            return response()->json(["message" => "Expired, added notif."]);
+                        }
+                    }
                     array_push($array_trainings, $notif);
                 } else {
                     array_push($array_trainings, "ITO YUNG EMPTY HUHUHUHU".$result->id);
