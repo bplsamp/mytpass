@@ -35,16 +35,6 @@ export default function Approval() {
     return(
         <AdminPage>
             <div className="p-12 w-full text-gray-600">
-                <Card className={`mx-4 p-8 flex flex-col gap-4`}>
-                    <div className={`flex flex-row w-full gap-12`}>
-                        <input
-                            id="search_users"
-                            name="search_users"
-                            className="outline-0 px-4 py-2 border border-gray-200 w-full rounded-md"
-                            placeholder={`Search Companies...`}
-                        />
-                    </div>
-                </Card>
 
                 {data?.length > 0 ? (
                     <table className="w-full">
